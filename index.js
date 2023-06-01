@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 5000
 */
 
 // Postgresへの接続
+/*
 const connection = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -18,7 +19,7 @@ const connection = new Client({
   }
 });
 connection.connect();
-
+*/
 const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET
