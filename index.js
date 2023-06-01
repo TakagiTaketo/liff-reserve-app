@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 import express from 'express';
 const PORT = process.env.PORT || 5001
-//import ClientPg from 'pg';
-//const { Client } = ClientPg;
+import ClientPg from 'pg';
+const { Client } = ClientPg;
 /*
 const express = require('express');
 //const { Client } = require('pg');
@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 5000
 */
 
 // Postgresへの接続
-/*
 const connection = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -19,7 +18,7 @@ const connection = new Client({
   }
 });
 connection.connect();
-*/
+
 const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET
