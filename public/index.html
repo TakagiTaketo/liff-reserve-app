@@ -111,8 +111,8 @@
     <script type="text/javascript" src="reserve.js"></script>
     <script type="text/javascript">
         const liffId = '1661289930-qLmEmZ8w';
-        let decordIdToken = '';
-        let idToken = '';
+        //let decordIdToken = '';
+        //let idToken = '';
         // LIFF初期化
         window.onload = () => {
             liff.init({
@@ -121,8 +121,8 @@
             })
                 .then(() => {
                     initializeApp();
-                    decordIdToken = liff.getDecodedIDToken();
-                    idtoken = liff.getIDToken();
+                    //const decordIdToken = liff.getDecodedIDToken();
+                    const idtoken = liff.getIDToken();
                     const jsonData = JSON.stringify({
                         id_token: idToken
                     });
@@ -136,6 +136,7 @@
                     })
                         .then(res => {
                             //ここにレスポンス返ってくる
+                            /*
                             res.json()
                                 .then(json => {
                                     console.log('json:' + json);
@@ -144,6 +145,16 @@
 
                                     const pElement2 = document.createElement('p');
                                     const divPage = document.getElementById('divPage');
+                                    pElement2.innerHTML = `あなたの名前は${name}です。LINE IDは${lineId}です。`;
+                                    divPage.appendChild(pElement2);
+                                })
+                                */
+
+                            liff.getProfile()
+                                .then(profile => {
+                                    const name = profile.displayName;
+                                    const lineId = profile.userId;
+                                    const pElement2 = document.createElement('p');
                                     pElement2.innerHTML = `あなたの名前は${name}です。LINE IDは${lineId}です。`;
                                     divPage.appendChild(pElement2);
                                 })
@@ -162,7 +173,7 @@
             if (liff.isLoggedIn()) {
                 //ログイン済
                 //getLineData();
-
+                /*
                 liff.getProfile()
                     .then(profile => {
                         lineUserName = profile.displayName;
@@ -171,7 +182,7 @@
                     .catch((err) => {
                         console.log("error", err);
                     })
-
+*/
             } else {
                 // 未ログイン
                 let result = window.confirm("LINE Loginを行います。");
