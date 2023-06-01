@@ -140,12 +140,12 @@
                             res.json()
                                 .then(json => {
                                     console.log('json:' + json);
-                                    const name = json.name;
-                                    const lineId = json.lineId;
+                                    const line_uname = json.line_uname;
+                                    const line_uid = json.line_uid;
 
                                     const pElement2 = document.createElement('p');
                                     const divPage = document.getElementById('divPage');
-                                    pElement2.innerHTML = `あなたの名前は${name}です。LINE IDは${lineId}です。`;
+                                    pElement2.innerHTML = `あなたの名前は${line_uname}です。LINE IDは${line_uid}です。`;
                                     divPage.appendChild(pElement2);
                                 })
 
