@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
 import express from 'express';
 const PORT = process.env.PORT || 5001
 import ClientPg from 'pg';
