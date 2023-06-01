@@ -106,6 +106,7 @@
             </p>
         </div>
     </form>
+    <div id="divPage"></div>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="reserve.js"></script>
     <script type="text/javascript">
@@ -117,39 +118,44 @@
             liff.init({
                 liffId: liffId
                 //withLoginOnExternalBrowser: true, // 外部ブラウザでのLIFFアプリ初期化時にliff.login()を自動で実行する。
-            }).then(() => {
-                initializeApp();
-                decordIdToken = liff.getDecodedIDToken();
-                idtoken = liff.getIDToken();
-            }).catch((err) => {
-                alert(err);
             })
-        }
-
-        function initializeApp() {
-            // ログインチェック
-            if (liff.isLoggedIn()) {
-                //ログイン済
-                //getLineData();
-
-                liff.getProfile()
-                    .then(profile => {
-                        lineUserName = profile.displayName;
-                        lineUserId = profile.userId;
+                .then(() => {
+                    initializeApp();
+                    decordIdToken = liff.getDecodedIDToken();
+                    idtoken = liff.getIDToken();
+                    const jsonData = JSON.stringify({
+                        id_token: idToken
+                    });
+                    fetch('/api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: jsonData,
+                        creadentials: 'same-origin'
                     })
-                    .catch((err) => {
-                        console.log("error", err);
-                    })
+                        .then(res => {
+                            //ここにレスポンス返ってくる
+                            res.json()
+                                .then(json => {
+                                    console.log('json:' + json);
+                                    const name = json.name;
+                                    const lineId = json.lineId;
 
-            } else {
-                // 未ログイン
-                let result = window.confirm("LINE Loginを行います。");
-                if (result) {
-                    liff.login();
-                }
-            }
+                                    const pElement2 = document.createElement('p');
+                                    const divPage = document.getElementById('divPage');
+                                    pElement2.innerHTML = `あなたの名前は${name}です。LINE IDは${lineId}です。`;
+                                    divPage.appendChild(pElement2);
+                                })
+                        })
+                        .catch((err) => {
+                            alert(err);
+                        })
+                })
+                .catch((err) => {
+                    alert(err);
+                })
         }
-
 
     </script>
 

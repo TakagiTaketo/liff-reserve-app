@@ -1,4 +1,4 @@
-//import fetch from 'node-fetch';
+import fetch from 'node-fetch';
 import express from 'express';
 const PORT = process.env.PORT || 5001
 import ClientPg from 'pg';
@@ -29,9 +29,68 @@ express()
   .use(express.static('public'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
-  //.post('/api', (req, res) => getUserInfo(req, res))
+  .post('/api', (req, res) => getUserInfo(req, res))
   //.post('/insertUser', (req, res) => insertUserInfo(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
+
+const getUserInfo = (req, res) => {
+  const data = req.body;
+  console.log('id_token:', data.id_token);
+  const postData = `id_token=${data.id_token}&client_id=${process.env.LOGIN_CHANNEL_ID}`;
+  console.log('client_id:' + process.env.LOGIN_CHANNEL_ID);
+  fetch('https://api.line.me/oauth2/v2.1/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: postData
+  })
+    .then(response => {
+      response.json()
+        .then(json => {
+          if (json) {
+            //Postgresからデータを取得する処理
+            const lineId = json.sub; //sub:line_uid
+            const select_query = {
+              text: `SELECT * FROM users WHERE line_uid='${lineId}';`
+            };
+
+            connection.query(select_query)
+              .then(data => {
+                console.log('data.rows[0]:', data.rows[0]);
+                const name = data.rows[0].line_uname;
+                const lineId = data.rows[0].line_uid;
+                res.status(200).send({ name, lineId });
+              })
+              .catch(e => console.log(e));
+            console.log('response data:', json);
+          }
+        });
+    })
+    .catch(e => console.log(e));
+}
+// usersテーブルに追加する。
+/*
+const insertUserInfo = (req, res) => {
+  const data = req.body;
+  console.log('line_uname:', data.line_uname);
+  console.log('line_uid:', data.line_uid);
+  const postData = `line_uid=${data.line_uid}&line_uname=${process.env.LOGIN_CHANNEL_ID}`;
+
+  const insert_query = {
+    text: `INSERT INTO users(line_uid, line_uname) VALUES ($1, $2);`,
+    values: [data.line_uid, data.line_uname]
+  };
+
+  connection.query(insert_query)
+    .then(() => {
+      console.log('insert successfully!!');
+    })
+    .catch(e => {
+      console.log(e);
+    });
+}
+*/
 /*
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
