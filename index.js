@@ -48,7 +48,6 @@ const getUserInfo = (req, res) => {
       response.json()
         .then(json => {
           console.log('response data:', json);
-          /*
           if (json) {
             //Postgresからデータを取得する処理
             const lineId = json.sub; //sub:line_uid
@@ -59,14 +58,13 @@ const getUserInfo = (req, res) => {
             connection.query(select_query)
               .then(data => {
                 console.log('data.rows[0]:', data.rows[0]);
-                const name = data.rows[0].line_uname;
-                const lineId = data.rows[0].line_uid;
-                res.status(200).send({ name, lineId });
+                const line_uname = data.rows[0].line_uname;
+                const line_uid = data.rows[0].line_uid;
+                res.status(200).send({ line_uname, line_uid });
               })
               .catch(e => console.log(e));
             console.log('response data:', json);
           }
-          */
         });
     })
     .catch(e => console.log(e));
