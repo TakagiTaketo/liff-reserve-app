@@ -7,11 +7,12 @@
     "npm": "8.x"
   },
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "node test.js"
   },
-  "author": "",
+  "author": "takagi",
   "license": "ISC",
   "dependencies": {
     "@line/bot-sdk": "^7.5.2",
