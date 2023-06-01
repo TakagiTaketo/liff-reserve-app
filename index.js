@@ -36,6 +36,7 @@ express()
 const getUserInfo = (req, res) => {
   const data = req.body;
   const postData = `id_token=${data.id_token}&client_id=${process.env.LOGIN_CHANNEL_ID}`;
+  console.log('id_token:' + data.id_token);
   console.log('client_id:' + process.env.LOGIN_CHANNEL_ID);
   fetch('https://api.line.me/oauth2/v2.1/verify', {
     method: 'POST',
