@@ -88,9 +88,7 @@ const searchReserve = (req, res) => {
   connection.query(select_query)
     .then((data) => {
       console.log('data:' + data);
-      console.log('data.length:' + data.length);
       console.log('data.length():' + data.length());
-      console.log('data.size:' + data.size);
       console.log('data.size():' + data.size());
       if (data.length == 0) {
         reserve_flg = true;
