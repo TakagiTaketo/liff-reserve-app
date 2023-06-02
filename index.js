@@ -86,7 +86,7 @@ const searchReserve = (req, res) => {
   };
   let reserve_flg = false;
   connection.query(select_query, function (error, results, fields) {
-    if (err) throw error;
+    if (error) throw error;
     let count = results[0]['COUNT(*)'];
     if (count == 0) {
       reserve_flg = false;
