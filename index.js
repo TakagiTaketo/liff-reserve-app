@@ -87,6 +87,11 @@ const searchReserve = (req, res) => {
   let reserve_flg = false;
   connection.query(select_query)
     .then((data) => {
+      console.log('data:' + data);
+      console.log('data.length:' + data.length);
+      console.log('data.length():' + data.length());
+      console.log('data.size:' + data.size);
+      console.log('data.size():' + data.size());
       if (data.length == 0) {
         reserve_flg = true;
         console.log('予約空席');
