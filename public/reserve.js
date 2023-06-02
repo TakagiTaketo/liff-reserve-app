@@ -8,6 +8,20 @@ $(function () {
 
         if (window.confirm(`この内容で予約します。よろしいですか？\n氏名：${username}\n生年月日：${birthday}\n予約日時：${reserveDate} ${reserveTime}\n`)) {
             // DB登録
+            const jsonData = JSON.stringify({
+                line_uid: line_uid,
+                reserve_date: reserveDate,
+                reserve_time: reserveTime
+            });
+            console.log(jsonData);
+            fetch('/insertReserve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData,
+                creadentials: 'same-origin'
+            })
 
             let msg = '新規予約' + '\n' + reserveDate + '\n' + reserveTime.toString() + '\n' + '氏名：' + username + '\n' + '生年月日：' + birthday;
             sendText(msg);

@@ -30,7 +30,7 @@ express()
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .post('/api', (req, res) => getUserInfo(req, res))
-  //.post('/insertUser', (req, res) => insertUserInfo(req, res))
+  .post('/insertReserve', (req, res) => insertReserve(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 const getUserInfo = (req, res) => {
@@ -71,28 +71,35 @@ const getUserInfo = (req, res) => {
     .catch(e => console.log(e));
 }
 
-// usersテーブルに追加する。
-/*
-const insertUserInfo = (req, res) => {
+// users,reservesテーブルに予定を追加する。
+const insertReserve = (req, res) => {
   const data = req.body;
-  console.log('line_uname:', data.line_uname);
-  console.log('line_uid:', data.line_uid);
-  const postData = `line_uid=${data.line_uid}&line_uname=${process.env.LOGIN_CHANNEL_ID}`;
 
+  // タイムスタンプ整形
+  let created_at = '';
+  let date = new Date();
+  created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+    + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
+    + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+
+  console.log('line_uid:', data.line_uid);
+  console.log('reserve_date:', data.reserve_date);
+  console.log('reserve_time:', data.reserve_time);
+  console.log('created_at:', created_at);
   const insert_query = {
-    text: `INSERT INTO users(line_uid, line_uname) VALUES ($1, $2);`,
-    values: [data.line_uid, data.line_uname]
+    text: `INSERT INTO reserves(line_uid, reserve_date, reserve_time, created_at, delete_flg) VALUES ($1, $2, $3, $4, $5);`,
+    values: [data.line_uid, data.reserve_date, data.reserve_time, created_at, 0]
   };
 
   connection.query(insert_query)
     .then(() => {
-      console.log('insert successfully!!');
+      console.log('予約追加完了');
     })
     .catch(e => {
       console.log(e);
     });
 }
-*/
+
 /*
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')

@@ -109,7 +109,9 @@
     <div id="divPage"></div>
     <div>変更点</div>
     <script type="text/javascript" src="main.js"></script>
-    <script type="text/javascript" src="reserve.js"></script>
+    <script type="text/javascript" src="reserve.js">
+        let line_uid = '';
+    </script>
     <script type="text/javascript">
         const liffId = '1661289930-qLmEmZ8w';
         //let decordIdToken = '';
@@ -143,7 +145,7 @@
                                 .then(json => {
                                     console.log('json:' + json);
                                     const line_uname = json.line_uname;
-                                    const line_uid = json.line_uid;
+                                    line_uid = json.line_uid;
 
                                     const pElement2 = document.createElement('p');
                                     const divPage = document.getElementById('divPage');
