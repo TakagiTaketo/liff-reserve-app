@@ -87,11 +87,12 @@ const searchReserve = (req, res) => {
   let reserve_flg = false;
   connection.query(select_query, function (error, results, fields) {
     if (error) throw error;
-    let line_uid = results.rows[0].line_uid;
-    if (line_uid != null) {
+    // TODO connection.queryの戻り値で判定するところから。91行目でrows[0]に値取りに行ってエラーなってます。
+    //let line_uid = results.rows[0].line_uid;
+    if (results.rows[0] != null) {
       reserve_flg = false;
       console.log('予約満席');
-    } else if (line_uid == null) {
+    } else if (results.rows[0] == null) {
       reserve_flg = true;
       console.log('予約空席');
     }
