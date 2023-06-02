@@ -31,6 +31,7 @@ express()
   .use(express.urlencoded({ extended: true }))
   .post('/api', (req, res) => getUserInfo(req, res))
   .post('/insertReserve', (req, res) => insertReserve(req, res))
+  .post('/searchReserve', (req, res) => searchReserve(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 const getUserInfo = (req, res) => {
