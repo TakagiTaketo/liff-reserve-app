@@ -108,7 +108,7 @@ const insertReserve = (req, res) => {
 
   // タイムスタンプ整形
   let created_at = '';
-  let date = new Date().toLocaleString({ timeZone: 'Asia/Tokyo' });
+  let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
   console.log('date:' + date);
   created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
     + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
