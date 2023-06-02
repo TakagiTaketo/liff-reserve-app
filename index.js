@@ -82,16 +82,16 @@ const searchReserve = (req, res) => {
   const reserve_date = data.reserve_date; //予約日
   const reserve_time = data.reserve_time; //予約時間
   const select_query = {
-    text: `SELECT COUNT(*) FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}';`
+    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}';`
   };
   let reserve_flg = false;
   connection.query(select_query, function (error, results, fields) {
     if (error) throw error;
-    let count = results[0]['COUNT(*)'];
-    if (count == 0) {
+    let line_uid = results.rows[0].line_uid;
+    if (line_uid != null) {
       reserve_flg = false;
       console.log('予約満席');
-    } else if (count > 0) {
+    } else if (line_uid == null) {
       reserve_flg = true;
       console.log('予約空席');
     }
