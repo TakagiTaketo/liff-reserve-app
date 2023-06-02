@@ -106,8 +106,6 @@
             </p>
         </div>
     </form>
-    <div id="divPage"></div>
-    <div>変更点</div>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="reserve.js">
         let line_uid = '';
@@ -139,8 +137,6 @@
                         creadentials: 'same-origin'
                     })
                         .then(res => {
-                            //ここにレスポンス返ってくる
-
                             res.json()
                                 .then(json => {
                                     console.log('json:' + json);
