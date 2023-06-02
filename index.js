@@ -88,11 +88,11 @@ const searchReserve = (req, res) => {
   connection.query(select_query)
     .then((error, results) => {
       if (results != null) {
-        reserve_flg = true;
-        console.log('予約空席');
-      } else {
         reserve_flg = false;
         console.log('予約満席');
+      } else {
+        reserve_flg = true;
+        console.log('予約空席');
       }
       console.log('error:' + error);
       res.status(200).send({ reserve_flg });
