@@ -109,11 +109,11 @@ const insertReserve = (req, res) => {
   // タイムスタンプ整形
   let created_at = '';
   let date = new Date().toLocaleString({ timeZone: 'Asia/Tokyo' });
-  date.add
+  console.log('date:' + date);
   created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
     + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
     + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
-
+  console.log('created_at:' + created_at);
   console.log('line_uid:', data.line_uid);
   console.log('reserve_date:', data.reserve_date);
   console.log('reserve_time:', data.reserve_time);
