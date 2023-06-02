@@ -86,15 +86,15 @@ const searchReserve = (req, res) => {
   };
   let reserve_flg = false;
   connection.query(select_query)
-    .then((data) => {
-      console.log('data.size():' + data.size());
-      if (data.size() == 0) {
+    .then((error, results) => {
+      if (results != null) {
         reserve_flg = true;
         console.log('予約空席');
-      } else if (data.size() > 0 || data == null) {
+      } else {
         reserve_flg = false;
         console.log('予約満席');
       }
+      console.log('error:' + error);
       res.status(200).send({ reserve_flg });
     })
     .catch(e => {
