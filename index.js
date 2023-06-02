@@ -70,6 +70,35 @@ const getUserInfo = (req, res) => {
     })
     .catch(e => console.log(e));
 }
+// 予定を入れられるかどうか確認する。
+const searchReserve = (req, res) => {
+  const data = req.body;
+  //const postData = `id_token=${data.id_token}&client_id=${process.env.LOGIN_CHANNEL_ID}`;
+  console.log('reserve_date:' + data.reserve_date);
+  console.log('reserve_time:' + data.reserve_time);
+  //console.log('client_id:' + process.env.LOGIN_CHANNEL_ID);
+
+  const reserve_date = data.reserve_date; //予約日
+  const reserve_time = data.reserve_time; //予約時間
+  const select_query = {
+    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}';`
+  };
+  let reserve_flg = false;
+  connection.query(select_query)
+    .then((data) => {
+      if (data.length == 0) {
+        reserve_flg = true;
+        console.log('予約空席');
+      } else if (data.length > 0 || data == null) {
+        reserve_flg = false;
+        console.log('予約満席');
+      }
+      res.status(200).send({ reserve_flg });
+    })
+    .catch(e => {
+      console.log(e);
+    });
+};
 
 // users,reservesテーブルに予定を追加する。
 const insertReserve = (req, res) => {
@@ -77,7 +106,8 @@ const insertReserve = (req, res) => {
 
   // タイムスタンプ整形
   let created_at = '';
-  let date = new Date();
+  let date = new Date().toLocaleString({ timeZone: 'Asia/Tokyo' });
+  date.add
   created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
     + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
     + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);

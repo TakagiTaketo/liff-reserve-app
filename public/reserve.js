@@ -7,24 +7,50 @@ $(function () {
         let birthday = $('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日';
 
         if (window.confirm(`この内容で予約します。よろしいですか？\n氏名：${username}\n生年月日：${birthday}\n予約日時：${reserveDate} ${reserveTime}\n`)) {
-            // DB登録
+            // jsonDataを作成
             const jsonData = JSON.stringify({
                 line_uid: line_uid,
                 reserve_date: reserveDate,
                 reserve_time: reserveTime
             });
             console.log(jsonData);
-            fetch('/insertReserve', {
+            // 予定検索
+            fetch('/searchReserve', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: jsonData,
-                creadentials: 'same-origin'
+                credentials: 'same-origin'
             })
-
-            let msg = '新規予約' + '\n' + reserveDate + '\n' + reserveTime.toString() + '\n' + '氏名：' + username + '\n' + '生年月日：' + birthday;
-            sendText(msg);
+                .then(res => {
+                    res.json()
+                        .then(json => {
+                            console.log('json:' + json);
+                            if (json.reserve_flg) {
+                                // 空席
+                                fetch('/insertReserve', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: jsonData,
+                                    creadentials: 'same-origin'
+                                })
+                                    .then(json => {
+                                        let msg = '新規予約' + '\n' + reserveDate + '\n' + reserveTime.toString() + '\n' + '氏名：' + username + '\n' + '生年月日：' + birthday;
+                                        sendText(msg);
+                                        console.log('予約完了');
+                                    })
+                            } else {
+                                // 満席
+                                alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
+                            }
+                        })
+                })
+                .catch((err) => {
+                    alert(err);
+                })
         }
         return false;
     })
