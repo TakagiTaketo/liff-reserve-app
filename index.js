@@ -151,11 +151,11 @@ const selectWeekReserve = (req, res) => {
     connection.end;
     if (error) throw error;
     let jsonData = '';
-    console.log('results:' + results);
+    //console.log('results:' + results);
     //numrows = results.length();
-    numrows = results.size();
-    console.log('numrows:' + numrows);
-    for (let i = 0; i < numrows; i++) {
+    //numrows = results.size();
+    //console.log('numrows:' + numrows);
+    for (let i = 0; i < 7; i++) {
       const reserve_date = results[i].reserve_date;
       const reserve_time = results[i].reserve_time;
       jsonData += JSON.stringify({
