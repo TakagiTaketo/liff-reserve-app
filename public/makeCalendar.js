@@ -45,7 +45,7 @@ function changeCalendar() {
     // 日にちを取得
     let thisDate = selectDate.getDate();
     // 選択した日付の曜日を取得
-    let thisDayNum = selectDate.getDay();　// ex)日曜日なら0
+    let thisDayNum = selectDate.getDay();   // ex)日曜日なら0
     // 今週の日曜日
     let thisSunday = thisDate - thisDayNum;
     // 今週の土曜日
@@ -76,9 +76,9 @@ function changeCalendar() {
                 .then(json => {
                     for (var i in json) {
                         // 選択した週の予定の場合、配列に格納する。
-                        let excelDate = new Date(json[i].startDate);
+                        let excelDate = new Date(json.rows[i].startDate);
                         if (startTime <= excelDate && excelDate <= endTime) {
-                            displayStartDate.push((json[i].startDate).toString().slice(0, 11) + 'T' + json[i].startTime);
+                            displayStartDate.push((json.rows[i].startDate).toString().slice(0, 11) + 'T' + json.rows[i].startTime);
                         }
                     }
                     let calendar = document.getElementById("calendar");
