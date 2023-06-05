@@ -158,8 +158,11 @@ const selectWeekReserve = (req, res) => {
     let reserve_date = '';
     let reserve_time = '';
     for (let i = 0; i < 7; i++) {
-      reserve_date = results.rows[1].reserve_date;
-      reserve_time = results.rows[1].reserve_time;
+      console.log('i:' + i);
+      console.log('reserve_date:' + results.rows[i].reserve_date);
+      console.log('reserve_time:' + results.rows[i].reserve_time);
+      reserve_date = results.rows[i].reserve_date;
+      reserve_time = results.rows[i].reserve_time;
       jsonData += JSON.stringify({
         reserve_date: reserve_date,
         reserve_time: reserve_time
