@@ -147,12 +147,13 @@ const selectWeekReserve = (req, res) => {
     text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
   let dataList = [];
-  let tmp_data = {};
+
   connection.query(select_query)
     .then(data => {
       let reserve_date = '';
       let reserve_time = '';
       for (let i = 0; i < data.rows.length; i++) {
+        let tmp_data = {};
         tmp_data.reserve_date = data.rows[i].reserve_date;
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
