@@ -168,7 +168,8 @@ const selectWeekReserve = (req, res) => {
       }
       //JSON.stringify(jsonData);
 
-      console.log('jsonData:' + json_data);
+      console.log('dataList:' + dataList);
+      console.log('json化したdataList:' + JSON.stringify(dataList));
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch(e => console.log(e))
