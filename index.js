@@ -155,13 +155,13 @@ const selectWeekReserve = (req, res) => {
         reserve_date = data.rows[i].reserve_date;
         reserve_time = data.rows[i].reserve_time;
 
-        jsonData.push(JSON.stringify({
+        jsonData.push({
           reserve_date: reserve_date,
           reserve_time: reserve_time
-        }));
+        });
       }
       console.log('jsonData:' + jsonData);
-      res.status(200).send({ jsonData });
+      res.status(200).send([jsonData]);
     })
     .catch(e => console.log(e))
     .finally(() => {
