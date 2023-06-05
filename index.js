@@ -155,7 +155,7 @@ const selectWeekReserve = (req, res) => {
       for (let i = 0; i < data.rows.length; i++) {
         jsonData['reserve_date'] = data.rows[i].reserve_date;
         jsonData['reserve_time'] = data.rows[i].reserve_time;
-        json_data.push(JSON.stringify(jsonData));
+        json_data += (JSON.stringify(jsonData));
         /*
         jsonData.push({
           reserve_date: reserve_date,
