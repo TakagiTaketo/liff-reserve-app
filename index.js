@@ -157,17 +157,28 @@ const selectWeekReserve = (req, res) => {
     //console.log('numrows:' + numrows);
     //let reserve_date = '';
     //let reserve_time = '';
+    let i = 0;
+    while (true) {
+      if (results.rows[i].reserve_date != null && results.rows[i].reserve_time != null) {
+        jsonData += JSON.stringify({
+          reserve_date: results.rows[i].reserve_date,
+          reserve_time: results.rows[i].reserve_time
+        })
+      } else {
+        break;
+      }
+      i++;
+    }
+    /*
     for (let i = 0; i < 6; i++) {
       //reserve_date = results.rows[i].reserve_date;
       //reserve_time = results.rows[i].reserve_time;
-      jsonData += JSON.stringify({
-        reserve_date: results.rows[i].reserve_date,
-        reserve_time: results.rows[i].reserve_time
-      })
+
       //console.log('reserve_date:' + reserve_date);
       //console.log('reserve_time:' + reserve_time);
       console.log('jsondata:' + jsonData + i);
     }
+    */
     //console.log('jsonData:' + jsonData);
     res.status(200).send({ jsonData });
 
