@@ -146,10 +146,9 @@ const selectWeekReserve = (req, res) => {
   const select_query = {
     text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
-
+  let jsonData = '';
   connection.query(select_query)
     .then(data => {
-      console.log('data.length:' + data.rows.length);
       let reserve_date = '';
       let reserve_time = '';
       for (let i = 0; i < data.rows.length; i++) {
