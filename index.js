@@ -150,7 +150,9 @@ const selectWeekReserve = (req, res) => {
   connection.query(select_query, function (error, results) {
     if (error) throw error;
     let jsonData = '';
-    for (let i = 0; i < results.length(); i++) {
+    numrows = results.length;
+    console.log('numrows:' + numrows);
+    for (let i = 0; i < numrows; i++) {
       const reserve_date = results[i].reserve_date;
       const reserve_time = results[i].reserve_time;
       jsonData += JSON.stringify({
