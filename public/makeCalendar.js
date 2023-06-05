@@ -67,7 +67,7 @@ function changeCalendar() {
     displayStartDate.push(startDate);
 
     //let displayEndDate = [];
-    fetch('/searchWeekReserve', {
+    fetch('/selectWeekReserve', {
         method: 'POST',
         credentials: 'same-origin'
     })
