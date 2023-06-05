@@ -76,9 +76,9 @@ function changeCalendar() {
                 .then(json => {
                     for (var i in json) {
                         // 選択した週の予定の場合、配列に格納する。
-                        let excelDate = new Date(json[i].startDate);
+                        let excelDate = new Date(json[i].reserve_date);
                         if (startTime <= excelDate && excelDate <= endTime) {
-                            displayStartDate.push((json[i].startDate).toString().slice(0, 11) + 'T' + json[i].startTime);
+                            displayStartDate.push((json[i].reserve_date).toString().slice(0, 11) + 'T' + json[i].reserve_time);
                         }
                     }
                     let calendar = document.getElementById("calendar");
