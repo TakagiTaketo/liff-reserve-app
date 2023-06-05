@@ -152,7 +152,7 @@ const selectWeekReserve = (req, res) => {
     if (error) throw error;
     let jsonData = '';
     console.log('results:' + results);
-    numrows = results.length();
+    //numrows = results.length();
     numrows = results.size();
     console.log('numrows:' + numrows);
     for (let i = 0; i < numrows; i++) {
