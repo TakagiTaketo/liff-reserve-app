@@ -64,16 +64,17 @@ const getUserInfo = (req, res) => {
                 const line_uid = data.rows[0].line_uid;
                 res.status(200).send({ line_uname, line_uid });
               })
-              .catch(e => console.log(e));
+              .catch(e => console.log(e))
+              .finally(() => {
+                connection.end;
+              });
             console.log('response data:', json);
           }
         });
     })
-    .catch(e => console.log(e))
-    .finally(() => {
-      connection.end;
-    });
-}
+    .catch(e => console.log(e));
+};
+
 // 予定を入れられるかどうか確認する。
 const searchReserve = (req, res) => {
   const data = req.body;
@@ -89,7 +90,9 @@ const searchReserve = (req, res) => {
   };
   let reserve_flg = false;
   connection.query(select_query, function (error, results, fields) {
+    connection.end;
     if (error) throw error;
+
     // TODO line
     if (results.rows[0] != null) {
       reserve_flg = false;
@@ -100,9 +103,6 @@ const searchReserve = (req, res) => {
     }
     res.status(200).send({ reserve_flg });
   })
-    .finally(() => {
-      connection.end;
-    });
 };
 
 // users,reservesテーブルに予定を追加する。
