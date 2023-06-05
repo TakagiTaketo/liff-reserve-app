@@ -74,12 +74,13 @@ function changeCalendar() {
         .then(res => {
             res.json()
                 .then(json => {
-                    //let jsonList = JSON.parse(json);
+                    let jsonList = JSON.parse(json);
+                    console.log('jsonList:' + jsonList);
                     for (var i in json) {
                         // 選択した週の予定の場合、配列に格納する。
-                        let excelDate = new Date(i.reserve_date);
+                        let excelDate = new Date(json[i].reserve_date);
                         if (startTime <= excelDate && excelDate <= endTime) {
-                            displayStartDate.push((i.reserve_date).toString().slice(0, 11) + 'T' + i.reserve_time);
+                            displayStartDate.push((json[i].reserve_date).toString().slice(0, 11) + 'T' + json[i].reserve_time);
                         }
                     }
                     let calendar = document.getElementById("calendar");
