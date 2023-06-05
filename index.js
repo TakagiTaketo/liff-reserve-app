@@ -151,6 +151,8 @@ const selectWeekReserve = (req, res) => {
     .then(data => {
       const reserve_date = data.rows[0].reserve_date;
       const reserve_time = data.rows[0].reserve_time;
+      console.log('reserve_date:' + reserve_date);
+      console.log('reserve_time:' + reserve_time);
       res.status(200).send({ reserve_date, reserve_time });
     })
     .catch(e => console.log(e))
@@ -175,8 +177,8 @@ let i = 0;
 while (true) {
 if (results.rows[i].reserve_date != null && results.rows[i].reserve_time != null) {
 jsonData += JSON.stringify({
-  reserve_date: results.rows[0].reserve_date,
-  reserve_time: results.rows[0].reserve_time
+reserve_date: results.rows[0].reserve_date,
+reserve_time: results.rows[0].reserve_time
 })
 } else {
 break;
