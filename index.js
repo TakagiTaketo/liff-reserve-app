@@ -149,8 +149,18 @@ const selectWeekReserve = (req, res) => {
 
   connection.query(select_query, function (error, results) {
     if (error) throw error;
-    console.log('results:' + results);
-    res.status(200).send({ results });
+    let jsonData = '';
+    for (let i = 0; i < results.rows.length(); i++) {
+      const reserve_date = results.rows[i].reserve_date;
+      const reserve_time = results.rows[i].reserve_time;
+      jsonData += JSON.stringify({
+        reserve_date: reserve_date,
+        reserve_time: reserve_time
+      })
+    }
+    console.log('jsonData:' + jsonData);
+    res.status(200).send({ jsonData });
+
   })
 }
 /*
