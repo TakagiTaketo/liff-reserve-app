@@ -69,7 +69,10 @@ const getUserInfo = (req, res) => {
           }
         });
     })
-    .catch(e => console.log(e));
+    .catch(e => console.log(e))
+    .finally(() => {
+      connection.end;
+    });
 }
 // 予定を入れられるかどうか確認する。
 const searchReserve = (req, res) => {
@@ -87,8 +90,7 @@ const searchReserve = (req, res) => {
   let reserve_flg = false;
   connection.query(select_query, function (error, results, fields) {
     if (error) throw error;
-    // TODO connection.queryの戻り値で判定するところから。91行目でrows[0]に値取りに行ってエラーなってます。
-    //let line_uid = results.rows[0].line_uid;
+    // TODO line
     if (results.rows[0] != null) {
       reserve_flg = false;
       console.log('予約満席');
@@ -98,6 +100,9 @@ const searchReserve = (req, res) => {
     }
     res.status(200).send({ reserve_flg });
   })
+    .finally(() => {
+      connection.end;
+    });
 };
 
 // users,reservesテーブルに予定を追加する。
@@ -127,6 +132,9 @@ const insertReserve = (req, res) => {
     })
     .catch(e => {
       console.log(e);
+    })
+    .finally(() => {
+      connection.end;
     });
 }
 
