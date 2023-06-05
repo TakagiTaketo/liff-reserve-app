@@ -119,12 +119,13 @@ const insertReserve = (req, res) => {
     + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
   console.log('created_at:' + created_at);
   console.log('line_uid:', data.line_uid);
+  console.log('name:', data.name);
   console.log('reserve_date:', data.reserve_date);
   console.log('reserve_time:', data.reserve_time);
   console.log('created_at:', created_at);
   const insert_query = {
-    text: `INSERT INTO reserves(line_uid, reserve_date, reserve_time, created_at, delete_flg) VALUES ($1, $2, $3, $4, $5);`,
-    values: [data.line_uid, data.reserve_date, data.reserve_time, created_at, 0]
+    text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg) VALUES ($1, $2, $3, $4, $5, $6);`,
+    values: [data.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0]
   };
 
   connection.query(insert_query)
@@ -143,41 +144,28 @@ const insertReserve = (req, res) => {
 
 // 予約カレンダー取得
 const selectWeekReserve = (req, res) => {
+  // SELECT文
   const select_query = {
-    text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
+    text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
-  let dataList = [];
 
+  let dataList = [];
+  // SQL実行
   connection.query(select_query)
     .then(data => {
-      let reserve_date = '';
-      let reserve_time = '';
       for (let i = 0; i < data.rows.length; i++) {
         let tmp_data = {};
+        tmp_data.name = data.rows[i].name;
         tmp_data.reserve_date = data.rows[i].reserve_date;
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
-        //jsonData["reserve_date"] = data.rows[i].reserve_date;
-        //jsonData["reserve_time"] = data.rows[i].reserve_time;
-        //jsonDataList += (JSON.stringify(jsonData));
-        /*
-        jsonData.push({
-          reserve_date: reserve_date,
-          reserve_time: reserve_time
-        });
-        */
       }
-      //JSON.stringify(jsonData);
-
-      console.log('dataList:' + dataList);
-      console.log('json化したdataList:' + JSON.stringify(dataList));
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch(e => console.log(e))
     .finally(() => {
       connection.end;
     });
-
 }
   /*
 connection.query(select_query, function (error, results) {

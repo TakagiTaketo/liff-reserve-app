@@ -35,7 +35,7 @@ window.onload = function () {
 }
 
 function changeCalendar() {
-    const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
+    //const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
     // 選択した日付を取得
     let selectDate = new Date(document.getElementById("displayDate").value); // ex)2023-05-01
     // 年を取得
@@ -65,7 +65,8 @@ function changeCalendar() {
 
     let displayStartDate = [];
     displayStartDate.push(startDate);
-
+    let nameList = [];
+    nameList.push('dummy');
     //let displayEndDate = [];
     fetch('/selectWeekReserve', {
         method: 'POST',
@@ -81,6 +82,7 @@ function changeCalendar() {
                         let excelDate = new Date(json[i].reserve_date);
                         if (startTime <= excelDate && excelDate <= endTime) {
                             displayStartDate.push((json[i].reserve_date).toString().slice(0, 11) + 'T' + json[i].reserve_time);
+                            nameList.push(json[i].name);
                         }
                     }
                     let calendar = document.getElementById("calendar");
@@ -89,8 +91,12 @@ function changeCalendar() {
                     }
                     console.log(displayStartDate);
                     let BUSY = [];
+                    let HAIHUN = [];
                     for (let i = 0; i < displayStartDate.length; i++) {
                         BUSY.push(displayStartDate[i]);
+                    }
+                    for (let i = 0; i < nameList.length; i++) {
+                        HAIHUN.push(nameList[i]);
                     }
                     console.log('BUSY' + BUSY);
                     const
@@ -122,7 +128,8 @@ function changeCalendar() {
                         d = date_num(b),
                         e = [],
                         f = TABLE.insertRow(-1),
-                        g = [];
+                        g = HAIHUN.map(),
+                        n = [];
 
                     let busytime = [];
                     for (let i = 0; i < DATE_SPAN; i++) {
@@ -149,7 +156,14 @@ function changeCalendar() {
                         }
                         */
                     }
-
+                    for (let f of g) {
+                        let h = f.getHours();
+                        //let m = f.getMinutes();
+                        if ('undefined' === typeof n[h]) {
+                            n[h] = [];
+                            n[h][date_num(f) - d] = true;
+                        }
+                    }
                     // 時間部
                     for (let i = TIME_BEGIN; i <= TIME_END; i++) {
                         if (i == 12) continue;
@@ -159,6 +173,8 @@ function changeCalendar() {
                         for (j = 0; j < DATE_SPAN; j++) {
                             let cell = a.insertCell(-1);
                             cell.textContent = (e[i] || [])[j] ? '×' : '◎';
+                            cell.textContent = (n[i] || [])[j] ? '-' : '×';
+                            // 土日はハイフン
                             if (j == 0 || j == 6) cell.textContent = '-';
                             if (cell.textContent == "◎") {
                                 cell.style.color = "red";

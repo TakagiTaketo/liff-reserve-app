@@ -10,6 +10,7 @@ $(function () {
             // jsonDataを作成
             const jsonData = JSON.stringify({
                 line_uid: line_uid,
+                name: username,
                 reserve_date: reserveDate,
                 reserve_time: reserveTime
             });
