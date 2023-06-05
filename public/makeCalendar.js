@@ -255,7 +255,7 @@ fetch(api_url)
             }
             */
 }
-
+/*
 // 時間部
 for (let i = TIME_BEGIN; i <= TIME_END; i++) {
     if (i == 12) continue;
@@ -295,6 +295,7 @@ for (let i = TIME_BEGIN; i <= TIME_END; i++) {
 
 })
 .catch((err) => console.error(`スケジュールが取得できませんでした：${err}`));
-*/
+
 
 }
+*/
