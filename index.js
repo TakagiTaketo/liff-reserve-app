@@ -148,6 +148,7 @@ const selectWeekReserve = (req, res) => {
   };
 
   connection.query(select_query, function (error, results) {
+    connection.end;
     if (error) throw error;
     let jsonData = '';
     console.log('results:' + results);
