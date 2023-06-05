@@ -149,11 +149,19 @@ const selectWeekReserve = (req, res) => {
 
   connection.query(select_query)
     .then(data => {
-      const reserve_date = data.rows[0].reserve_date;
-      const reserve_time = data.rows[0].reserve_time;
-      console.log('reserve_date:' + reserve_date);
-      console.log('reserve_time:' + reserve_time);
-      res.status(200).send({ reserve_date, reserve_time });
+      console.log('data.length:' + data.length);
+      let reserve_date = '';
+      let reserve_time = '';
+      for (let i = 0; i < data.length; i++) {
+        reserve_date = data.rows[i].reserve_date;
+        reserve_time = data.rows[i].reserve_time;
+        jsonData += JSON.stringify({
+          reserve_date: reserve_date,
+          reserve_time: reserve_time
+        })
+      }
+      console.log('jsonData:' + jsonData);
+      res.status(200).send({ jsonData });
     })
     .catch(e => console.log(e))
     .finally(() => {
