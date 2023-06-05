@@ -128,10 +128,13 @@ const insertReserve = (req, res) => {
 
   connection.query(insert_query)
     .then(() => {
-      console.log('予約追加完了');
+      //console.log('予約追加完了');
+      let message = '予約追加完了'
+      res.status(200).send(message);
     })
     .catch(e => {
       console.log(e);
+      res.status
     })
     .finally(() => {
       connection.end;
