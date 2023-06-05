@@ -164,6 +164,8 @@ const selectWeekReserve = (req, res) => {
         reserve_date: reserve_date,
         reserve_time: reserve_time
       })
+      console.log('reserve_date:' + reserve_date);
+      console.log('reserve_time:' + reserve_time);
     }
     console.log('jsonData:' + jsonData);
     res.status(200).send({ jsonData });
