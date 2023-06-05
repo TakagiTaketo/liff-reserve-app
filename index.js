@@ -29,9 +29,10 @@ express()
   .use(express.static('public'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
-  .post('/api', (req, res) => getUserInfo(req, res))
-  .post('/insertReserve', (req, res) => insertReserve(req, res))
-  .post('/searchReserve', (req, res) => searchReserve(req, res))
+  .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
+  .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
+  .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
+  .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約カレンダー作成
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 const getUserInfo = (req, res) => {
@@ -76,7 +77,7 @@ const getUserInfo = (req, res) => {
 };
 
 // 予定を入れられるかどうか確認する。
-const searchReserve = (req, res) => {
+const selectReserve = (req, res) => {
   const data = req.body;
   //const postData = `id_token=${data.id_token}&client_id=${process.env.LOGIN_CHANNEL_ID}`;
   console.log('reserve_date:' + data.reserve_date);
@@ -86,10 +87,10 @@ const searchReserve = (req, res) => {
   const reserve_date = data.reserve_date; //予約日
   const reserve_time = data.reserve_time; //予約時間
   const select_query = {
-    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}';`
+    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time} and delete_flg=0';`
   };
   let reserve_flg = false;
-  connection.query(select_query, function (error, results, fields) {
+  connection.query(select_query, function (error, results) {
     connection.end;
     if (error) throw error;
 
@@ -128,7 +129,6 @@ const insertReserve = (req, res) => {
 
   connection.query(insert_query)
     .then(() => {
-      //console.log('予約追加完了');
       let message = '予約追加完了'
       res.status(200).send(message);
     })
@@ -141,6 +141,18 @@ const insertReserve = (req, res) => {
     });
 }
 
+// 予約カレンダー取得
+const selectWeekReserve = (req, res) => {
+  const select_query = {
+    text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
+  };
+
+  connection.query(select_query, function (error, results) {
+    if (error) throw error;
+    console.log('results:' + results);
+    res.status(200).send({ results });
+  })
+}
 /*
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
@@ -149,7 +161,7 @@ const insertReserve = (req, res) => {
   .post('/p/', (req, res) => res.json({ method: "こんにちは、postさん" }))
   .post("/hook/", (req, res) => res.json({ test: "hook" }))
   //.post('/hook',line.middleware(config),(req,res)=> lineBot(req,res))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 //usersテーブル作成クエリ
 const create_query = {
@@ -164,7 +176,7 @@ connection.query(create_query)
 const client = new line.Client(config);
 app
   .post('/hook', line.middleware(config), (req, res) => lineBot(req, res))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+  .listen(PORT, () => console.log(`Listening on ${ PORT } `));
 
 const lineBot = (req, res) => {
   res.status(200).end();
@@ -188,14 +200,14 @@ const lineBot = (req, res) => {
 const greeting_follow = async (ev) => {
   const profile = await client.getProfile(ev.source.userId);
   const insert_query = {
-    text: `INSERT INTO users (line_uid,name,age) VALUES($1,$2,$3);`,
+    text: `INSERT INTO users(line_uid, name, age) VALUES($1, $2, $3); `,
     values: [ev.source.userId, profile.displayName, 33]
   };
   connection.query(insert_query)
     .then(() => {
       return client.replyMessage(ev.replyToken, {
         "type": "text",
-        "text": `${profile.displayName}さん、フォローありがとうございます\uDBC0\uDC04`
+        "text": `${ profile.displayName } さん、フォローありがとうございます\uDBC0\uDC04`
       });
     })
     .catch(e => console.log(e));

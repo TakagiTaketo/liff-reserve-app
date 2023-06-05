@@ -15,7 +15,7 @@ $(function () {
             });
             console.log(jsonData);
             // 予定検索
-            fetch('/searchReserve', {
+            fetch('/selectReserve', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,8 +40,8 @@ $(function () {
                                     .then(json => {
                                         //let msg = '新規予約' + '\n' + reserveDate + '\n' + reserveTime.toString() + '\n' + '氏名：' + username + '\n' + '生年月日：' + birthday;
                                         let msg = '予約入力しました。'
-                                        sendText(msg);
                                         console.log(json.message);
+                                        sendText(msg);
                                     })
                             } else {
                                 // 満席
