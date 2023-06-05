@@ -146,16 +146,19 @@ const selectWeekReserve = (req, res) => {
   const select_query = {
     text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
-  let jsonData = {};
-  let json_data = {};
+  let dataList = [];
+  let tmp_data = {};
   connection.query(select_query)
     .then(data => {
       let reserve_date = '';
       let reserve_time = '';
       for (let i = 0; i < data.rows.length; i++) {
-        jsonData['reserve_date'] = data.rows[i].reserve_date;
-        jsonData['reserve_time'] = data.rows[i].reserve_time;
-        json_data += (JSON.stringify(jsonData));
+        tmp_data.reserve_date = data.rows[i].reserve_date;
+        tmp_data.reserve_time = data.rows[i].reserve_time;
+        dataList.push(tmp_data);
+        //jsonData["reserve_date"] = data.rows[i].reserve_date;
+        //jsonData["reserve_time"] = data.rows[i].reserve_time;
+        //jsonDataList += (JSON.stringify(jsonData));
         /*
         jsonData.push({
           reserve_date: reserve_date,
@@ -166,7 +169,7 @@ const selectWeekReserve = (req, res) => {
       //JSON.stringify(jsonData);
 
       console.log('jsonData:' + json_data);
-      res.status(200).send([jsonData]);
+      res.status(200).send(JSON.stringify(dataList));
     })
     .catch(e => console.log(e))
     .finally(() => {
