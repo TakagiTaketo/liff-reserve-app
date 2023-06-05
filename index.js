@@ -147,100 +147,116 @@ const selectWeekReserve = (req, res) => {
     text: `SELECT reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
 
-  connection.query(select_query, function (error, results) {
-    connection.end;
-    if (error) throw error;
-    let jsonData = '';
-    //console.log('results:' + results);
-    //numrows = results.length();
-    //numrows = results.size();
-    //console.log('numrows:' + numrows);
-    //let reserve_date = '';
-    //let reserve_time = '';
-    let i = 0;
-    while (true) {
-      if (results.rows[i].reserve_date != null && results.rows[i].reserve_time != null) {
-        jsonData += JSON.stringify({
-          reserve_date: results.rows[i].reserve_date,
-          reserve_time: results.rows[i].reserve_time
-        })
-      } else {
-        break;
-      }
-      i++;
-    }
-    /*
-    for (let i = 0; i < 6; i++) {
-      //reserve_date = results.rows[i].reserve_date;
-      //reserve_time = results.rows[i].reserve_time;
+  connection.query(select_query)
+    .then(data => {
+      const reserve_date = data.rows[0].reserve_date;
+      const reserve_time = data.rows[0].reserve_time;
+      res.status(200).send({ reserve_date, reserve_time });
+    })
+    .catch(e => console.log(e))
+    .finally(() => {
+      connection.end;
+    });
 
-      //console.log('reserve_date:' + reserve_date);
-      //console.log('reserve_time:' + reserve_time);
-      console.log('jsondata:' + jsonData + i);
-    }
-    */
-    //console.log('jsonData:' + jsonData);
-    res.status(200).send({ jsonData });
-
-  })
 }
+  /*
+connection.query(select_query, function (error, results) {
+connection.end;
+if (error) throw error;
+let jsonData = '';
+//console.log('results:' + results);
+//numrows = results.length();
+//numrows = results.size();
+//console.log('numrows:' + numrows);
+//let reserve_date = '';
+//let reserve_time = '';
 /*
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .get('/g/', (req, res) => res.json({ method: "こんにちは、getさん" }))
-  .post('/p/', (req, res) => res.json({ method: "こんにちは、postさん" }))
-  .post("/hook/", (req, res) => res.json({ test: "hook" }))
-  //.post('/hook',line.middleware(config),(req,res)=> lineBot(req,res))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+let i = 0;
+while (true) {
+if (results.rows[i].reserve_date != null && results.rows[i].reserve_time != null) {
+jsonData += JSON.stringify({
+  reserve_date: results.rows[0].reserve_date,
+  reserve_time: results.rows[0].reserve_time
+})
+} else {
+break;
+}
+i++;
+}
+ 
+for (let i = 0; i < 6; i++) {
+//reserve_date = results.rows[i].reserve_date;
+//reserve_time = results.rows[i].reserve_time;
+
+//console.log('reserve_date:' + reserve_date);
+//console.log('reserve_time:' + reserve_time);
+console.log('jsondata:' + jsonData + i);
+}
+ 
+//console.log('jsonData:' + jsonData);
+
+res.status(200).send({ results.rows[0].reserve_date, results.rows[0].reserve_time });
+
+})
+}
+
+/*
+.set('views', path.join(__dirname, 'views'))
+.set('view engine', 'ejs')
+.get('/', (req, res) => res.render('pages/index'))
+.get('/g/', (req, res) => res.json({ method: "こんにちは、getさん" }))
+.post('/p/', (req, res) => res.json({ method: "こんにちは、postさん" }))
+.post("/hook/", (req, res) => res.json({ test: "hook" }))
+//.post('/hook',line.middleware(config),(req,res)=> lineBot(req,res))
+.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 //usersテーブル作成クエリ
 const create_query = {
-  text: 'CREATE TABLE IF NOT EXISTS users (id SERIAL NOT NULL, line_uid VARCHAR(50), name VARCHAR(20), age SMALLINT);'
+text: 'CREATE TABLE IF NOT EXISTS users (id SERIAL NOT NULL, line_uid VARCHAR(50), name VARCHAR(20), age SMALLINT);'
 };
 
 //CREATEクエリ実行
 connection.query(create_query)
-  .then(() => console.log('usersテーブル作成成功！！'))
-  .catch(e => console.log(e))
+.then(() => console.log('usersテーブル作成成功！！'))
+.catch(e => console.log(e))
 
 const client = new line.Client(config);
 app
-  .post('/hook', line.middleware(config), (req, res) => lineBot(req, res))
-  .listen(PORT, () => console.log(`Listening on ${ PORT } `));
+.post('/hook', line.middleware(config), (req, res) => lineBot(req, res))
+.listen(PORT, () => console.log(`Listening on ${ PORT } `));
 
 const lineBot = (req, res) => {
-  res.status(200).end();
-  const events = req.body.events;
-  const promises = [];
-  for (let i = 0; i < events.length; i++) {
-    const ev = events[i];
-    switch (ev.type) {
-      case 'follow':
-        promises.push(greeting_follow(ev));
-        break;
-    }
-  }
-  Promise
-    .all(promises)
-    .then(console.log('all promises passed'))
-    .catch(e => console.error(e.stack));
+res.status(200).end();
+const events = req.body.events;
+const promises = [];
+for (let i = 0; i < events.length; i++) {
+const ev = events[i];
+switch (ev.type) {
+case 'follow':
+promises.push(greeting_follow(ev));
+break;
+}
+}
+Promise
+.all(promises)
+.then(console.log('all promises passed'))
+.catch(e => console.error(e.stack));
 }
 
 //フォローしたら挨拶を返す関数
 const greeting_follow = async (ev) => {
-  const profile = await client.getProfile(ev.source.userId);
-  const insert_query = {
-    text: `INSERT INTO users(line_uid, name, age) VALUES($1, $2, $3); `,
-    values: [ev.source.userId, profile.displayName, 33]
-  };
-  connection.query(insert_query)
-    .then(() => {
-      return client.replyMessage(ev.replyToken, {
-        "type": "text",
-        "text": `${ profile.displayName } さん、フォローありがとうございます\uDBC0\uDC04`
-      });
-    })
-    .catch(e => console.log(e));
+const profile = await client.getProfile(ev.source.userId);
+const insert_query = {
+text: `INSERT INTO users(line_uid, name, age) VALUES($1, $2, $3); `,
+values: [ev.source.userId, profile.displayName, 33]
+};
+connection.query(insert_query)
+.then(() => {
+return client.replyMessage(ev.replyToken, {
+"type": "text",
+"text": `${ profile.displayName } さん、フォローありがとうございます\uDBC0\uDC04`
+});
+})
+.catch(e => console.log(e));
 }
 */
