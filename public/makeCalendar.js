@@ -186,7 +186,9 @@ function changeCalendar() {
                         for (j = 0; j < DATE_SPAN; j++) {
                             let cell = a.insertCell(-1);
                             cell.textContent = (e[i] || [])[j] ? '×' : '◎';
-                            cell.textContent = (n[i] || [])[j] ? '-' : '×';
+                            if ((n[i] || [])[j]) {
+                                cell.textContent = '-';
+                            }
                             // 土日はハイフン
                             if (j == 0 || j == 6) cell.textContent = '-';
                             if (cell.textContent == "◎") {
