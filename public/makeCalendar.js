@@ -110,7 +110,7 @@ function changeCalendar() {
                         BUSY.push(displayStartDate[i]);
                     }
                     for (let i = 0; i < noReserveList.length; i++) {
-                        HAIHUN.push(nameList[i]);
+                        HAIHUN.push(noReserveList[i]);
                     }
                     console.log('BUSY' + BUSY);
                     const
