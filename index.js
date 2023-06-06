@@ -161,7 +161,7 @@ const selectWeekReserve = (req, res) => {
         tmp_data.reserve_date = data.rows[i].reserve_date;
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
-        console.log('selectWeekReserve()のdataList' + dataList);
+        console.log('selectWeekReserve()のdataList' + JSON.stringify(dataList));
         res.status(200).send((JSON.stringify(dataList)));
       }
     })
@@ -186,7 +186,7 @@ const selectNoReserve = (req, res) => {
         tmp_data.no_reserve_time = data.rows[i].no_reserve_time;
         dataList.push(tmp_data);
       }
-      console.log('selectNoReserve()のdataList:' + dataList);
+      console.log('selectNoReserve()のdataList:' + JSON.stringify(dataList));
       res.status(200).send((JSON.stringify(dataList)));
     })
     .catch(e => console.log(e))
