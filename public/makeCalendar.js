@@ -66,7 +66,6 @@ function changeCalendar() {
     let displayStartDate = [];
     displayStartDate.push(startDate);
     let noReserveList = [];
-    noReserveList.push('dummy');
     //let displayEndDate = [];
     fetch('/selectWeekReserve', {
         method: 'POST',
