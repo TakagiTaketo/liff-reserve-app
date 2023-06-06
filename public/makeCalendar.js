@@ -77,6 +77,8 @@ function changeCalendar() {
                 .then(json => {
                     //let jsonList = JSON.parse(json);
                     console.log('json:' + json);
+                    console.log('json.dataList:' + json.dataList);
+                    console.log('json.dataList2:' + json.dataList2);
                     for (var i in json) {
                         // 選択した週の予定の場合、配列に格納する。
                         let excelDate = new Date(json[i].reserve_date);

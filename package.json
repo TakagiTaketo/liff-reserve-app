@@ -9,8 +9,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
+    "start": "node index.js"
   },
   "author": "takagi",
   "license": "ISC",
