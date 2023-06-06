@@ -176,8 +176,8 @@ const selectWeekReserve = (req, res) => {
           }
           console.log('dataList:' + dataList);
           console.log('dataList2:' + dataList2);
-          console.log('送信するjson:' + JSON.stringify(dataList, dataList2));
-          res.status(200).send(JSON.stringify(dataList, dataList2));
+          console.log('送信するjson:' + JSON.stringify(dataList));
+          res.status(200).send((JSON.stringify(dataList), JSON.stringify(dataList2)));
         })
         .catch(e => console.log(e))
         .finally(() => {
