@@ -65,8 +65,8 @@ function changeCalendar() {
 
     let displayStartDate = [];
     displayStartDate.push(startDate);
-    let nameList = [];
-    nameList.push('dummy');
+    let noReserveList = [];
+    noReserveList.push('dummy');
     //let displayEndDate = [];
     fetch('/selectWeekReserve', {
         method: 'POST',
@@ -75,18 +75,30 @@ function changeCalendar() {
         .then(res => {
             res.json()
                 .then(json => {
-                    //let jsonList = JSON.parse(json);
-                    console.log('json:' + json);
-                    console.log('json.dataList:' + json.dataList);
-                    console.log('json.dataList2:' + json.dataList2);
                     for (var i in json) {
                         // 選択した週の予定の場合、配列に格納する。
                         let excelDate = new Date(json[i].reserve_date);
                         if (startTime <= excelDate && excelDate <= endTime) {
                             displayStartDate.push((json[i].reserve_date).toString().slice(0, 11) + 'T' + json[i].reserve_time);
-                            nameList.push(json[i].name);
                         }
                     }
+
+                    // 予約不可日取得
+                    fetch('/selectNoReserve', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    })
+                        .then(res => {
+                            res.json()
+                                .then(json => {
+                                    for (var i in json) {
+                                        // 選択した週の予定の場合、配列に格納する。
+                                        noReserveList.push((json[i].no_reserve_date).toString().slice(0, 11) + 'T' + json[i].no_reserve_time);
+                                    }
+                                })
+                        })
+                        .catch((err) => console.error(`予約不可日が取得できませんでした：${err}`));
+
                     let calendar = document.getElementById("calendar");
                     while (calendar.lastChild) {
                         calendar.removeChild(calendar.lastChild);
@@ -97,7 +109,7 @@ function changeCalendar() {
                     for (let i = 0; i < displayStartDate.length; i++) {
                         BUSY.push(displayStartDate[i]);
                     }
-                    for (let i = 0; i < nameList.length; i++) {
+                    for (let i = 0; i < noReserveList.length; i++) {
                         HAIHUN.push(nameList[i]);
                     }
                     console.log('BUSY' + BUSY);
@@ -130,7 +142,7 @@ function changeCalendar() {
                         d = date_num(b),
                         e = [],
                         f = TABLE.insertRow(-1),
-                        g = HAIHUN.map(),
+                        g = HAIHUN,
                         n = [];
 
                     let busytime = [];

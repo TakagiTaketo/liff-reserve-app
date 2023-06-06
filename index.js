@@ -34,6 +34,7 @@ express()
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
   .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
   .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約カレンダー作成
+  .post('/selectNoReserve', (req, res) => selectNoReserve(req, res)) // 予約不可カレンダー作成
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 const getUserInfo = (req, res) => {
@@ -149,11 +150,8 @@ const selectWeekReserve = (req, res) => {
   const select_query = {
     text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
   };
-  const select_query2 = {
-    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0;`
-  };
   let dataList = [];
-  let dataList2 = [];
+
   // SQL実行
   connection.query(select_query)
     .then(data => {
@@ -163,33 +161,39 @@ const selectWeekReserve = (req, res) => {
         tmp_data.reserve_date = data.rows[i].reserve_date;
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
+        console.log('selectWeekReserve()のdataList' + dataList);
+        res.status(200).send((JSON.stringify(dataList)));
       }
-
-      connection.query(select_query2)
-        .then(data => {
-          for (let i = 0; i < data.rows.length; i++) {
-            let tmp_data = {};
-            tmp_data.name = data.rows[i].name;
-            tmp_data.no_reserve_date = data.rows[i].no_reserve_date;
-            tmp_data.no_reserve_time = data.rows[i].no_reserve_time;
-            dataList2.push(tmp_data);
-          }
-          console.log('dataList:' + dataList);
-          console.log('dataList2:' + dataList2);
-          console.log('送信するjson:' + JSON.stringify(dataList));
-          res.status(200).send((JSON.stringify(dataList), JSON.stringify(dataList2)));
-        })
-        .catch(e => console.log(e))
-        .finally(() => {
-          connection.end;
-        });
     })
     .catch(e => console.log(e))
     .finally(() => {
       connection.end;
     });
-  // TODO 連続fetchの処理をどうするか考える。
 };
+
+// 予約不可日の取得
+const selectNoReserve = (req, res) => {
+  const select_query = {
+    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0;`
+  };
+  let dataList = [];
+  connection.query(select_query)
+    .then(data => {
+      for (let i = 0; i < data.rows.length; i++) {
+        let tmp_data = {};
+        tmp_data.name = data.rows[i].name;
+        tmp_data.no_reserve_date = data.rows[i].no_reserve_date;
+        tmp_data.no_reserve_time = data.rows[i].no_reserve_time;
+        dataList.push(tmp_data);
+      }
+      console.log('selectNoReserve()のdataList:' + dataList);
+      res.status(200).send((JSON.stringify(dataList)));
+    })
+    .catch(e => console.log(e))
+    .finally(() => {
+      connection.end;
+    });
+}
   /*
 connection.query(select_query, function (error, results) {
 connection.end;
