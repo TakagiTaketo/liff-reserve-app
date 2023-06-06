@@ -174,6 +174,9 @@ const selectWeekReserve = (req, res) => {
             tmp_data.no_reserve_time = data.rows[i].no_reserve_time;
             dataList2.push(tmp_data);
           }
+          console.log('dataList:' + dataList);
+          console.log('dataList2:' + dataList2);
+          console.log('送信するjson:' + JSON.stringify(dataList, dataList2));
           res.status(200).send(JSON.stringify(dataList, dataList2));
         })
         .catch(e => console.log(e))
