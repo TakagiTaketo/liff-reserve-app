@@ -14,7 +14,7 @@ connection.connect();
 
 const config = {
     channelAccessToken: process.env.ACCESS_TOKEN,
-    channelSecret: process.env.CHANNEL_SECRET
+    channelSecret: process.env.CHANNEL_SECRET_MessagingAPI
 };
 
 // APIコールのためのクライアントインスタンスを作成
@@ -43,7 +43,7 @@ function main() {
 
     // 3日後の日付
     let reserve_date_after3days = year + '-' + month + '-' + date_after3days;
-    let dataList = [];
+
     // 検索クエリ
     const select_query = {
         text: `SELECT line_uid FROM reserves WHERE reserve_date='${reserve_date_after3days}' and delete_flg=0';`
