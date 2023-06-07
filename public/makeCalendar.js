@@ -34,7 +34,7 @@ window.onload = function () {
     sleep(1000);
 }
 
-async function selectWeekReserve(displayStartDate) {
+async function selectWeekReserve(displayStartDate, startTime, endTime) {
     const res = await fetch('/selectWeekReserve', {
         method: 'POST',
         credentials: 'same-origin'
@@ -103,7 +103,7 @@ function changeCalendar() {
     let noReserveList = [];
     //let displayEndDate = [];
 
-    displayStartDate = selectWeekReserve(displayStartDate);
+    displayStartDate = selectWeekReserve(displayStartDate, startTime, endTime);
     noReserveList = selectNoReserve(noReserveList);
 
     let calendar = document.getElementById("calendar");
