@@ -89,10 +89,10 @@ function changeCalendar() {
                     })
                         .then(res => {
                             res.json()
-                                .then(json => {
-                                    for (var i in json) {
+                                .then(json2 => {
+                                    for (var i in json2) {
                                         // 選択した週の予定の場合、配列に格納する。
-                                        noReserveList.push((json[i].no_reserve_date).toString().slice(0, 11) + 'T' + json[i].no_reserve_time);
+                                        noReserveList.push((json2[i].no_reserve_date).toString().slice(0, 11) + 'T' + json2[i].no_reserve_time);
                                     }
                                 })
                         })
