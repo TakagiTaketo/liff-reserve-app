@@ -104,10 +104,10 @@ function changeCalendar() {
 
     displayStartDate.push(startDate);
 
-    run_process(displayStartDate, noReserveList);
+    run_process(displayStartDate, noReserveList, startTime, endTime);
 }
 
-async function run_process(displayStartDate, noReserveList) {
+async function run_process(displayStartDate, noReserveList, startTime, endTime) {
     await selectWeekReserve(displayStartDate, startTime, endTime);
     await selectNoReserve(noReserveList);
     setCalendar(displayStartDate, noReserveList);
