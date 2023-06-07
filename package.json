@@ -9,7 +9,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "push-message": "node reminder.js"
   },
   "author": "takagi",
   "license": "ISC",
