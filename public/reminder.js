@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-import express from 'express';
 import line from '@line/bot-sdk';
 import ClientPg from 'pg';
 const { Client } = ClientPg;
@@ -54,9 +52,11 @@ function main() {
         .then(data => {
             for (let i = 0; i < data.rows.length; i++) {
                 message = `予約3日前になりました。\n予約日は${year}年${month}月${date_after3days}日\n${data.rows[i].reserve_time}\nです。\nよろしくお願いいたします。`;
+                console.log('リマインドするline_uid:' + data.rows[i].line_uid);
+                console.log('リマインドするMessage:' + message);
                 sendMessage(message, data.rows[i].line_uid);
             }
-            console.log('リマインドするline_uid:' + dataList);
+            //console.log('リマインドするline_uid:' + dataList);
         })
         .catch(e => console.log(e))
         .finally(() => {
