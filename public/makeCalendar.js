@@ -95,113 +95,113 @@ function changeCalendar() {
                                         noReserveList.push((json2[i].no_reserve_date).toString().slice(0, 11) + 'T' + json2[i].no_reserve_time);
                                     }
                                 })
+                            let calendar = document.getElementById("calendar");
+                            while (calendar.lastChild) {
+                                calendar.removeChild(calendar.lastChild);
+                            }
+                            console.log(displayStartDate);
+                            let BUSY = [];
+                            let HAIHUN = [];
+                            for (let i = 0; i < displayStartDate.length; i++) {
+                                BUSY.push(displayStartDate[i]);
+                            }
+                            for (let i = 0; i < noReserveList.length; i++) {
+                                HAIHUN.push(noReserveList[i]);
+                            }
+                            console.log('BUSY' + BUSY);
+                            const
+                                //TABLE = document.querySelector('table'),
+                                TABLE = document.getElementById('calendar'),
+                                DATE_SPAN = 7,
+                                TIME_BEGIN = 10,
+                                TIME_END = 16,
+
+                                WEEK_NAME = ['日', '月', '火', '水', '木', '金', '土'],
+                                date_th = d => [d.getMonth() + 1, d.getDate()].join('/'),
+                                //date_th = d => [d.getDate()],
+                                date_th2 = d => [date_th(d), '\n(', WEEK_NAME[d.getDay()], ')'].join(''),
+                                date_add = (d, o = 1) => { let r = new Date(d); r.setDate(r.getDate() + o); return r },
+                                date_same = (a, b) => ['getFullYear', 'getMonth', 'getDate'].every((c, d) => a[c]() === b[c]()),
+                                date_sun = d => (date_add(d, - ((7 - d.getDay()) % 7))),
+
+                                date_num = d => {
+                                    let m = d.getMonth();
+                                    console.log([0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
+                                        (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m));
+                                    return [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
+                                        (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m);
+                                };
+                            let
+                                a = BUSY.map(d => new Date(d + ':00.000+09:00')).sort((a, b) => +a > +b),
+                                b = date_sun(new Date(a[0])),
+                                c = [[date_th(b), date_th(date_add(b, DATE_SPAN - 1))].join('-')],
+                                d = date_num(b),
+                                e = [],
+                                f = TABLE.insertRow(-1),
+                                g = HAIHUN,
+                                n = [];
+
+                            let busytime = [];
+                            for (let i = 0; i < DATE_SPAN; i++) {
+                                c.push(date_th2(date_add(b, i)));
+                                //busytime.push(i, 10);
+                            }
+                            c.forEach(s => f.insertCell(-1).textContent = s);
+
+                            for (let f of a) {
+                                let h = f.getHours();
+                                //let m = f.getMinutes();
+                                if ('undefined' === typeof e[h]) {
+                                    e[h] = [];
+                                    e[h][date_num(f) - d] = true;
+                                }
+                                /*
+                                if ('undefined' === typeof e[h] && m == 0) {
+                                    e[h] = [];
+                                    e[h][date_num(f) - d] = true;
+                                }
+                                if ('undefined' === typeof e[h] && m == 30) {
+                                    g[h] = [];
+                                    g[h][date_num(f) - d] = true;
+                                }
+                                */
+                            }
+                            for (let f of g) {
+                                let h = f.getHours();
+                                //let m = f.getMinutes();
+                                if ('undefined' === typeof n[h]) {
+                                    n[h] = [];
+                                    n[h][date_num(f) - d] = true;
+                                }
+                            }
+                            // 時間部
+                            for (let i = TIME_BEGIN; i <= TIME_END; i++) {
+                                if (i == 12) continue;
+                                let a = TABLE.insertRow(-1);
+                                a.appendChild(document.createElement('th')).textContent = i + ':00';
+
+                                for (j = 0; j < DATE_SPAN; j++) {
+                                    let cell = a.insertCell(-1);
+                                    cell.textContent = (e[i] || [])[j] ? '×' : '◎';
+                                    if ((n[i] || [])[j]) {
+                                        cell.textContent = '-';
+                                    }
+                                    // 土日はハイフン
+                                    if (j == 0 || j == 6) cell.textContent = '-';
+                                    if (cell.textContent == "◎") {
+                                        cell.style.color = "red";
+                                    } else if (cell.textContent == "×") {
+                                        cell.style.color = "blue";
+                                    } else if (cell.textContent == "-") {
+                                        cell.style.color = "black";
+                                    }
+
+                                }
+
+                            }
+
                         })
                         .catch((err) => console.error(`予約不可日が取得できませんでした：${err}`));
-
-                    let calendar = document.getElementById("calendar");
-                    while (calendar.lastChild) {
-                        calendar.removeChild(calendar.lastChild);
-                    }
-                    console.log(displayStartDate);
-                    let BUSY = [];
-                    let HAIHUN = [];
-                    for (let i = 0; i < displayStartDate.length; i++) {
-                        BUSY.push(displayStartDate[i]);
-                    }
-                    for (let i = 0; i < noReserveList.length; i++) {
-                        HAIHUN.push(noReserveList[i]);
-                    }
-                    console.log('BUSY' + BUSY);
-                    const
-                        //TABLE = document.querySelector('table'),
-                        TABLE = document.getElementById('calendar'),
-                        DATE_SPAN = 7,
-                        TIME_BEGIN = 10,
-                        TIME_END = 16,
-
-                        WEEK_NAME = ['日', '月', '火', '水', '木', '金', '土'],
-                        date_th = d => [d.getMonth() + 1, d.getDate()].join('/'),
-                        //date_th = d => [d.getDate()],
-                        date_th2 = d => [date_th(d), '\n(', WEEK_NAME[d.getDay()], ')'].join(''),
-                        date_add = (d, o = 1) => { let r = new Date(d); r.setDate(r.getDate() + o); return r },
-                        date_same = (a, b) => ['getFullYear', 'getMonth', 'getDate'].every((c, d) => a[c]() === b[c]()),
-                        date_sun = d => (date_add(d, - ((7 - d.getDay()) % 7))),
-
-                        date_num = d => {
-                            let m = d.getMonth();
-                            console.log([0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
-                                (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m));
-                            return [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
-                                (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m);
-                        };
-                    let
-                        a = BUSY.map(d => new Date(d + ':00.000+09:00')).sort((a, b) => +a > +b),
-                        b = date_sun(new Date(a[0])),
-                        c = [[date_th(b), date_th(date_add(b, DATE_SPAN - 1))].join('-')],
-                        d = date_num(b),
-                        e = [],
-                        f = TABLE.insertRow(-1),
-                        g = HAIHUN,
-                        n = [];
-
-                    let busytime = [];
-                    for (let i = 0; i < DATE_SPAN; i++) {
-                        c.push(date_th2(date_add(b, i)));
-                        //busytime.push(i, 10);
-                    }
-                    c.forEach(s => f.insertCell(-1).textContent = s);
-
-                    for (let f of a) {
-                        let h = f.getHours();
-                        //let m = f.getMinutes();
-                        if ('undefined' === typeof e[h]) {
-                            e[h] = [];
-                            e[h][date_num(f) - d] = true;
-                        }
-                        /*
-                        if ('undefined' === typeof e[h] && m == 0) {
-                            e[h] = [];
-                            e[h][date_num(f) - d] = true;
-                        }
-                        if ('undefined' === typeof e[h] && m == 30) {
-                            g[h] = [];
-                            g[h][date_num(f) - d] = true;
-                        }
-                        */
-                    }
-                    for (let f of g) {
-                        let h = f.getHours();
-                        //let m = f.getMinutes();
-                        if ('undefined' === typeof n[h]) {
-                            n[h] = [];
-                            n[h][date_num(f) - d] = true;
-                        }
-                    }
-                    // 時間部
-                    for (let i = TIME_BEGIN; i <= TIME_END; i++) {
-                        if (i == 12) continue;
-                        let a = TABLE.insertRow(-1);
-                        a.appendChild(document.createElement('th')).textContent = i + ':00';
-
-                        for (j = 0; j < DATE_SPAN; j++) {
-                            let cell = a.insertCell(-1);
-                            cell.textContent = (e[i] || [])[j] ? '×' : '◎';
-                            if ((n[i] || [])[j]) {
-                                cell.textContent = '-';
-                            }
-                            // 土日はハイフン
-                            if (j == 0 || j == 6) cell.textContent = '-';
-                            if (cell.textContent == "◎") {
-                                cell.style.color = "red";
-                            } else if (cell.textContent == "×") {
-                                cell.style.color = "blue";
-                            } else if (cell.textContent == "-") {
-                                cell.style.color = "black";
-                            }
-
-                        }
-
-                    }
                 })
                 .catch((err) => console.error(`スケジュールが取得できませんでした：${err}`));
         })
