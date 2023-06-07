@@ -104,6 +104,8 @@ async function reserveDB_access() {
     console.log('startDate:' + startDate);
     console.log('endDate:' + endDate);
 
+    displayStartDate = [];
+    noReserveList = [];
     displayStartDate.push(startDate);
 
     await selectWeekReserve(displayStartDate, startTime, endTime);
