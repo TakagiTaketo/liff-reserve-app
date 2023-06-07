@@ -110,8 +110,8 @@ function changeCalendar() {
     let noReserveList = [];
     //let displayEndDate = [];
 
-    displayStartDate = selectWeekReserve(displayStartDate, startTime, endTime);
-    noReserveList = selectNoReserve(noReserveList);
+    selectWeekReserve(displayStartDate, startTime, endTime);
+    selectNoReserve(noReserveList);
 }
 /*
     let calendar = document.getElementById("calendar");
