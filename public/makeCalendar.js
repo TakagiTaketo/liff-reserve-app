@@ -156,7 +156,7 @@ function setCalendar(displayStartDate, noReserveList) {
         d = date_num(b),
         e = [],
         f = TABLE.insertRow(-1),
-        g = HAIHUN,
+        g = HAIHUN.map(d => new Date(d + ':00.000+09:00')),
         n = [];
 
     let busytime = [];
