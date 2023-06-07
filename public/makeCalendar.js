@@ -74,7 +74,7 @@ async function selectNoReserve(noReserveList) {
 }
 
 // カレンダー
-async function reserveDB_access(displayStartDate, noReserveList, startTime, endTime) {
+async function reserveDB_access() {
     // GASからカレンダーの値を取得
     //const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
     // 選択した日付を取得
