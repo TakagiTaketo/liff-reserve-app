@@ -52,6 +52,10 @@ async function selectWeekReserve(displayStartDate, startTime, endTime) {
     }
     return displayStartDate;
 }
+selectWeekReserve().then((displayStartDate) => {
+    console.log('displayStartDate then:' + displayStartDate);
+});
+
 
 async function selectNoReserve(noReserveList) {
     const res = await fetch('/selectNoReserve', {
@@ -68,6 +72,9 @@ async function selectNoReserve(noReserveList) {
     return noReserveList;
 }
 
+selectNoReserve().then((noReserveList) => {
+    console.log('noReserveList then:' + noReserveList);
+})
 
 function changeCalendar() {
     //const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
@@ -105,7 +112,8 @@ function changeCalendar() {
 
     displayStartDate = selectWeekReserve(displayStartDate, startTime, endTime);
     noReserveList = selectNoReserve(noReserveList);
-
+}
+/*
     let calendar = document.getElementById("calendar");
     while (calendar.lastChild) {
         calendar.removeChild(calendar.lastChild);
@@ -166,7 +174,7 @@ function changeCalendar() {
             e[h] = [];
             e[h][date_num(f) - d] = true;
         }
-        /*
+        
         if ('undefined' === typeof e[h] && m == 0) {
             e[h] = [];
             e[h][date_num(f) - d] = true;
@@ -175,7 +183,7 @@ function changeCalendar() {
             g[h] = [];
             g[h][date_num(f) - d] = true;
         }
-        */
+        
     }
     for (let f of g) {
         let h = f.getHours();
@@ -212,7 +220,7 @@ function changeCalendar() {
     }
 
 }
-
+*/
 /*
 // Googleスプレッドシートから予約データを取得する
 fetch(api_url)
