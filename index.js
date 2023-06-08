@@ -3,6 +3,10 @@ import express from 'express';
 const PORT = process.env.PORT || 5001
 import ClientPg from 'pg';
 const { Client } = ClientPg;
+import line from '@line/bot-sdk';
+import dotenv from "dotenv";
+const env = dotenv.config();
+
 /*
 const express = require('express');
 //const { Client } = require('pg');
@@ -25,18 +29,101 @@ const config = {
   channelSecret: process.env.CHANNEL_SECRET
 };
 
+const client = new line.Client(config);
 //express
 express()
   .use(express.static('public'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
+  .post('/webhook', line.middleware(config), (req, res) => lineBot(req, res)) // LINE MessagingAPI
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
   .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
   .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約カレンダー作成
   .post('/selectNoReserve', (req, res) => selectNoReserve(req, res)) // 予約不可カレンダー作成
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
+// LINE BOT
+const lineBot = (req, res) => {
+  res.status(200).end();
+  const events = req.body.events;
+  const promises = [];
+  for (let i = 0; i < events.length; i++) {
+    const ev = events[i];
+    switch (ev.type) {
+      case 'follow':
+        promises.push(greeting_follow(ev));
+        break;
+      case 'message':
+        promises.push(handleMessageEvent(ev));
+        break;
+    }
+  }
+  Promise
+    .all(promises)
+    .then(console.log('all promises passed'))
+    .catch(e => console.error(e.stack));
+}
+
+// リプライメッセージ送信
+const handleMessageEvent = async (ev) => {
+  const profile = await client.getProfile(ev.source.userId);
+  const text = (ev.message.type === 'text') ? ev.message.text : '';
+  if (req.body.events[0].type === "message") {
+    const dataString = JSON.stringify({
+      replyToken: req.body.events[0].replyToken,
+      messages: [
+        {
+          type: "text",
+          text: "Hello, user",
+        },
+      ],
+    });
+
+    // リクエストヘッダー。仕様についてはMessaging APIリファレンスを参照してください。
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + TOKEN,
+    };
+
+    // Node.jsドキュメントのhttps.requestメソッドで定義されている仕様に従ったオプションを指定します。
+    const webhookOptions = {
+      hostname: "api.line.me",
+      path: "/v2/bot/message/reply",
+      method: "POST",
+      headers: headers,
+      body: dataString,
+    };
+
+    // messageタイプのHTTP POSTリクエストが/webhookエンドポイントに送信された場合、
+    // 変数webhookOptionsで定義したhttps://api.line.me/v2/bot/message/replyに対して
+    // HTTP POSTリクエストを送信します。
+
+    // リクエストの定義
+    const request = https.request(webhookOptions, (res) => {
+      res.on("data", (d) => {
+        process.stdout.write(d);
+      });
+    });
+
+    // エラーをハンドリング
+    // request.onは、APIサーバーへのリクエスト送信時に
+    // エラーが発生した場合にコールバックされる関数です。
+    request.on("error", (err) => {
+      console.error(err);
+    });
+
+    // 最後に、定義したリクエストを送信
+    request.write(dataString);
+    request.end();
+  }
+  return client.replyMessage(ev.replyToken, {
+    "type": "text",
+    "text": `${profile.displayName}さん、今${text}って言いました？`
+  });
+}
+
+// LINEプロフィールの取得
 const getUserInfo = (req, res) => {
   const data = req.body;
   const postData = `id_token=${data.id_token}&client_id=${process.env.LOGIN_CHANNEL_ID}`;
