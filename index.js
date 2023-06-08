@@ -30,7 +30,8 @@ const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET_MessagingAPI
 };
-console.log('config:' + config);
+console.log('process.env.ACCESS_TOKEN:' + process.env.ACCESS_TOKEN);
+console.log('process.env.CHANNEL_SECRET_MessagingAPI:' + process.env.CHANNEL_SECRET_MessagingAPI);
 const client = new line.Client(config);
 //express
 express()
