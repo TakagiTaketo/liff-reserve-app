@@ -39,59 +39,59 @@ express()
   .use(express.urlencoded({ extended: true }))
   .get('/', (req, res) => { res.sendStatus(200); })
   .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
-//.post('/webhook', line.middleware(config), (req, res) => lineBot(req, res)) // LINE MessagingAPI
-// 「/webhook」にPOSTリクエストがあった場合の処理
-app.post("/webhook", function (req, res) {
-  res.send("HTTP POST request sent to the webhook URL!")
-  // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
-  if (req.body.events[0].type === "message") {
-    // 文字列化したメッセージデータ
-    const dataString = JSON.stringify({
-      replyToken: req.body.events[0].replyToken,
-      messages: [
-        {
-          "type": "text",
-          "text": "Hello, user"
-        },
-        {
-          "type": "text",
-          "text": "May I help you?"
-        }
-      ]
-    })
-
-    // リクエストヘッダー
-    const headers = {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + TOKEN
-    }
-
-    // リクエストに渡すオプション
-    const webhookOptions = {
-      "hostname": "api.line.me",
-      "path": "/v2/bot/message/reply",
-      "method": "POST",
-      "headers": headers,
-      "body": dataString
-    }
-
-    // リクエストの定義
-    const request = https.request(webhookOptions, (res) => {
-      res.on("data", (d) => {
-        process.stdout.write(d)
+  //.post('/webhook', line.middleware(config), (req, res) => lineBot(req, res)) // LINE MessagingAPI
+  // 「/webhook」にPOSTリクエストがあった場合の処理
+  .post("/webhook", function (req, res) {
+    res.send("HTTP POST request sent to the webhook URL!")
+    // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
+    if (req.body.events[0].type === "message") {
+      // 文字列化したメッセージデータ
+      const dataString = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: [
+          {
+            "type": "text",
+            "text": "Hello, user"
+          },
+          {
+            "type": "text",
+            "text": "May I help you?"
+          }
+        ]
       })
-    })
 
-    // エラーをハンドル
-    request.on("error", (err) => {
-      console.error(err)
-    })
+      // リクエストヘッダー
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + TOKEN
+      }
 
-    // データを送信
-    request.write(dataString)
-    request.end()
-  }
-})
+      // リクエストに渡すオプション
+      const webhookOptions = {
+        "hostname": "api.line.me",
+        "path": "/v2/bot/message/reply",
+        "method": "POST",
+        "headers": headers,
+        "body": dataString
+      }
+
+      // リクエストの定義
+      const request = https.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+          process.stdout.write(d)
+        })
+      })
+
+      // エラーをハンドル
+      request.on("error", (err) => {
+        console.error(err)
+      })
+
+      // データを送信
+      request.write(dataString)
+      request.end()
+    }
+  })
 
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
   .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
