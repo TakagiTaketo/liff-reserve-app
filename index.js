@@ -27,9 +27,9 @@ connection.connect();
 
 const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
-  channelSecret: process.env.CHANNEL_SECRET
+  channelSecret: process.env.CHANNEL_SECRET_MessagingAPI
 };
-
+console.log('config:' + config);
 const client = new line.Client(config);
 //express
 express()
