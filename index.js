@@ -44,6 +44,7 @@ express()
   .post("/webhook", function (req, res) {
     res.send("HTTP POST request sent to the webhook URL!")
     // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
+    console.log('events:' + req.body.events[0]);
     if (req.body.events[0].type === "message") {
       // 文字列化したメッセージデータ
       const dataString = JSON.stringify({
