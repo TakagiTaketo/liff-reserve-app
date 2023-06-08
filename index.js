@@ -4,8 +4,6 @@ const PORT = process.env.PORT || 5001
 import ClientPg from 'pg';
 const { Client } = ClientPg;
 import line from '@line/bot-sdk';
-import dotenv from "dotenv";
-const env = dotenv.config();
 const TOKEN = process.env.ACCESS_TOKEN;
 import https from 'https';
 
@@ -30,8 +28,6 @@ const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET_MessagingAPI
 };
-console.log('process.env.ACCESS_TOKEN:' + process.env.ACCESS_TOKEN);
-console.log('process.env.CHANNEL_SECRET_MessagingAPI:' + process.env.CHANNEL_SECRET_MessagingAPI);
 const client = new line.Client(config);
 //express
 express()
@@ -45,11 +41,11 @@ express()
   .post("/webhook", function (req, res) {
     res.send("HTTP POST request sent to the webhook URL!")
     // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
-    console.log('events:' + req.body.events[0]);
+    let dataString = '';
     if (req.body.events[0].type === "message") {
       if (req.body.events[0].message.text.substring(0, 4) == "新規予約") {
         // 文字列化したメッセージデータ
-        const dataString = JSON.stringify({
+        dataString = JSON.stringify({
           replyToken: req.body.events[0].replyToken,
           messages: [
             {
@@ -58,38 +54,61 @@ express()
             }
           ]
         })
-
-        // リクエストヘッダー
-        const headers = {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + TOKEN
-        }
-
-        // リクエストに渡すオプション
-        const webhookOptions = {
-          "hostname": "api.line.me",
-          "path": "/v2/bot/message/reply",
-          "method": "POST",
-          "headers": headers,
-          "body": dataString
-        }
-
-        // リクエストの定義
-        const request = https.request(webhookOptions, (res) => {
-          res.on("data", (d) => {
-            process.stdout.write(d)
-          })
+      } else if (req.body.events[0].message.text.substring(0, 4) == "問診記入"
+        && req.body.events[0].message.text.substring(5, 10) != "お薬服用中") {
+        // 文字列化したメッセージデータ
+        dataString = JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              "type": "text",
+              "text": "問診の記入ありがとうございました。"
+            }
+          ]
         })
-
-        // エラーをハンドル
-        request.on("error", (err) => {
-          console.error(err)
+      } else if (req.body.events[0].message.text.substring(0, 4) == "問診記入"
+        && req.body.events[0].message.text.substring(5, 10) == "お薬服用中") {
+        // 文字列化したメッセージデータ
+        dataString = JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              "type": "text",
+              "text": "問診記入ありがとうございます。\nお薬を服用中の場合は保健指導を行うことは出来ません。"
+            }
+          ]
         })
-
-        // データを送信
-        request.write(dataString)
-        request.end()
       }
+      // リクエストヘッダー
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + TOKEN
+      }
+
+      // リクエストに渡すオプション
+      const webhookOptions = {
+        "hostname": "api.line.me",
+        "path": "/v2/bot/message/reply",
+        "method": "POST",
+        "headers": headers,
+        "body": dataString
+      }
+
+      // リクエストの定義
+      const request = https.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+          process.stdout.write(d)
+        })
+      })
+
+      // エラーをハンドル
+      request.on("error", (err) => {
+        console.error(err)
+      })
+
+      // データを送信
+      request.write(dataString)
+      request.end()
     }
   })
 
