@@ -46,18 +46,14 @@ express()
     // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
     console.log('events:' + req.body.events[0]);
     if (req.body.events[0].type === "message") {
-      if (req.body.events[0].message.text == "テキスト") {
+      if (req.body.events[0].message.text.substring(0, 4) == "新規予約") {
         // 文字列化したメッセージデータ
         const dataString = JSON.stringify({
           replyToken: req.body.events[0].replyToken,
           messages: [
             {
               "type": "text",
-              "text": "Hello, user"
-            },
-            {
-              "type": "text",
-              "text": "May I help you?"
+              "text": "予約完了しました。"
             }
           ]
         })
