@@ -33,6 +33,7 @@ console.log('config:' + config);
 const client = new line.Client(config);
 //express
 express()
+  .use('/webhook', line.middleware(config))
   .use(express.static('public'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
