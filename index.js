@@ -6,6 +6,7 @@ const { Client } = ClientPg;
 import line from '@line/bot-sdk';
 import dotenv from "dotenv";
 const env = dotenv.config();
+const TOKEN = process.env.ACCESS_TOKEN;
 
 /*
 const express = require('express');
@@ -35,6 +36,7 @@ express()
   .use(express.static('public'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
+  .get('/', (req, res) => { res.sendStatus(200); })
   .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
   .post('/webhook', line.middleware(config), (req, res) => lineBot(req, res)) // LINE MessagingAPI
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
@@ -51,9 +53,6 @@ const lineBot = (req, res) => {
   for (let i = 0; i < events.length; i++) {
     const ev = events[i];
     switch (ev.type) {
-      case 'follow':
-        promises.push(greeting_follow(ev));
-        break;
       case 'message':
         promises.push(handleMessageEvent(ev));
         break;
@@ -69,6 +68,11 @@ const lineBot = (req, res) => {
 const handleMessageEvent = async (ev) => {
   const profile = await client.getProfile(ev.source.userId);
   const text = (ev.message.type === 'text') ? ev.message.text : '';
+  return client.replyMessage(ev.replyToken, {
+    "type": "text",
+    "text": `${profile.displayName}さん、今${text}って言いました？`
+  });
+  /*
   if (req.body.events[0].type === "message") {
     const dataString = JSON.stringify({
       replyToken: req.body.events[0].replyToken,
@@ -121,6 +125,7 @@ const handleMessageEvent = async (ev) => {
     "type": "text",
     "text": `${profile.displayName}さん、今${text}って言いました？`
   });
+  */
 }
 
 // LINEプロフィールの取得
