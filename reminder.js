@@ -5,13 +5,12 @@ import dotenv from "dotenv";
 const env = dotenv.config();
 
 // Postgresへの接続
-
 const connection = new Client({
-    host: 'ec2-44-199-147-86.compute-1.amazonaws.com',
-    user: 'dkmwoerbgnaizs',
-    database: 'd356ccnbj29spk',
-    password: '16e32cc27f251eac006c7267ab129f5a4c9c020ae7c571f6004f551b4d5014d9',
-    port: 5432,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASS,
+    port: process.env.DB_PORT,
     ssl: {
         rejectUnauthorized: false
     }
