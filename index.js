@@ -46,51 +46,53 @@ express()
     // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
     console.log('events:' + req.body.events[0]);
     if (req.body.events[0].type === "message") {
-      // 文字列化したメッセージデータ
-      const dataString = JSON.stringify({
-        replyToken: req.body.events[0].replyToken,
-        messages: [
-          {
-            "type": "text",
-            "text": "Hello, user"
-          },
-          {
-            "type": "text",
-            "text": "May I help you?"
-          }
-        ]
-      })
-
-      // リクエストヘッダー
-      const headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + TOKEN
-      }
-
-      // リクエストに渡すオプション
-      const webhookOptions = {
-        "hostname": "api.line.me",
-        "path": "/v2/bot/message/reply",
-        "method": "POST",
-        "headers": headers,
-        "body": dataString
-      }
-
-      // リクエストの定義
-      const request = https.request(webhookOptions, (res) => {
-        res.on("data", (d) => {
-          process.stdout.write(d)
+      if (req.body.events[0].text == "テキスト") {
+        // 文字列化したメッセージデータ
+        const dataString = JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              "type": "text",
+              "text": "Hello, user"
+            },
+            {
+              "type": "text",
+              "text": "May I help you?"
+            }
+          ]
         })
-      })
 
-      // エラーをハンドル
-      request.on("error", (err) => {
-        console.error(err)
-      })
+        // リクエストヘッダー
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + TOKEN
+        }
 
-      // データを送信
-      request.write(dataString)
-      request.end()
+        // リクエストに渡すオプション
+        const webhookOptions = {
+          "hostname": "api.line.me",
+          "path": "/v2/bot/message/reply",
+          "method": "POST",
+          "headers": headers,
+          "body": dataString
+        }
+
+        // リクエストの定義
+        const request = https.request(webhookOptions, (res) => {
+          res.on("data", (d) => {
+            process.stdout.write(d)
+          })
+        })
+
+        // エラーをハンドル
+        request.on("error", (err) => {
+          console.error(err)
+        })
+
+        // データを送信
+        request.write(dataString)
+        request.end()
+      }
     }
   })
 
