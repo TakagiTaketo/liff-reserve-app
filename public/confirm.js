@@ -142,7 +142,7 @@ async function select_reserves() {
         table.appendChild(tr);
     }
     // 予約情報が存在しない時
-    if (result.length) {
+    if (result.length == 0) {
         let text = document.getElementById('no_reserve_text');
         text.textContent = "予約情報がありません。";
     }
