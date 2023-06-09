@@ -107,7 +107,7 @@ async function select_reserves() {
         let input = document.createElement('input');
         input.setAttribute("name", "checkbox");
         input.setAttribute("required", true);
-        input.type = "radio";
+        input.type = "checkbox";
         input.value = i;
         p.appendChild(input);
         // テーブル作成
@@ -122,6 +122,9 @@ async function select_reserves() {
             th.style.width = '15%';
             th2.style.width = '50%';
             th3.style.width = '35%';
+            th.textContent = '選択';
+            th.textContent = '日付';
+            th.textContent = '時間';
             head.appendChild(th);
             head.appendChild(th2);
             head.appendChild(th3);
