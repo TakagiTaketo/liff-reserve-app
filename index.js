@@ -316,6 +316,7 @@ const insertReserve = (req, res) => {
 // 予約カレンダー取得
 const selectWeekReserve = (req, res) => {
   const data = req.body;
+  console.log('data:' + data);
   const startDate = data.startDate;
   const endDate = data.endDate;
   console.log('selectWeekREserve()のstartDate:' + startDate);
