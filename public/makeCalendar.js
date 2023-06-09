@@ -48,8 +48,9 @@ async function selectWeekReserve(displayStartDate, startDate, endDate) {
     console.log('selectWeekReserve()のjsonDataのendTime:' + endDate);
     const res = await fetch('/selectWeekReserve', {
         method: 'POST',
-        credentials: 'same-origin',
-        body: jsonData
+        body: jsonData,
+        credentials: 'same-origin'
+
     });
     console.log('selectWeekReserveのresponse:' + res);
     const json = await res.json();
