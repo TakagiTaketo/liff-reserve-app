@@ -318,12 +318,12 @@ const selectWeekReserve = (req, res) => {
   const data = req.body;
   console.log('data:' + data);
   const startDate = data.startDate;
-  const endDate = data.endDate;
+  const endDate = data.end;
   console.log('selectWeekREserve()のstartDate:' + startDate);
   console.log('selectWeekREserve()のendDate:' + endDate);
   // SELECT文
   const select_query = {
-    text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE ${startDate} <= reserve_date and reserve_date <= ${endDate} and delete_flg=0;`
+    text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE delete_flg=0 AND reserve_date BETWEEN '${startDate}' AND '${endDate}';`
   };
   let dataList = [];
 
@@ -355,7 +355,7 @@ const selectNoReserve = (req, res) => {
   console.log('selectNoReserve()のendDate:' + endDate);
 
   const select_query = {
-    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE ${startDate} <= reserve_date and reserve_date <= ${endDate} and delete_flg=0;`
+    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0 AND no_reserve_date BETWEEN '${startDate}' AND '${endDate}';`
   };
   let dataList = [];
   connection.query(select_query)
