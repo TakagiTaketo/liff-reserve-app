@@ -1,8 +1,12 @@
 window.addEventListener("load", () => {
-    let json = getlineProfile();
+    select_reserves();
+});
+
+async function select_reserves() {
+    let json = await getlineProfile();
     // 予約管理DBから予約情報を取得
     select_reserves(json.line_uid);
-});
+}
 // 予約情報取得
 async function select_reserves(line_uid) {
     // jsonDataを作成
