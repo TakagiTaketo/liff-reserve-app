@@ -112,8 +112,6 @@
     </script>
     <script type="text/javascript">
         const liffId = '1661289930-qLmEmZ8w';
-        //let decordIdToken = '';
-        //let idToken = '';
         // LIFF初期化
         window.onload = () => {
             liff.init({
@@ -127,7 +125,6 @@
                     const jsonData = JSON.stringify({
                         id_token: idtoken
                     });
-                    console.log(jsonData);
                     fetch('/api', {
                         method: 'POST',
                         headers: {
@@ -158,7 +155,7 @@
             if (liff.isLoggedIn()) {
                 //ログイン済
                 //getLineData();
-
+                /*
                 liff.getProfile()
                     .then(profile => {
                         lineUserName = profile.displayName;
@@ -167,7 +164,7 @@
                     .catch((err) => {
                         console.log("error", err);
                     })
-
+                    */
             } else {
                 // 未ログイン
                 let result = window.confirm("LINE Loginを行います。");

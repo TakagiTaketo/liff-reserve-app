@@ -81,26 +81,48 @@
             <button type="button" class="reserve_button" style="margin-left: 20px;" onclick="history.back()">戻る</button>
         </div>
     </form>
+    <script type="text/javascript">
+        let line_uid = '';
+        let line_uname = '';
+    </script>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="confirm.js"></script>
     <script type="text/javascript">
         const liffId = '1660856020-lm6XRQgz';
-        let decordIdToken = '';
-        let idToken = '';
         window.onload = () => {
             // liff初期化
-            liff
-                .init({
-                    liffId: liffId,
-                })
+            liff.init({
+                liffId: liffId,
+            })
                 .then(() => {
                     initializeApp();
-                    decordIdToken = liff.getDecodedIDToken();
-                    idtoken = liff.getIDToken();
-                    console.log('decordIdToken:' + decordIdToken); // print decoded idToken object
-                    console.log('idToken:' + idToken);
-                });
-
+                    const idtoken = liff.getIDToken();
+                    const jsonData = JSON.stringify({
+                        id_token: idtoken
+                    });
+                    fetch('/api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: jsonData,
+                        creadentials: 'same-origin'
+                    })
+                        .then(res => {
+                            res.json()
+                                .then(json => {
+                                    console.log('json:' + json);
+                                    line_uname = json.line_uname;
+                                    line_uid = json.line_uid;
+                                })
+                        })
+                        .catch((err) => {
+                            alert(err);
+                        })
+                })
+                .catch((err) => {
+                    alert(err);
+                })
         }
         function initializeApp() {
             // ログインチェック

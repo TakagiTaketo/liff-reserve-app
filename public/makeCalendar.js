@@ -25,12 +25,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // 予約管理DBからカレンダーを生成
     reserveDB_access();
 });
+/*
 function sleep(waitMsec) {
     var startMsec = new Date();
 
     // 指定ミリ秒間だけループさせる
     while (new Date() - startMsec < waitMsec);
 }
+*/
 /*
 //今日の日時を表示
 window.onload = function () {
