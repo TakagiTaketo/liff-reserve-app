@@ -1,14 +1,60 @@
-window.addEventListener("load", () => {
-    select_reserves();
-});
+const liffId = '1661289930-qLmEmZ8w';
+let line_uid = '';
+let line_uname = '';
+window.addEventListener("DOMContentLoaded", () => {
 
-async function select_reserves() {
-    let json = await getlineProfile();
-    // 予約管理DBから予約情報を取得
-    select_reserves2(json.line_uid);
+    // LIFF 初期化
+    liff.init({
+        liffId: liffId
+    })
+        .then(() => {
+            checkLogin();
+            const idtoken = liff.getIDToken();
+            const jsonData = JSON.stringify({
+                id_token: idtoken
+            });
+            // LINEプロフィール取得
+            fetch('/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData,
+                creadentials: 'same-origin'
+            })
+                .then(res => {
+                    res.json()
+                        .then(json => {
+                            console.log('json:' + json);
+                            line_uname = json.line_uname;
+                            line_uid = json.line_uid;
+                            select_reserves();
+                        })
+                })
+                .catch((err) => {
+                    alert(err);
+                })
+        })
+        .catch((err) => {
+            alert(err);
+        })
+});
+// ログインチェック
+function checkLogin() {
+    // ログインチェック
+    if (liff.isLoggedIn()) {
+        //ログイン済
+    } else {
+        // 未ログイン
+        let result = window.confirm("LINE Loginを行います。");
+        if (result) {
+            liff.login();
+        }
+    }
 }
+
 // 予約情報取得
-async function select_reserves2(line_uid) {
+async function select_reserves() {
     // jsonDataを作成
     const jsonData = JSON.stringify({
         line_uid: line_uid
