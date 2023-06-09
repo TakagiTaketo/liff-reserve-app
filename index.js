@@ -43,7 +43,7 @@ express()
     // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
     let dataString = '';
     if (req.body.events[0].type === "message") {
-      if (req.body.events[0].message.text.substring(0, 4) == "予約入力しました。") {
+      if (req.body.events[0].message.text.substring(0, 10) == "予約入力しました。") {
         // 文字列化したメッセージデータ
         dataString = JSON.stringify({
           replyToken: req.body.events[0].replyToken,

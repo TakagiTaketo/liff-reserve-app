@@ -46,14 +46,16 @@ function sendMessage(message, line_uid) {
 function main() {
     //現在日付の取得
     let today = new Date();
+    console.log('today:' + today);
     let year = today.getFullYear();
     let month = today.getMonth() + 1;
     today.setDate(today.getDate() + 3);
     let date_after3days = today.getDate();
     let message = "";
-
+    console.log('today2:' + today);
     // 3日後の日付
     let reserve_date_after3days = year + '-' + month.toString().padStart(2, "0") + '-' + date_after3days.toString().padStart(2, "0");
+    console.log('reserve_date_after3days:' + reserve_date_after3days);
     // 検索クエリ
     const select_query = {
         text: `SELECT line_uid, reserve_time FROM reserves WHERE reserve_date='${reserve_date_after3days}' and delete_flg=0;`
