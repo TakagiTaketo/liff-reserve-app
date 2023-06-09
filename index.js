@@ -315,9 +315,14 @@ const insertReserve = (req, res) => {
 
 // 予約カレンダー取得
 const selectWeekReserve = (req, res) => {
+  const data = req.body;
+  const startDate = data.startDate;
+  const endDate = data.endDate;
+  console.log('selectWeekREserve()のstartDate:' + startDate);
+  console.log('selectWeekREserve()のendDate:' + endDate);
   // SELECT文
   const select_query = {
-    text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE delete_flg=0;`
+    text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE ${startDate} <= reserve_date and reserve_date <= ${endDate} and delete_flg=0;`
   };
   let dataList = [];
 
@@ -331,8 +336,8 @@ const selectWeekReserve = (req, res) => {
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
         console.log('サーバーサイドselectWeekReserve()のdataList' + JSON.stringify(dataList));
-        res.status(200).send((JSON.stringify(dataList)));
       }
+      res.status(200).send((JSON.stringify(dataList)));
     })
     .catch(e => console.log(e))
     .finally(() => {
@@ -342,8 +347,14 @@ const selectWeekReserve = (req, res) => {
 
 // 予約不可日の取得
 const selectNoReserve = (req, res) => {
+  const data = req.body;
+  const startDate = data.startDate;
+  const endDate = data.endDate;
+  console.log('selectNoReserve()のstartDate:' + startDate);
+  console.log('selectNoReserve()のendDate:' + endDate);
+
   const select_query = {
-    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0;`
+    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE ${startDate} <= reserve_date and reserve_date <= ${endDate} and delete_flg=0;`
   };
   let dataList = [];
   connection.query(select_query)

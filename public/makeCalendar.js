@@ -39,9 +39,16 @@ window.onload = function () {
 }
 // 予約日リストを取得
 async function selectWeekReserve(displayStartDate, startTime, endTime) {
+    // jsonDataを作成
+    const jsonData = JSON.stringify({
+        startTime: startTime,
+        endTime: endTime
+    });
+
     const res = await fetch('/selectWeekReserve', {
         method: 'POST',
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        body: jsonData
     });
     console.log('selectWeekReserveのresponse:' + res);
     const json = await res.json();
@@ -58,10 +65,17 @@ async function selectWeekReserve(displayStartDate, startTime, endTime) {
 }
 
 // 予約不可日リストを取得
-async function selectNoReserve(noReserveList) {
+async function selectNoReserve(noReserveList, startTime, endTime) {
+    // jsonDataを作成
+    const jsonData = JSON.stringify({
+        startTime: startTime,
+        endTime: endTime
+    });
+
     const res = await fetch('/selectNoReserve', {
         method: 'POST',
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        body: jsonData
     });
     console.log('selectNoReserveのresponse:' + res);
     const json = await res.json();
@@ -109,7 +123,7 @@ async function reserveDB_access() {
     displayStartDate.push(startDate);
 
     await selectWeekReserve(displayStartDate, startTime, endTime);
-    await selectNoReserve(noReserveList);
+    await selectNoReserve(noReserveList, startTime, endTime);
     setCalendar(displayStartDate, noReserveList);
 }
 // 予約日・予約不可日リストからカレンダーを生成する。
