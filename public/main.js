@@ -26,14 +26,14 @@ function initializeApp() {
 }
 
 // LINEのプロフィール情報を取得する。
-function getlineProfile() {
-    let json = {};
+async function getlineProfile() {
+    let json_result = {};
     const idtoken = liff.getIDToken();
     const jsonData = JSON.stringify({
         id_token: idtoken
     });
     // LINEプロフィール取得
-    fetch('/api', {
+    await fetch('/api', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -47,13 +47,15 @@ function getlineProfile() {
                     console.log('json:' + json);
                     line_uname = json.line_uname;
                     line_uid = json.line_uid;
-                    return json;
+                    json_result = json;
                 })
         })
         .catch((err) => {
             alert(err);
         })
-    return json;
+        .finally{
+        return json_result;
+    }
 }
 
 function sendText(msg) {
