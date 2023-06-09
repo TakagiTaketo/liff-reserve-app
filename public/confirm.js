@@ -172,15 +172,17 @@ $(function () {
         let checked_date = [];
 
         let jsonData = {};
+        let check_flg = false;
         for (let i = 0; i < reserveDate.length; i++) {
             if (reserveDate[i].checked) {
                 let addData = { reserveDate: dateList[i].innerText, reserve_time: startList[i].innerText, line_uid: line_uid }
                 jsonData.push(addData);
                 //confirm_date.push(dateList[i].innerText + startList[i].innerText);
                 checked_date.push(hiddenDateList[i].innerText);
+                check_flg = true;
             }
         }
-        if (reserveDate.length == 0) {
+        if (!check_flg) {
             alert('取り消す予約情報を選択してください。');
             return false;
         }
