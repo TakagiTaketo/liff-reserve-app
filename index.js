@@ -336,8 +336,8 @@ const selectWeekReserve = (req, res) => {
         tmp_data.reserve_date = data.rows[i].reserve_date;
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
-        console.log('サーバーサイドselectWeekReserve()のdataList' + JSON.stringify(dataList));
       }
+      console.log('サーバーサイドselectWeekReserve()のdataList' + JSON.stringify(dataList));
       res.status(200).send((JSON.stringify(dataList)));
     })
     .catch(e => console.log(e))

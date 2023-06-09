@@ -63,7 +63,7 @@ async function selectWeekReserve(displayStartDate, startTime, endTime, startDate
         // 選択した週の予定の場合、配列に格納する。
         let excelDate = new Date(json[i].reserve_date);
         if (startTime <= excelDate && excelDate <= endTime) {
-            displayStartDate.push((json[i].reserve_date).toString().slice(0, 11) + 'T' + json[i].reserve_time);
+            displayStartDate.push((json[i].reserve_date).toString().slice(0, 10) + 'T' + json[i].reserve_time);
         }
     }
     return displayStartDate;
@@ -91,7 +91,7 @@ async function selectNoReserve(noReserveList, startDate, endDate) {
     console.log('selectNoReserveのjson' + json);
 
     for (var i in json) {
-        noReserveList.push((json[i].no_reserve_date).toString().slice(0, 11) + 'T' + json[i].no_reserve_time);
+        noReserveList.push((json[i].no_reserve_date).toString().slice(0, 10) + 'T' + json[i].no_reserve_time);
     }
     return true;
 }
