@@ -191,7 +191,7 @@ $(function () {
                 body: jsonData
             })
             alert('予約を取り消しました。');
-            location.reload();
+            //location.reload();
             /*
             let msg = '予約取消' + "\n" + checked_date;
             sendText(msg);

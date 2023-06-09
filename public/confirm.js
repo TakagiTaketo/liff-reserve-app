@@ -185,19 +185,21 @@ $(function () {
         if (!check_flg) {
             alert('取り消す予約情報を選択してください。');
             return false;
+        } else {
+            // TODO 取消は未確認。
+            if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
+                await fetch('/updateReserve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: jsonData
+                })
+                let msg = '予約取消' + "\n" + checked_date;
+                sendText(msg);
+            }
+            return false;
         }
-        if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
-            await fetch('/updateReserve', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'same-origin',
-                body: jsonData
-            })
-            let msg = '予約取消' + "\n" + checked_date;
-            sendText(msg);
-        }
-        return false;
     })
 })
