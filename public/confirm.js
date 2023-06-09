@@ -97,7 +97,7 @@ async function select_reserves() {
         return (a < b) ? -1 : 1;
     });
     console.log('result:' + result);
-    // resultの数文テーブルを生成する。
+    // resultの数分テーブルを生成する。
     for (var i in result) {
         let table = document.getElementById('reserve_table');
 
@@ -140,6 +140,11 @@ async function select_reserves() {
         tr.appendChild(cell3);
         tr.appendChild(input2);
         table.appendChild(tr);
+    }
+    // 予約情報が存在しない時
+    if (result.length) {
+        let text = document.getElementById('no_reserve_text');
+        text.textContent = "予約情報がありません。";
     }
 }
 
