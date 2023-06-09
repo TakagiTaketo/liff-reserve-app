@@ -38,7 +38,7 @@ window.onload = function () {
     sleep(1000);
 }
 // 予約日リストを取得
-async function selectWeekReserve(displayStartDate, startDate, endDate) {
+async function selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate) {
     // jsonDataを作成
     const jsonData = JSON.stringify({
         startDate: startDate,
@@ -131,7 +131,7 @@ async function reserveDB_access() {
     noReserveList = [];
     displayStartDate.push(startDate + 'T00:00');
 
-    await selectWeekReserve(displayStartDate, startDate, endDate);
+    await selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate);
     await selectNoReserve(noReserveList, startDate, endDate);
     setCalendar(displayStartDate, noReserveList);
 }
