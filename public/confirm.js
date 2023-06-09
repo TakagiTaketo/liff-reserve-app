@@ -100,7 +100,14 @@ async function select_reserves() {
     // resultの数分テーブルを生成する。
     for (var i in result) {
         let table = document.getElementById('reserve_table');
-
+        let head = document.getElementById('reserve_table_head');
+        /*
+        <tr>
+            <th colspan="1" style="width: 15%;">選択</th>
+            <th colspan="1" style="width: 50%;">日付</th>
+            <th colspan="1" style="width: 35%;">開始時間</th>
+        </tr>
+*/
         // 整形
         let year = result[i].getFullYear();
         let month = result[i].getMonth() + 1;
@@ -119,6 +126,20 @@ async function select_reserves() {
         p.appendChild(input);
         // テーブル作成
         let tr = document.createElement('tr');
+        if (i == 0) {
+            let th = document.createElement('th');
+            let th2 = document.createElement('th');
+            let th3 = document.createElement('th');
+            th.setAttribute('colspan', 1);
+            th2.setAttribute('colspan', 1);
+            th3.setAttribute('colspan', 1);
+            th.style.width = '15%';
+            th2.style.width = '50%';
+            th3.style.width = '35%';
+            head.appendChild(th);
+            head.appendChild(th2);
+            head.appendChild(th3);
+        }
         // td
         let cell = document.createElement('td');
         let cell2 = document.createElement('td');
