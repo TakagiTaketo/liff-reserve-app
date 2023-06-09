@@ -27,8 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             console.log('json:' + json);
                             line_uname = json.line_uname;
                             line_uid = json.line_uid;
-                            // 予約管理DBから予約情報を取得
-                            select_reserves();
                         })
                 })
                 .catch((err) => {

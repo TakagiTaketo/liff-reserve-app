@@ -1,9 +1,6 @@
 
 //const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
 
-let result = [];
-let line_uid = '';
-let line_uname = '';
 /*
 document.addEventListener("DOMContentLoaded", () => {
     const liffId = '1661289930-qLmEmZ8w';
@@ -58,6 +55,12 @@ function initializeApp() {
     }
 }
 */
+
+
+document.addEventListener("load", () => {
+    // 予約管理DBから予約情報を取得
+    select_reserves();
+});
 // 予約情報取得
 async function select_reserves() {
     // jsonDataを作成
