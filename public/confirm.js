@@ -105,7 +105,6 @@ async function select_reserves() {
         let p = document.createElement('p');
         let input = document.createElement('input');
         input.setAttribute("name", "checkbox");
-        input.setAttribute("required", true);
         input.type = "checkbox";
         input.value = i;
         p.appendChild(input);
@@ -180,6 +179,10 @@ $(function () {
                 //confirm_date.push(dateList[i].innerText + startList[i].innerText);
                 checked_date.push(hiddenDateList[i].innerText);
             }
+        }
+        if (reserveDate.length == 0) {
+            alert('取り消す予約情報を選択してください。');
+            return false;
         }
         if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
             await fetch('/updateReserve', {
