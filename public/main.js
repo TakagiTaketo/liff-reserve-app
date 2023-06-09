@@ -53,9 +53,9 @@ async function getlineProfile() {
         .catch((err) => {
             alert(err);
         })
-        .finally{
-        return json_result;
-    }
+        .finally(() => {
+            return json_result;
+        });
 }
 
 function sendText(msg) {
