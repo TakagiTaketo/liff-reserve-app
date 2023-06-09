@@ -88,7 +88,7 @@ async function select_reserves() {
     for (var i in json) {
         let reserve_date = json[i].reserve_date;
         let reserve_time = json[i].reserve_time;
-        let date = new Date(reserve_date + 'T' + reserve_time + ':00');
+        let date = new Date(reserve_date.substring(0, 10) + 'T' + reserve_time + ':00');
         dateList.push(date);
     }
     console.log('dataList:' + dateList);
