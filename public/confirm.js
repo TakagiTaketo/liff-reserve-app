@@ -97,17 +97,12 @@ async function select_reserves() {
         return (a < b) ? -1 : 1;
     });
     console.log('result:' + result);
+
     // resultの数分テーブルを生成する。
     for (var i in result) {
         let table = document.getElementById('reserve_table');
         let head = document.getElementById('reserve_table_head');
-        /*
-        <tr>
-            <th colspan="1" style="width: 15%;">選択</th>
-            <th colspan="1" style="width: 50%;">日付</th>
-            <th colspan="1" style="width: 35%;">開始時間</th>
-        </tr>
-*/
+
         // 整形
         let year = result[i].getFullYear();
         let month = result[i].getMonth() + 1;
@@ -162,10 +157,15 @@ async function select_reserves() {
         tr.appendChild(input2);
         table.appendChild(tr);
     }
+
     // 予約情報が存在しない時
+    let reserve_delete_button = document.getElementById('reserve_delete_button');
     if (result.length == 0) {
         let text = document.getElementById('no_reserve_text');
         text.textContent = "予約情報がありません。";
+        reserve_delete_button.setAttribute('disabled', true);
+    } else {
+        reserve_delete_button.removeAttribute('disabled');
     }
 }
 
