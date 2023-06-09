@@ -2,7 +2,6 @@ const liffId = '1661289930-qLmEmZ8w';
 let line_uid = '';
 let line_uname = '';
 window.addEventListener("DOMContentLoaded", () => {
-
     // LIFF 初期化
     liff.init({
         liffId: liffId
@@ -123,8 +122,8 @@ async function select_reserves() {
             th2.style.width = '50%';
             th3.style.width = '35%';
             th.textContent = '選択';
-            th.textContent = '日付';
-            th.textContent = '時間';
+            th2.textContent = '日付';
+            th3.textContent = '開始時間';
             head.appendChild(th);
             head.appendChild(th2);
             head.appendChild(th3);
@@ -163,72 +162,6 @@ async function select_reserves() {
     }
 }
 
-/*
-fetch(api_url)
-    .then(function (fetch_data) {
-        return fetch_data.json();
-    })
-    .then(function (json) {
-        let dateList = [];
-        for (var i in json) {
-            let userID = json[i].userId;
-            if (decordIdToken.sub == userID) {
-                let date = new Date(json[i].startDate + 'T' + json[i].startTime + ':00');
-                dateList.push(date);
-            }
-        }
-        // 日付ソート
-        let result = dateList.sort(function (a, b) {
-            return (a < b) ? -1 : 1;
-        });
-
-        for (var i in result) {
-            let table = document.getElementById('reserve_table');
-
-            // 整形
-            let year = result[i].getFullYear();
-            let month = result[i].getMonth() + 1;
-            let day = result[i].getDate();
-            let hour = result[i].getHours();
-            let minute = result[i].getMinutes();
-            minute = minute.toString().padStart(2, '0');
-
-            // チェックボックス作成
-            let p = document.createElement('p');
-            let input = document.createElement('input');
-            input.setAttribute("name", "checkbox");
-            input.setAttribute("required", true);
-            input.type = "radio";
-            input.value = i;
-            p.appendChild(input);
-            // テーブル作成
-            let tr = document.createElement('tr');
-            // td
-            let cell = document.createElement('td');
-            let cell2 = document.createElement('td');
-            cell2.setAttribute('name', 'date');
-            let cell3 = document.createElement('td');
-            cell3.setAttribute('name', 'start');
-            let cellText2 = document.createTextNode(year + '年' + ('00' + month).slice(-2) + '月' + ('00' + day).slice(-2) + '日');
-            let cellText3 = document.createTextNode(hour + ':' + minute);
-            let input2 = document.createElement('input');
-            input2.setAttribute('hidden', true);
-            input2.setAttribute('name', 'hidden_date');
-            cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
-            cell.appendChild(p);
-            cell2.appendChild(cellText2);
-            cell3.appendChild(cellText3);
-            input2.appendChild(cellText4);
-            tr.appendChild(cell);
-            tr.appendChild(cell2);
-            tr.appendChild(cell3);
-            tr.appendChild(input2);
-            table.appendChild(tr);
-
-        }
-    })
-    .catch((err) => console.error(`予約情報が取得できませんでした：${err}`));
-*/
 // 予約取消ボタン
 $(function () {
     $('form').submit(function () {
