@@ -1,10 +1,10 @@
 window.addEventListener("load", () => {
-    getlineProfile();
+    let json = getlineProfile();
     // 予約管理DBから予約情報を取得
-    select_reserves();
+    select_reserves(json.line_uid);
 });
 // 予約情報取得
-async function select_reserves() {
+async function select_reserves(line_uid) {
     // jsonDataを作成
     const jsonData = JSON.stringify({
         line_uid: line_uid

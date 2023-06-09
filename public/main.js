@@ -1,5 +1,3 @@
-let line_uid = '';
-let line_uname = '';
 window.addEventListener("DOMContentLoaded", () => {
     const liffId = '1661289930-qLmEmZ8w';
     // LIFF 初期化
@@ -29,6 +27,7 @@ function initializeApp() {
 
 // LINEのプロフィール情報を取得する。
 function getlineProfile() {
+    let json = {};
     const idtoken = liff.getIDToken();
     const jsonData = JSON.stringify({
         id_token: idtoken
@@ -48,12 +47,13 @@ function getlineProfile() {
                     console.log('json:' + json);
                     line_uname = json.line_uname;
                     line_uid = json.line_uid;
+                    return json;
                 })
         })
         .catch((err) => {
             alert(err);
         })
-
+    return json;
 }
 
 function sendText(msg) {
