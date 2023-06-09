@@ -318,7 +318,7 @@ const selectWeekReserve = (req, res) => {
   const data = req.body;
   console.log('data:' + data);
   const startDate = data.startDate;
-  const endDate = data.end;
+  const endDate = data.endDate;
   console.log('selectWeekREserve()のstartDate:' + startDate);
   console.log('selectWeekREserve()のendDate:' + endDate);
   // SELECT文
