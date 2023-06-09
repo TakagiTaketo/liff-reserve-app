@@ -48,6 +48,9 @@ async function selectWeekReserve(displayStartDate, startDate, endDate) {
     console.log('selectWeekReserve()のjsonDataのendTime:' + endDate);
     const res = await fetch('/selectWeekReserve', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: jsonData,
         credentials: 'same-origin'
 
@@ -77,6 +80,9 @@ async function selectNoReserve(noReserveList, startDate, endDate) {
     console.log('selectNoReserve()のjsonDataのendTime:' + jsonData.endDate);
     const res = await fetch('/selectNoReserve', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         credentials: 'same-origin',
         body: jsonData
     });
