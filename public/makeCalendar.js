@@ -38,14 +38,14 @@ window.onload = function () {
     sleep(1000);
 }
 // 予約日リストを取得
-async function selectWeekReserve(displayStartDate, startTime, endTime) {
+async function selectWeekReserve(displayStartDate, startDate, endDate) {
     // jsonDataを作成
     const jsonData = JSON.stringify({
-        startTime: startTime,
-        endTime: endTime
+        startDate: startDate,
+        endDate: endDate
     });
-    console.log('selectWeekReserve()のjsonDataのstartTime:' + jsonData.startTime);
-    console.log('selectWeekReserve()のjsonDataのendTime:' + jsonData.endTime);
+    console.log('selectWeekReserve()のjsonDataのstartTime:' + jsonData.startDate);
+    console.log('selectWeekReserve()のjsonDataのendTime:' + jsonData.endDate);
     const res = await fetch('/selectWeekReserve', {
         method: 'POST',
         credentials: 'same-origin',
@@ -66,14 +66,14 @@ async function selectWeekReserve(displayStartDate, startTime, endTime) {
 }
 
 // 予約不可日リストを取得
-async function selectNoReserve(noReserveList, startTime, endTime) {
+async function selectNoReserve(noReserveList, startDate, endDate) {
     // jsonDataを作成
     const jsonData = JSON.stringify({
-        startTime: startTime,
-        endTime: endTime
+        startDate: startDate,
+        endDate: endDate
     });
-    console.log('selectNoReserve()のjsonDataのstartTime:' + jsonData.startTime);
-    console.log('selectNoReserve()のjsonDataのendTime:' + jsonData.endTime);
+    console.log('selectNoReserve()のjsonDataのstartTime:' + jsonData.startDate);
+    console.log('selectNoReserve()のjsonDataのendTime:' + jsonData.endDate);
     const res = await fetch('/selectNoReserve', {
         method: 'POST',
         credentials: 'same-origin',
