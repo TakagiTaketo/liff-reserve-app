@@ -57,7 +57,7 @@ function initializeApp() {
 */
 
 
-document.addEventListener("load", () => {
+window.addEventListener("load", () => {
     // 予約管理DBから予約情報を取得
     select_reserves();
 });
