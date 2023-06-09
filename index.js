@@ -117,6 +117,7 @@ express()
   .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約データ取得
   .post('/selectNoReserve', (req, res) => selectNoReserve(req, res)) // 予約不可データ取得
   .post('/selectConfirmReserve', (req, res) => selectConfirmReserve(req, res)) // 予約確認データ取得
+  .post('/updateReserve', (req, res) => updateReserve(req, res)) // 予約の取消更新
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 // LINE BOT
@@ -336,4 +337,42 @@ const selectConfirmReserve = (req, res) => {
       connection.end;
     });
 
+}
+
+// 予約情報の削除更新
+const updateReserve = (req, res) => {
+  const data = req.body;
+  const line_uid = data.line_uid;
+  const reserve_date = data.reserve_date;
+  const reserve_time = data.reserve_time;
+
+  console.log('updateReserve()のline_uid:' + line_uid);
+  console.log('updateReserve()のreserve_date:' + reserve_date);
+  console.log('updateReserve()のreserve_time:' + reserve_time);
+  for (d in data) {
+    const update_query = {
+      text: `UPDATE reserves set delete_flg=1 WHERE line_uid=${line_uid} AND reserve_date=${reserve_date} AND reserve_time=${reserve_time} FROM reserves WHERE line_uid = '${line_uid}';`
+    };
+    connection.query(update_query)
+      .catch(e => console.log(e))
+  }
+  connection.end;
+  /*
+  let dataList = [];
+  connection.query(select_query)
+    .then(data => {
+      for (let i = 0; i < data.rows.length; i++) {
+        let tmp_data = {};
+        tmp_data.reserve_date = data.rows[i].reserve_date;
+        tmp_data.reserve_time = data.rows[i].reserve_time;
+        dataList.push(tmp_data);
+      }
+      console.log('サーバーサイドselectConfirmReserve()のdataList:' + JSON.stringify(dataList));
+      res.status(200).send((JSON.stringify(dataList)));
+    })
+    .catch(e => console.log(e))
+    .finally(() => {
+      connection.end;
+    });
+*/
 }
