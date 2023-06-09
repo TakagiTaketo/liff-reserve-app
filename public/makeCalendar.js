@@ -120,8 +120,8 @@ async function reserveDB_access() {
     let endTime = new Date(thisYear, thisMonth, thisSaturday, 23, 59, 59, 999);
 
     // 整形
-    let startDate = startTime.getFullYear() + '-' + (startTime.getMonth() + 1).toString().padStart(2, '0') + '-' + startTime.getDate().toString().padStart(2, '0') + 'T00:00';
-    let endDate = endTime.getFullYear() + '-' + (endTime.getMonth() + 1).toString().padStart(2, '0') + '-' + endTime.getDate().toString().padStart(2, '0') + 'T23:59';
+    let startDate = startTime.getFullYear() + '-' + (startTime.getMonth() + 1).toString().padStart(2, '0') + '-' + startTime.getDate().toString().padStart(2, '0');
+    let endDate = endTime.getFullYear() + '-' + (endTime.getMonth() + 1).toString().padStart(2, '0') + '-' + endTime.getDate().toString().padStart(2, '0');
     console.log('startTime:' + startTime);
     console.log('endTime:' + endTime);
     console.log('startDate:' + startDate);
@@ -129,7 +129,7 @@ async function reserveDB_access() {
 
     displayStartDate = [];
     noReserveList = [];
-    displayStartDate.push(startDate);
+    displayStartDate.push(startDate + 'T00:00');
 
     await selectWeekReserve(displayStartDate, startDate, endDate);
     await selectNoReserve(noReserveList, startDate, endDate);
