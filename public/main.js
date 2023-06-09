@@ -8,30 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             initializeApp();
-            const idtoken = liff.getIDToken();
-            const jsonData = JSON.stringify({
-                id_token: idtoken
-            });
-            // LINEプロフィール取得
-            fetch('/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData,
-                creadentials: 'same-origin'
-            })
-                .then(res => {
-                    res.json()
-                        .then(json => {
-                            console.log('json:' + json);
-                            line_uname = json.line_uname;
-                            line_uid = json.line_uid;
-                        })
-                })
-                .catch((err) => {
-                    alert(err);
-                })
         })
         .catch((err) => {
             alert(err);
@@ -49,6 +25,35 @@ function initializeApp() {
             liff.login();
         }
     }
+}
+
+// LINEのプロフィール情報を取得する。
+function getlineProfile() {
+    const idtoken = liff.getIDToken();
+    const jsonData = JSON.stringify({
+        id_token: idtoken
+    });
+    // LINEプロフィール取得
+    fetch('/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData,
+        creadentials: 'same-origin'
+    })
+        .then(res => {
+            res.json()
+                .then(json => {
+                    console.log('json:' + json);
+                    line_uname = json.line_uname;
+                    line_uid = json.line_uid;
+                })
+        })
+        .catch((err) => {
+            alert(err);
+        })
+
 }
 
 function sendText(msg) {

@@ -1,7 +1,7 @@
 let displayStartDate = [];
 let noReserveList = [];
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
     //今日の日時を表示
     var date = new Date()
     var year = date.getFullYear()
