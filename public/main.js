@@ -1,3 +1,5 @@
+let line_uid = '';
+let line_uname = '';
 document.addEventListener("DOMContentLoaded", () => {
     const liffId = '1661289930-qLmEmZ8w';
     // LIFF 初期化
