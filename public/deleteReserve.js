@@ -184,8 +184,8 @@ function goConfirm() {
         alert('取り消す予約情報を選択してください。');
         return false;
     } else {
-        sessionStorage.setItem('jsonData', jsonData);
-        console.log('jsonData:' + jsonData);
+        sessionStorage.setItem('jsonData', JSON.stringify(jsonData));
+        console.log('jsonData:' + JSON.stringify(jsonData));
         console.log('checked_date:' + checked_date);
         location.href = '/confirm.html';
     }
