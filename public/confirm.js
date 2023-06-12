@@ -235,6 +235,7 @@ async function deleteReserve() {
         body: JSON.stringify(jsonData)
     })
     let msg = '予約を取り消しました。';
+    console.log('msg' + msg);
     sendText(msg);
     return false;
 }
