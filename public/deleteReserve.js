@@ -191,6 +191,10 @@ function goConfirm() {
     }
 }
 
+function backIndex() {
+
+}
+
 /*
 // 予約取消ボタン
 async function deleteReserve() {

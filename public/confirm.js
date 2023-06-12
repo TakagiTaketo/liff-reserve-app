@@ -225,7 +225,7 @@ async function deleteReserve() {
     let jsonData = sessionStorage.getItem('jsonData');
     jsonData = JSON.parse(jsonData);
 
-    // TODO 取消は未確認。
+    // 取消
     await fetch('/updateReserve', {
         method: 'POST',
         headers: {
@@ -237,4 +237,8 @@ async function deleteReserve() {
     let msg = '予約を取り消しました。';
     sendText(msg);
     return false;
+}
+
+function backDeleteReserve() {
+    location.href = '/deleteReserve.html';
 }

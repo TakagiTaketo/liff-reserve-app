@@ -367,6 +367,7 @@ const updateReserve = (req, res) => {
       .catch(e => console.log(e))
   }
   connection.end;
+  res.status(200).send('予約取消完了');
   /*
   let dataList = [];
   connection.query(select_query)
