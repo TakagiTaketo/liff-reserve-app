@@ -350,7 +350,7 @@ const updateReserve = (req, res) => {
     + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
     + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 
-
+  let message = '';
   for (let i = 0; i < data.length; i++) {
     const line_uid = data[i].line_uid;
     const reserve_date = data[i].reserve_date.substring(0, 4) + '-' + data[i].reserve_date.substring(5, 7) + '-' + data[i].reserve_date.substring(8, 10);
@@ -362,12 +362,16 @@ const updateReserve = (req, res) => {
       text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
     };
     connection.query(update_query)
+      .then(() => {
+        message = '取消完了';
+      })
       .catch(e => {
         console.log(e);
-        res.send(503).send({ message: timeout });
+        message = '取消失敗'
+        res.send(503).send(message);
       })
   }
-  res.status(200).end;
+  res.status(200).send(message);
   req.connection.end;
   console.log('取消SQL終了');
   console.log('レスポンス返しました');
