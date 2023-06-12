@@ -236,7 +236,7 @@ function deleteReserve() {
     })
         .then((json) => {
             let msg = '予約を取り消しました。';
-            console.log('msg' + json);
+            console.log('msg' + json.message);
             sendText(msg);
         })
         .catch((err) => {

@@ -177,6 +177,7 @@ const getUserInfo = (req, res) => {
               });
             console.log('response data:', json);
           }
+          res.status(200).end;
         });
     })
     .catch(e => console.log(e));
@@ -364,7 +365,10 @@ const updateReserve = (req, res) => {
       text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
     };
     connection.query(update_query)
-      .catch(e => console.log(e))
+      .catch(e => {
+        console.log(e);
+        res.send(503).send({ Message: timeout });
+      })
   }
   connection.end;
   console.log('取消SQL終了');
