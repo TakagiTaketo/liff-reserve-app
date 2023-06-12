@@ -80,16 +80,16 @@ window.onload = function () {
         let cellText2 = document.createTextNode(reserve_date);
         //let cellText3 = document.createTextNode(hour + ':' + minute);
         let cellText3 = document.createTextNode(reserve_time);
-        let input2 = document.createElement('input');
-        input2.setAttribute('hidden', true);
-        input2.setAttribute('name', 'hidden_date');
+        //let input2 = document.createElement('input');
+        //input2.setAttribute('hidden', true);
+        //input2.setAttribute('name', 'hidden_date');
         cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
         cell2.appendChild(cellText2);
         cell3.appendChild(cellText3);
-        input2.appendChild(cellText4);
+        //input2.appendChild(cellText4);
         tr.appendChild(cell2);
         tr.appendChild(cell3);
-        tr.appendChild(input2);
+        //tr.appendChild(input2);
         table.appendChild(tr);
     }
 }
