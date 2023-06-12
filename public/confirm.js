@@ -27,7 +27,6 @@ window.addEventListener("DOMContentLoaded", () => {
                             console.log('json:' + json);
                             line_uname = json.line_uname;
                             line_uid = json.line_uid;
-                            select_reserves();
                         })
                 })
                 .catch((err) => {
@@ -38,6 +37,55 @@ window.addEventListener("DOMContentLoaded", () => {
             alert(err);
         })
 });
+// 選択テーブル作成
+window.onload = function () {
+    // セッションから選択した予約でデータの日付を取得する
+    const jsonData = sessionStorage.getItem('jsonData');
+    for (let i = 0; i < jsonData.length; i++) {
+        let table = document.getElementById('reserve_table');
+        let head = document.getElementById('reserve_table_head');
+        // 整形
+        let year = result[i].getFullYear();
+        let month = result[i].getMonth() + 1;
+        let day = result[i].getDate();
+        let hour = result[i].getHours();
+        let minute = result[i].getMinutes();
+        minute = minute.toString().padStart(2, '0');
+        // テーブル作成
+        let tr = document.createElement('tr');
+        if (i == 0) {
+            let th2 = document.createElement('th');
+            let th3 = document.createElement('th');
+            th2.setAttribute('colspan', 1);
+            th3.setAttribute('colspan', 1);
+            th2.style.width = '50%';
+            th3.style.width = '50%';
+            th2.textContent = '日付';
+            th3.textContent = '開始時間';
+            head.appendChild(th2);
+            head.appendChild(th3);
+        }
+        // td
+        let cell2 = document.createElement('td');
+        cell2.setAttribute('name', 'date');
+        let cell3 = document.createElement('td');
+        cell3.setAttribute('name', 'start');
+        let cellText2 = document.createTextNode(year + '年' + ('00' + month).slice(-2) + '月' + ('00' + day).slice(-2) + '日');
+        let cellText3 = document.createTextNode(hour + ':' + minute);
+        let input2 = document.createElement('input');
+        input2.setAttribute('hidden', true);
+        input2.setAttribute('name', 'hidden_date');
+        cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
+        cell2.appendChild(cellText2);
+        cell3.appendChild(cellText3);
+        input2.appendChild(cellText4);
+        tr.appendChild(cell2);
+        tr.appendChild(cell3);
+        tr.appendChild(input2);
+        table.appendChild(tr);
+    }
+}
+
 // ログインチェック
 function checkLogin() {
     // ログインチェック
@@ -52,6 +100,7 @@ function checkLogin() {
     }
 }
 
+/*
 // 予約情報取得
 async function select_reserves() {
     // jsonDataを作成
@@ -149,7 +198,7 @@ async function select_reserves() {
         tr.appendChild(input2);
         table.appendChild(tr);
     }
-
+    /*
     // 予約情報が存在しない時
     let reserve_delete_button = document.getElementById('reserve_delete_button');
     if (result.length == 0) {
@@ -159,8 +208,9 @@ async function select_reserves() {
     } else {
         reserve_delete_button.removeAttribute('disabled');
     }
+    
 }
-
+*/
 // 予約取消ボタン
 async function deleteReserve() {
     let reserveDate = document.getElementsByName('checkbox');
@@ -186,7 +236,7 @@ async function deleteReserve() {
     } else {
         console.log('取り消し処理 JSON:' + JSON.stringify(jsonData));
         // TODO 取消は未確認。
-        if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
+        if (window.confirm(`下記予定を取り消します。\nよろしいですか？`)) {
             await fetch('/updateReserve', {
                 method: 'POST',
                 headers: {

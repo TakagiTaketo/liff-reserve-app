@@ -59,7 +59,7 @@
 </head>
 
 <body>
-    <form>
+    <form onsubmit="deleteReserve()">
         <div style="text-align: center;">
             <div class="home" style="padding: 2rem 2rem;">
                 <h1 class="home__title">
@@ -73,12 +73,13 @@
                 <tbody>
                 </tbody>
             </table>
-            <button type="submit" class="reserve_button" id="reserve_delete_button">予約取消</button>
-            <button type="button" class="reserve_button" style="margin-left: 20px;" onclick="history.back()">戻る</button>
+            <button type="submit" class="reserve_button" id="reserve_confirm_button">確認</button>
+            <button type="button" class="reserve_button" style="margin-left: 20px;"
+                onclick="location.href('/index.html')">戻る</button>
         </div>
     </form>
     <script type="text/javascript" src="main.js"></script>
-    <script type="text/javascript" src="confirm.js"></script>
+    <script type="text/javascript" src="deleteReserve.js"></script>
 </body>
 
 </html>
