@@ -121,7 +121,6 @@ express()
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 // LINE BOT
-/*
 const lineBot = (req, res) => {
   res.status(200).end();
   const events = req.body.events;
@@ -139,7 +138,7 @@ const lineBot = (req, res) => {
     .then(console.log('all promises passed'))
     .catch(e => console.error(e.stack));
 }
-*/
+
 
 // LINEプロフィールの取得
 const getUserInfo = (req, res) => {
@@ -178,7 +177,7 @@ const getUserInfo = (req, res) => {
               });
             console.log('response data:', json);
           }
-          res.status(200).send();
+          res.status(200).end;
         });
     })
     .catch(e => console.log(e));
@@ -239,7 +238,7 @@ const insertReserve = (req, res) => {
   connection.query(insert_query)
     .then(() => {
       let message = '予約追加完了'
-      res.status(200).send({ message });
+      res.status(200).send(message);
     })
     .catch(e => {
       console.log(e);
@@ -368,11 +367,11 @@ const updateReserve = (req, res) => {
       })
       .catch(e => {
         console.log(e);
-        message = '取消失敗'
-        res.send(503).send({ message });
+        message = '取消完了'
+        res.send(503).send(message);
       })
   }
-  res.status(200).send({ message });
+  res.status(200).send(message);
   req.connection.end;
   console.log('取消SQL終了');
   console.log('レスポンス返しました');
