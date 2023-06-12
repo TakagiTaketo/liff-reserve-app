@@ -40,7 +40,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // 選択テーブル作成
 window.onload = function () {
     // セッションから選択した予約でデータの日付を取得する
-    const jsonData = sessionStorage.getItem('jsonData');
+    let jsonData = sessionStorage.getItem('jsonData');
+    jsonData = JSON.parse(jsonData);
     for (let i = 0; i < jsonData.length; i++) {
         let reserve_date = jsonData[i].reserveDate;
         let reserve_time = jsonData[i].reserve_time;
