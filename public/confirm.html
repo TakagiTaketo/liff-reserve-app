@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta http-equiv="Cache-Control" content="no-cache">
     <link rel="stylesheet" href="index.css" />
-    <title>面談予約確認</title>
+    <title>面談予約</title>
     <script defer="defer" src="/main.bundle.js"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -59,21 +59,21 @@
 </head>
 
 <body>
-    <form>
+    <form onsubmit="deleteReserve()">
         <div style="text-align: center;">
             <div class="home" style="padding: 2rem 2rem;">
                 <h1 class="home__title">
-                    面談予約確認
+                    面談予約取消確認
                 </h1>
             </div>
-            <div id="no_reserve_text"></div>
+            <div>下記予約を取り消します。\nよろしいですか？</div>
             <table id="reserve_table" style="margin-bottom: 30px; width: max-content;">
                 <thead id="reserve_table_head">
                 </thead>
                 <tbody>
                 </tbody>
             </table>
-            <button type="submit" class="reserve_button" id="reserve_delete_button">予約取消</button>
+            <button type="submit" class="reserve_button" id="reserve_delete_button">予約を取り消す</button>
             <button type="button" class="reserve_button" style="margin-left: 20px;"
                 onclick="location.href('/deleteReserve.html')">戻る</button>
         </div>

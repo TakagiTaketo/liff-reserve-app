@@ -105,7 +105,6 @@ async function select_reserves() {
         let p = document.createElement('p');
         let input = document.createElement('input');
         input.setAttribute("name", "checkbox");
-        input.setAttribute("required", true);
         input.type = "checkbox";
         input.value = i;
         p.appendChild(input);
