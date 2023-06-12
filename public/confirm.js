@@ -184,7 +184,7 @@ async function deleteReserve() {
         alert('取り消す予約情報を選択してください。');
         return false;
     } else {
-        console.log('取り消し処理');
+        console.log('取り消し処理 JSON:' + JSON.stringify(jsonData));
         // TODO 取消は未確認。
         if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
             await fetch('/updateReserve', {
