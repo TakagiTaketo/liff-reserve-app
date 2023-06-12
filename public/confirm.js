@@ -83,7 +83,7 @@ window.onload = function () {
         //let input2 = document.createElement('input');
         //input2.setAttribute('hidden', true);
         //input2.setAttribute('name', 'hidden_date');
-        cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
+        //cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
         cell2.appendChild(cellText2);
         cell3.appendChild(cellText3);
         //input2.appendChild(cellText4);
