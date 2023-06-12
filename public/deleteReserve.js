@@ -185,6 +185,8 @@ function goConfirm() {
         return false;
     } else {
         sessionStorage.setItem('jsonData', jsonData);
+        console.log('jsonData:' + jsonData);
+        console.log('checked_date:' + checked_date);
         location.href = '/confirm.html';
     }
 }
