@@ -236,18 +236,14 @@ function deleteReserve() {
     })
         .then((json) => {
             alert("メッセージ送信");
-            /*
             let msg = '予約を取り消しました。';
             console.log('msg' + json.message);
             sendText(msg);
-            */
         })
         .catch((err) => {
             alert(err);
-            alert("なんかエラー出てます");
         })
         .finally(() => {
-            alert("finally呼ばれました");
         })
 }
 
