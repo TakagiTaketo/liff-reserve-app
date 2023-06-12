@@ -173,7 +173,7 @@ const getUserInfo = (req, res) => {
               })
               .catch(e => console.log(e))
               .finally(() => {
-                connection.end;
+                req.connection.end;
               });
             console.log('response data:', json);
           }
@@ -198,7 +198,7 @@ const selectReserve = (req, res) => {
   };
   let reserve_flg = false;
   connection.query(select_query, function (error, results) {
-    connection.end;
+    req.connection.end;
     if (error) throw error;
 
     // TODO line
@@ -245,7 +245,7 @@ const insertReserve = (req, res) => {
       res.status
     })
     .finally(() => {
-      connection.end;
+      req.connection.end;
     });
 }
 
@@ -278,7 +278,7 @@ const selectWeekReserve = (req, res) => {
     })
     .catch(e => console.log(e))
     .finally(() => {
-      connection.end;
+      req.connection.end;
     });
 };
 
@@ -308,7 +308,7 @@ const selectNoReserve = (req, res) => {
     })
     .catch(e => console.log(e))
     .finally(() => {
-      connection.end;
+      req.connection.end;
     });
 }
 // 予約確認データ取得
@@ -335,7 +335,7 @@ const selectConfirmReserve = (req, res) => {
     })
     .catch(e => console.log(e))
     .finally(() => {
-      connection.end;
+      req.connection.end;
     });
 
 }
@@ -343,9 +343,6 @@ const selectConfirmReserve = (req, res) => {
 // 予約情報の削除更新
 const updateReserve = (req, res) => {
   const data = req.body;
-  //const line_uid = data.line_uid;
-  //const reserve_date = data.reserve_date;
-  //const reserve_time = data.reserve_time;
   // タイムスタンプ整形
   let updated_at = '';
   let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
@@ -371,7 +368,7 @@ const updateReserve = (req, res) => {
       })
   }
   res.status(200).end;
-  connection.end;
+  req.connection.end;
   console.log('取消SQL終了');
   console.log('レスポンス返しました');
   /*
