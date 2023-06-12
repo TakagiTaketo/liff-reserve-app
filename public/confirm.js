@@ -240,6 +240,9 @@ function deleteReserve() {
             sendText(msg);
         })
         .catch((err) => {
+            let msg = '予約を取り消しました。';
+            console.log('msg' + msg);
+            sendText(msg);
             alert(err);
         })
 }
