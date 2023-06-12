@@ -239,6 +239,9 @@ function deleteReserve() {
             console.log('msg' + msg);
             sendText(msg);
         })
+        .catch((err) => {
+            alert(err);
+        })
 }
 
 function backDeleteReserve() {

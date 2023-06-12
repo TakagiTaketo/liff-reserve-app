@@ -191,8 +191,9 @@ function goConfirm() {
     }
 }
 
+// 予約画面に戻る
 function backIndex() {
-
+    location.href = '/index.html';
 }
 
 /*
