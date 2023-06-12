@@ -367,12 +367,13 @@ const updateReserve = (req, res) => {
     connection.query(update_query)
       .catch(e => {
         console.log(e);
-        res.send(503).send({ Message: timeout });
+        res.send(503).send({ message: timeout });
       })
   }
   connection.end;
   console.log('取消SQL終了');
   res.status(200).end;
+  console.log('レスポンス返しました');
   /*
   let dataList = [];
   connection.query(select_query)
