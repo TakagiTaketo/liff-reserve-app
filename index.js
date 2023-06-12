@@ -370,9 +370,9 @@ const updateReserve = (req, res) => {
         res.send(503).send({ message: timeout });
       })
   }
+  res.status(200).end;
   connection.end;
   console.log('取消SQL終了');
-  res.status(200).end;
   console.log('レスポンス返しました');
   /*
   let dataList = [];
