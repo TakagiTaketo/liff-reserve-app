@@ -193,7 +193,7 @@ async function deleteReserve() {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'same-origin',
-                body: jsonData
+                body: JSON.stringify(jsonData)
             })
             let msg = '予約取消' + "\n" + checked_date;
             sendText(msg);
