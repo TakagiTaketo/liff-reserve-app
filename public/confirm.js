@@ -220,13 +220,13 @@ async function select_reserves() {
 }
 */
 // 予約取消ボタン
-async function deleteReserve() {
+function deleteReserve() {
     // セッションから選択した予約でデータの日付を取得する
     let jsonData = sessionStorage.getItem('jsonData');
     jsonData = JSON.parse(jsonData);
 
     // 取消
-    await fetch('/updateReserve', {
+    fetch('/updateReserve', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
