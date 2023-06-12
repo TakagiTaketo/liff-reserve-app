@@ -170,7 +170,7 @@ const getUserInfo = (req, res) => {
                 console.log('data.rows[0]:', data.rows[0]);
                 const line_uname = data.rows[0].line_uname;
                 const line_uid = data.rows[0].line_uid;
-                res.status(200).send({ "line_uname": line_uname, "line_uid": line_uid });
+                res.status(200).send({ line_uname, line_uid });
               })
               .catch(e => console.log(e))
               .finally(() => {
@@ -178,7 +178,7 @@ const getUserInfo = (req, res) => {
               });
             console.log('response data:', json);
           }
-          res.status(200).send({});
+          res.status(200).send();
         });
     })
     .catch(e => console.log(e));
@@ -210,7 +210,7 @@ const selectReserve = (req, res) => {
       reserve_flg = true;
       console.log('予約空席');
     }
-    res.status(200).send({ "reserve_flg": reserve_flg });
+    res.status(200).send({ reserve_flg });
   })
 };
 
