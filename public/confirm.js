@@ -234,15 +234,12 @@ function deleteReserve() {
         credentials: 'same-origin',
         body: JSON.stringify(jsonData)
     })
-        .then(() => {
+        .then((json) => {
             let msg = '予約を取り消しました。';
-            console.log('msg' + msg);
+            console.log('msg' + json);
             sendText(msg);
         })
         .catch((err) => {
-            let msg = '予約を取り消しました。';
-            console.log('msg' + msg);
-            sendText(msg);
             alert(err);
         })
 }
