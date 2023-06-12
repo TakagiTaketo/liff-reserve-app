@@ -239,7 +239,7 @@ const insertReserve = (req, res) => {
   connection.query(insert_query)
     .then(() => {
       let message = '予約追加完了'
-      res.status(200).send({ "message": message });
+      res.status(200).send({ message });
     })
     .catch(e => {
       console.log(e);
@@ -369,10 +369,10 @@ const updateReserve = (req, res) => {
       .catch(e => {
         console.log(e);
         message = '取消失敗'
-        res.send(503).send({ "message": message });
+        res.send(503).send({ message });
       })
   }
-  res.status(200).send({ "message": message });
+  res.status(200).send({ message });
   req.connection.end;
   console.log('取消SQL終了');
   console.log('レスポンス返しました');
