@@ -162,45 +162,43 @@ async function select_reserves() {
 }
 
 // 予約取消ボタン
-$(function () {
-    $('form').submit(async function () {
-        let reserveDate = document.getElementsByName('checkbox');
-        let dateList = document.getElementsByName('date');
-        let startList = document.getElementsByName('start');
-        let hiddenDateList = document.getElementsByName('hidden_date');
-        let confirm_date = [];
-        let checked_date = [];
+async function deleteReserve() {
+    let reserveDate = document.getElementsByName('checkbox');
+    let dateList = document.getElementsByName('date');
+    let startList = document.getElementsByName('start');
+    let hiddenDateList = document.getElementsByName('hidden_date');
+    let confirm_date = [];
+    let checked_date = [];
 
-        let jsonData = {};
-        let check_flg = false;
-        for (let i = 0; i < reserveDate.length; i++) {
-            if (reserveDate[i].checked) {
-                let addData = { reserveDate: dateList[i].innerText, reserve_time: startList[i].innerText, line_uid: line_uid }
-                jsonData.push(addData);
-                //confirm_date.push(dateList[i].innerText + startList[i].innerText);
-                checked_date.push(hiddenDateList[i].innerText);
-                check_flg = true;
-            }
+    let jsonData = {};
+    let check_flg = false;
+    for (let i = 0; i < reserveDate.length; i++) {
+        if (reserveDate[i].checked) {
+            let addData = { reserveDate: dateList[i].innerText, reserve_time: startList[i].innerText, line_uid: line_uid }
+            jsonData.push(addData);
+            //confirm_date.push(dateList[i].innerText + startList[i].innerText);
+            checked_date.push(hiddenDateList[i].innerText);
+            check_flg = true;
         }
-        if (!check_flg) {
-            alert('取り消す予約情報を選択してください。');
-            return false;
-        } else {
-            console.log('取り消し処理');
-            // TODO 取消は未確認。
-            if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
-                await fetch('/updateReserve', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'same-origin',
-                    body: jsonData
-                })
-                let msg = '予約取消' + "\n" + checked_date;
-                sendText(msg);
-            }
-            return false;
+    }
+    if (!check_flg) {
+        alert('取り消す予約情報を選択してください。');
+        return false;
+    } else {
+        console.log('取り消し処理');
+        // TODO 取消は未確認。
+        if (window.confirm(`下記予定を取り消します。\nよろしいですか？\n${confirm_date}`)) {
+            await fetch('/updateReserve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: jsonData
+            })
+            let msg = '予約取消' + "\n" + checked_date;
+            sendText(msg);
         }
-    })
-})
+        return false;
+    }
+}
