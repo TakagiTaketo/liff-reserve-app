@@ -345,13 +345,19 @@ const updateReserve = (req, res) => {
   const line_uid = data.line_uid;
   const reserve_date = data.reserve_date;
   const reserve_time = data.reserve_time;
+  // タイムスタンプ整形
+  let updated_at = '';
+  let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+  updated_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+    + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
+    + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 
   console.log('updateReserve()のline_uid:' + line_uid);
   console.log('updateReserve()のreserve_date:' + reserve_date);
   console.log('updateReserve()のreserve_time:' + reserve_time);
   for (d in data) {
     const update_query = {
-      text: `UPDATE reserves set delete_flg=1 WHERE line_uid=${line_uid} AND reserve_date=${reserve_date} AND reserve_time=${reserve_time} FROM reserves WHERE line_uid = '${line_uid}';`
+      text: `UPDATE reserves set updated_at=${updated_at}, delete_flg=1 WHERE line_uid=${line_uid} AND reserve_date=${reserve_date} AND reserve_time=${reserve_time} FROM reserves WHERE line_uid = '${line_uid}';`
     };
     connection.query(update_query)
       .catch(e => console.log(e))
