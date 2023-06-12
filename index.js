@@ -368,7 +368,7 @@ const updateReserve = (req, res) => {
   }
   connection.end;
   console.log('取消SQL終了');
-  res.status(200).end();
+  res.end();
   /*
   let dataList = [];
   connection.query(select_query)
