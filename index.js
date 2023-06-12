@@ -352,14 +352,14 @@ const updateReserve = (req, res) => {
     + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
     + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 
-  console.log('updateReserve()のline_uid:' + line_uid);
-  console.log('updateReserve()のreserve_date:' + reserve_date);
-  console.log('updateReserve()のreserve_time:' + reserve_time);
+
   for (let i = 0; i < data.length; i++) {
     const line_uid = data.line_uid;
     const reserve_date = data.reserve_date;
     const reserve_time = data.reserve_time;
-
+    console.log('updateReserve()のline_uid:' + line_uid);
+    console.log('updateReserve()のreserve_date:' + reserve_date);
+    console.log('updateReserve()のreserve_time:' + reserve_time);
     const update_query = {
       text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
     };
