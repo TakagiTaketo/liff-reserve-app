@@ -354,9 +354,9 @@ const updateReserve = (req, res) => {
 
 
   for (let i = 0; i < data.length; i++) {
-    const line_uid = data.line_uid;
-    const reserve_date = data.reserve_date;
-    const reserve_time = data.reserve_time;
+    const line_uid = data[i].line_uid;
+    const reserve_date = data[i].reserve_date;
+    const reserve_time = data[i].reserve_time;
     console.log('updateReserve()のline_uid:' + line_uid);
     console.log('updateReserve()のreserve_date:' + reserve_date);
     console.log('updateReserve()のreserve_time:' + reserve_time);
