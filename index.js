@@ -342,9 +342,9 @@ const selectConfirmReserve = (req, res) => {
 // 予約情報の削除更新
 const updateReserve = (req, res) => {
   const data = req.body;
-  const line_uid = data.line_uid;
-  const reserve_date = data.reserve_date;
-  const reserve_time = data.reserve_time;
+  //const line_uid = data.line_uid;
+  //const reserve_date = data.reserve_date;
+  //const reserve_time = data.reserve_time;
   // タイムスタンプ整形
   let updated_at = '';
   let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
@@ -355,9 +355,13 @@ const updateReserve = (req, res) => {
   console.log('updateReserve()のline_uid:' + line_uid);
   console.log('updateReserve()のreserve_date:' + reserve_date);
   console.log('updateReserve()のreserve_time:' + reserve_time);
-  for (d in data) {
+  for (let i = 0; i < data.length; i++) {
+    const line_uid = data.line_uid;
+    const reserve_date = data.reserve_date;
+    const reserve_time = data.reserve_time;
+
     const update_query = {
-      text: `UPDATE reserves set updated_at=${updated_at}, delete_flg=1 WHERE line_uid=${line_uid} AND reserve_date=${reserve_date} AND reserve_time=${reserve_time} FROM reserves WHERE line_uid = '${line_uid}';`
+      text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
     };
     connection.query(update_query)
       .catch(e => console.log(e))
