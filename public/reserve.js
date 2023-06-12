@@ -114,6 +114,6 @@ $(function () {
 
 // 予約確認
 function reserve_confirm() {
-    location.href = '/confirm.html';
+    location.href = '/deleteReserve.html';
 }
 

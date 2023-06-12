@@ -42,15 +42,20 @@ window.onload = function () {
     // セッションから選択した予約でデータの日付を取得する
     const jsonData = sessionStorage.getItem('jsonData');
     for (let i = 0; i < jsonData.length; i++) {
+        let reserve_date = jsonData[i].reserveDate;
+        let reserve_time = jsonData[i].reserve_time;
+        line_uid = jsonData[i].line_uid;
         let table = document.getElementById('reserve_table');
         let head = document.getElementById('reserve_table_head');
         // 整形
+        /*
         let year = result[i].getFullYear();
         let month = result[i].getMonth() + 1;
         let day = result[i].getDate();
         let hour = result[i].getHours();
         let minute = result[i].getMinutes();
         minute = minute.toString().padStart(2, '0');
+        */
         // テーブル作成
         let tr = document.createElement('tr');
         if (i == 0) {
@@ -70,8 +75,10 @@ window.onload = function () {
         cell2.setAttribute('name', 'date');
         let cell3 = document.createElement('td');
         cell3.setAttribute('name', 'start');
-        let cellText2 = document.createTextNode(year + '年' + ('00' + month).slice(-2) + '月' + ('00' + day).slice(-2) + '日');
-        let cellText3 = document.createTextNode(hour + ':' + minute);
+        //let cellText2 = document.createTextNode(year + '年' + ('00' + month).slice(-2) + '月' + ('00' + day).slice(-2) + '日');
+        let cellText2 = document.createTextNode(reserve_date);
+        //let cellText3 = document.createTextNode(hour + ':' + minute);
+        let cellText3 = document.createTextNode(reserve_time);
         let input2 = document.createElement('input');
         input2.setAttribute('hidden', true);
         input2.setAttribute('name', 'hidden_date');
@@ -217,8 +224,6 @@ async function deleteReserve() {
     let dateList = document.getElementsByName('date');
     let startList = document.getElementsByName('start');
     let hiddenDateList = document.getElementsByName('hidden_date');
-    let confirm_date = [];
-    let checked_date = [];
 
     let jsonData = [];
     let check_flg = false;
@@ -226,7 +231,6 @@ async function deleteReserve() {
         if (reserveDate[i].checked) {
             let addData = { reserveDate: dateList[i].innerText, reserve_time: startList[i].innerText, line_uid: line_uid }
             jsonData.push(addData);
-            checked_date.push(hiddenDateList[i].innerText);
             check_flg = true;
         }
     }
@@ -235,19 +239,18 @@ async function deleteReserve() {
         return false;
     } else {
         console.log('取り消し処理 JSON:' + JSON.stringify(jsonData));
+        jsonData = JSON.stringify(jsonData);
         // TODO 取消は未確認。
-        if (window.confirm(`下記予定を取り消します。\nよろしいですか？`)) {
-            await fetch('/updateReserve', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify(jsonData)
-            })
-            let msg = '予約取消' + "\n" + checked_date;
-            sendText(msg);
-        }
+        await fetch('/updateReserve', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: jsonData
+        })
+        let msg = '予約取消' + "\n" + checked_date;
+        sendText(msg);
         return false;
     }
 }
