@@ -59,6 +59,9 @@ let dialog_close = $('#dialog_close');
 // 予約ボタン押下
 $(function () {
     $('form').submit(function () {
+        $('#dialog_username').text($('#username').val());
+        $('#dialog_birthday').text($('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日');
+        $('#dialog_reserve_date').text($('#date').val() + ' ' + $('select[name="time"]').val());
         dialog.show();
     });
 });
