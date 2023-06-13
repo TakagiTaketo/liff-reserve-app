@@ -87,9 +87,9 @@
                 面談予約
             </h1>
             <span style="text-align: left; display: inline-block;">
-                <label for="username" style="font-size: 20px;">氏名(本名)</label>
+                <label for="username" style="font-size: 20px;">氏名(本名)</label><br>
                 <input type="text" id="username" style="font-size: 20px;" required><br>
-                <label for="birthday_year" style="margin-right: 12px; font-size: 20px;">生年月日</label>
+                <label for="birthday_year" style="margin-right: 12px; font-size: 20px;">生年月日</label><br>
                 <input type="text" id="birthday_year" style="width: 60px;" pattern="^[0-9]+$" required>年
                 <input type="text" id="birthday_month" style="width: 60px;" pattern="^[0-9]+$" required>月
                 <input type="text" id="birthday_day" style="width: 60px;" pattern="^[0-9]+$" required>日
@@ -97,7 +97,7 @@
             <label for="displayDate" class="displayDateLabel">表示週変更</label>
             <input class="displayDate" id="displayDate" type="date" onchange="reserveDB_access()">
 
-            <span style="font-size: 20px;">
+            <span style="font-size: 10px;">
                 <span style="color: red;">〇</span>：空席（予約可）
                 <span style="color: blue;">×</span>：満席（予約不可）
                 <span style="color: black;">-</span>：休診<br>
@@ -108,7 +108,7 @@
         <div style="text-align: center; display:block;">
             <div>
                 <label for="date" class="displayDateLabel"
-                    style="display: inline; border-bottom: 1px solid red;">予約日</label>
+                    style="display: inline; border-bottom: 1px solid red;">予約日</label><br>
                 <p style="margin-top: 30px; text-align:left; display:inline-block;">
                     <label for="date" style="font-size: 20px;">日付：</label>
                     <input type="date" id="date" min="2023-04-01" max="2025-12-31" style="font-size: 20px;" required>
