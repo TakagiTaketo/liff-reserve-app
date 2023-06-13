@@ -57,6 +57,8 @@
 
         .dialog_text {
             display: inline;
+            font-size: 20px;
+            color: blue;
         }
     </style>
 </head>
@@ -111,15 +113,17 @@
         </div>
     </form>
     <dialog>
-        <p>この内容で予約します。よろしいですか？</p>
-        <div>氏名：<p id="dialog_username" class="dialog_text"></p>
+        <p style="font-size: 20px;">この内容で予約します。よろしいですか？</p>
+        <div style="font-size: 20px;">氏名：<p id="dialog_username" class="dialog_text"></p>
         </div>
-        <div>生年月日：<p id="dialog_birthday" class="dialog_text"></p>
+        <div style="font-size: 20px;">生年月日：<p id="dialog_birthday" class="dialog_text"></p>
         </div>
-        <div>予約日時：<p id="dialog_reserve_date" class="dialog_text"></p>
+        <div style="font-size: 20px;">予約日時：<p id="dialog_reserve_date" class="dialog_text"></p>
         </div>
-        <button id="dialog_reserve" onclick="click_dialog_reserve()">予約</button>
-        <button id="dialog_close" onclick="click_dialog_close()">キャンセル</button>
+        <div style="text-align: center;">
+            <button id="dialog_reserve" onclick="click_dialog_reserve()">予約</button>
+            <button id="dialog_close" onclick="click_dialog_close()" style="margin-left: 20px;">キャンセル</button>
+        </div>
     </dialog>
 
     <script type="text/javascript" src="main.js"></script>
