@@ -60,6 +60,22 @@
             font-size: 20px;
             color: blue;
         }
+
+        .btn--blue {
+            color: #fff;
+            background-color: deepskyblue;
+        }
+
+        .btn--blue:hover {
+            color: #fff;
+            background: lightblue;
+        }
+
+        .btn--radius {
+            border-radius: 100vh;
+            width: 100px;
+            height: 50px;
+        }
     </style>
 </head>
 
@@ -113,16 +129,17 @@
         </div>
     </form>
     <dialog>
-        <p style="font-size: 20px;">この内容で予約します。よろしいですか？</p>
+        <p style="font-size: 20px; text-align: center;">この内容で予約します。<br>よろしいですか？</p>
         <div style="font-size: 20px;">氏名：<p id="dialog_username" class="dialog_text"></p>
         </div>
         <div style="font-size: 20px;">生年月日：<p id="dialog_birthday" class="dialog_text"></p>
         </div>
         <div style="font-size: 20px;">予約日時：<p id="dialog_reserve_date" class="dialog_text"></p>
         </div>
-        <div style="text-align: center;">
-            <button id="dialog_reserve" onclick="click_dialog_reserve()">予約</button>
-            <button id="dialog_close" onclick="click_dialog_close()" style="margin-left: 20px;">キャンセル</button>
+        <div style="text-align: center; margin-top: 30px;">
+            <button id="dialog_reserve" onclick="click_dialog_reserve()" class="btn btn--blue btn--radius">予約</button>
+            <button id="dialog_close" onclick="click_dialog_close()" class="btn btn--blue btn--radius"
+                style="margin-left: 20px;">キャンセル</button>
         </div>
     </dialog>
 
