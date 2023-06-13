@@ -56,10 +56,6 @@ function checkLogin() {
 $(function () {
     $('form').submit(function () {
         const dialog = new bootstrap.Modal(documet.getElementById('staticBackdrop'));
-        let reserveDate = $("#date").val();
-        let reserveTime = document.getElementsByName("time")[0].value;
-        let username = $('#username').val();
-        let birthday = $('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日';
 
         dialog.show();
 
@@ -120,6 +116,11 @@ $(function () {
 })
 
 function click_reserve() {
+    let reserveDate = $("#date").val();
+    let reserveTime = document.getElementsByName("time")[0].value;
+    let username = $('#username').val();
+    let birthday = $('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日';
+
     // jsonDataを作成
     const jsonData = JSON.stringify({
         line_uid: line_uid,
