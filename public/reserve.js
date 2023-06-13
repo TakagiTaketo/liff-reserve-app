@@ -53,7 +53,6 @@ function checkLogin() {
 }
 
 // 予約ボタン押下
-/*
 $(function () {
     $('form').submit(function () {
         let reserveDate = $("#date").val();
@@ -112,7 +111,7 @@ $(function () {
         return false;
     })
 })
-*/
+
 // 予約確認
 function reserve_confirm() {
     location.href = '/deleteReserve.html';
