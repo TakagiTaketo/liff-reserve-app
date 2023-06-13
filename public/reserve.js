@@ -67,7 +67,7 @@ $(function () {
 });
 
 // ダイアログの「予約」ボタン押下時
-function click_reserve() {
+function click_dialog_reserve() {
     // jsonDataを作成
     const jsonData = JSON.stringify({
         line_uid: line_uid,
