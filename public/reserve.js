@@ -55,12 +55,9 @@ function checkLogin() {
 // 予約ボタン押下
 $(function () {
     $('form').submit(function () {
-        //const dialog = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-
-        $('#staticBackdrop').modal('show');
-
-
-
+        const dialog = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        dialog.show();
+        return false;
         /*
         if (window.confirm(`この内容で予約します。よろしいですか？\n氏名：${username}\n生年月日：${birthday}\n予約日時：${reserveDate} ${reserveTime}\n`)) {
             // jsonDataを作成
