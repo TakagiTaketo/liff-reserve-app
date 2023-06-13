@@ -55,9 +55,9 @@ function checkLogin() {
 // 予約ボタン押下
 $(function () {
     $('form').submit(function () {
-        const dialog = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        //const dialog = new bootstrap.Modal(document.getElementById('staticBackdrop'));
 
-        dialog.show();
+        $('#staticBackdrop').modal('show');
 
 
 
