@@ -103,11 +103,27 @@
                 <button type="submit" class="reserve_button" id="reserve_button">予約</button>
                 <button type="button" class="reserve_button" id="reserve_button" style="margin-left: 20px;"
                     onclick="reserve_confirm()">予約確認</button>
+                <button type="button" id="open">開く</button>
             </p>
         </div>
     </form>
+    <dialog>
+        <p>タイトル</p>
+        <button id="close">閉じる</button>
+    </dialog>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="reserve.js"></script>
+    <script>
+        let dialog = document.querySelector('dialog');
+        let btn_open = document.getElementById('open');
+        let btn_close = document.getElementById('close');
+        btn_open.addEventListener('click', function () {
+            dialog.showModal();
+        }, false);
+        btn_close.addEventListener('click', function () {
+            dialog.close();
+        }, false);
+    </script>
 </body>
 
 </html>
