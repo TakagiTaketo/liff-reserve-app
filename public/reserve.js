@@ -139,9 +139,10 @@ function click_reserve() {
     return false;
 }
 // ダイアログの閉じるボタン押下時
-dialog_close.addEventListener('click', function () {
+function click_dialog_close() {
     dialog.close();
-}, false);
+    return false;
+}
 
 // 予約確認
 function reserve_confirm() {
