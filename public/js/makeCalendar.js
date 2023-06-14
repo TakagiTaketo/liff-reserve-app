@@ -151,8 +151,10 @@ function setCalendar(displayStartDate, noReserveList) {
 
         date_num = d => {
             let m = d.getMonth();
+            /*
             console.log([0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
                 (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m));
+                */
             return [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
                 (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m);
         };
@@ -202,9 +204,16 @@ function setCalendar(displayStartDate, noReserveList) {
 
         for (j = 0; j < DATE_SPAN; j++) {
             let cell = a.insertCell(-1);
-            console.log('e[i][j]:' + e[i][j]);
+            console.log('e[i][j]:' + i);
             console.log('[][j]:' + [][j]);
-            cell.textContent = (e[i] || [])[j] ? '×' : '◎';
+            if ((e[i] || [])[j]) {
+                console.log('i:' + i);
+                console.log('j:' + j);
+                cell.textContent = '×';
+            } else {
+                cell.textContent = '◎';
+            }
+            //cell.textContent = (e[i] || [])[j] ? '×' : '◎';
 
             // 予約不可日の場合は'-'
             if ((n[i] || [])[j]) {
