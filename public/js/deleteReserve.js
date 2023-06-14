@@ -90,9 +90,9 @@ async function select_reserves() {
 
     // resultの数分テーブルを生成する。
     for (var i in result) {
-        let table = $('#reserve_table');
-        let head = $('#reserve_table_head');
-        let tbody = $('#reserve_table_body');
+        //let table = document.getElementById('reserve_table');
+        let head = document.getElementById('reserve_table_head');
+        let body = document.getElementById('reserve_table_body');
 
         // 整形
         let year = result[i].getFullYear();
@@ -148,8 +148,7 @@ async function select_reserves() {
         tr.appendChild(cell2);
         tr.appendChild(cell3);
         tr.appendChild(input2);
-        table.appendChild(head);
-        tbody.appendChild(tr);
+        body.appendChild(tr);
     }
 
     // 予約情報が存在しない時
