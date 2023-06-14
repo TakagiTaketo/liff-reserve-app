@@ -36,84 +36,7 @@ express()
   .use(express.urlencoded({ extended: true }))
   .get('/', (req, res) => { res.sendStatus(200); })
   .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
-  //.post('/webhook', line.middleware(config), (req, res) => lineBot(req, res)) // LINE MessagingAPI
-  // 「/webhook」にPOSTリクエストがあった場合の処理
-  .post("/webhook", (req, res) => replyMessage(req, res))
-  /*
-  .post("/webhook", function (req, res) {
-    res.send("HTTP POST request sent to the webhook URL!")
-    // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
-    let dataString = '';
-    if (req.body.events[0].type === "message") {
-      if (req.body.events[0].message.text.substring(0, 10) == "予約入力しました。") {
-        // 文字列化したメッセージデータ
-        dataString = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: [
-            {
-              "type": "text",
-              "text": "予約完了しました。"
-            }
-          ]
-        })
-      } else if (req.body.events[0].message.text.substring(0, 4) == "問診記入"
-        && req.body.events[0].message.text.substring(5, 10) != "お薬服用中") {
-        // 文字列化したメッセージデータ
-        dataString = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: [
-            {
-              "type": "text",
-              "text": "問診の記入ありがとうございました。"
-            }
-          ]
-        })
-      } else if (req.body.events[0].message.text.substring(0, 4) == "問診記入"
-        && req.body.events[0].message.text.substring(5, 10) == "お薬服用中") {
-        // 文字列化したメッセージデータ
-        dataString = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: [
-            {
-              "type": "text",
-              "text": "問診記入ありがとうございます。\nお薬を服用中の場合は保健指導を行うことは出来ません。"
-            }
-          ]
-        })
-      }
-      // リクエストヘッダー
-      const headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + TOKEN
-      }
-
-      // リクエストに渡すオプション
-      const webhookOptions = {
-        "hostname": "api.line.me",
-        "path": "/v2/bot/message/reply",
-        "method": "POST",
-        "headers": headers,
-        "body": dataString
-      }
-
-      // リクエストの定義
-      const request = https.request(webhookOptions, (res) => {
-        res.on("data", (d) => {
-          process.stdout.write(d)
-        })
-      })
-
-      // エラーをハンドル
-      request.on("error", (err) => {
-        console.error(err)
-      })
-
-      // データを送信
-      request.write(dataString)
-      request.end()
-    }
-  })
-*/
+  .post("/webhook", (req, res) => replyMessage(req, res)) // LINEBOT
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
   .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
   .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約データ取得
@@ -121,25 +44,6 @@ express()
   .post('/selectConfirmReserve', (req, res) => selectConfirmReserve(req, res)) // 予約確認データ取得
   .post('/updateReserve', (req, res) => updateReserve(req, res)) // 予約の取消更新
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
-
-// LINE BOT
-const lineBot = (req, res) => {
-  res.status(200).end();
-  const events = req.body.events;
-  const promises = [];
-  for (let i = 0; i < events.length; i++) {
-    const ev = events[i];
-    switch (ev.type) {
-      case 'message':
-        promises.push(handleMessageEvent(ev));
-        break;
-    }
-  }
-  Promise
-    .all(promises)
-    .then(console.log('all promises passed'))
-    .catch(e => console.error(e.stack));
-}
 
 const replyMessage = (req, res) => {
   res.send("HTTP POST request sent to the webhook URL!")
