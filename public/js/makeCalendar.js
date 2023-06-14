@@ -166,7 +166,6 @@ function setCalendar(displayStartDate, noReserveList) {
         g = HAIHUN.map(d => new Date(d + ':00.000+09:00')),
         n = [];
 
-    console.log('BUSYソート後：' + BUSY);
     for (let i = 0; i < DATE_SPAN; i++) {
         c.push(date_th2(date_add(b, i)));
     }
@@ -203,6 +202,8 @@ function setCalendar(displayStartDate, noReserveList) {
 
         for (j = 0; j < DATE_SPAN; j++) {
             let cell = a.insertCell(-1);
+            console.log('e[i][j]:' + e[i][j]);
+            console.log('[][j]:' + [][j]);
             cell.textContent = (e[i] || [])[j] ? '×' : '◎';
 
             // 予約不可日の場合は'-'
