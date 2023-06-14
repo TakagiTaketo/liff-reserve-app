@@ -291,7 +291,7 @@ const selectNoReserve = (req, res) => {
   console.log('selectNoReserve()のendDate:' + endDate);
 
   const select_query = {
-    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0 AND no_reserve_date BETWEEN '${startDate}' AND '${endDate}' ORDER BY reserve_date ASC, reserve_time ASC;`
+    text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0 AND no_reserve_date BETWEEN '${startDate}' AND '${endDate}' ORDER BY no_reserve_date ASC, no_reserve_time ASC;`
   };
   let dataList = [];
   connection.query(select_query)
