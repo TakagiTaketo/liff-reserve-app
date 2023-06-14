@@ -148,6 +148,7 @@ async function select_reserves() {
         tr.appendChild(cell2);
         tr.appendChild(cell3);
         tr.appendChild(input2);
+        table.appendChild(head);
         tbody.appendChild(tr);
     }
 
