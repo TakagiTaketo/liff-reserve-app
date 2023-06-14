@@ -25,16 +25,19 @@
                     面談予約状況確認
                 </h1>
             </div>
-            <div style="margin-bottom: 30px; font-size: 20px;">予約を取り消す場合は、<br>取り消したい予約情報を選択して取消確認ボタンを押してください。</div>
+            <div class="normal_fontsize" style="margin-bottom: 30px;">予約を取り消す場合は、<br>取り消したい予約情報を選択して取消確認ボタンを押してください。
+            </div>
             <div id="no_reserve_text"></div>
             <table id="reserve_table" style="margin-bottom: 30px; width: max-content;">
-                <thead id="reserve_table_head">
+                <thead class="normal_fontsize" id="reserve_table_head">
                 </thead>
-                <tbody>
+                <tbody class="normal_fontsize">
                 </tbody>
             </table>
-            <button type="button" class="reserve_button" id="reserve_confirm_button" onclick="goConfirm()">取消確認</button>
-            <button type="button" class="reserve_button" style="margin-left: 20px;" onclick="backIndex()">戻る</button>
+            <button type="button" class="reserve_button btn--blue" id="reserve_confirm_button"
+                onclick="goConfirm()">取消確認</button>
+            <button type="button" class="reserve_button btn--blue" style="margin-left: 20px;"
+                onclick="backIndex()">戻る</button>
         </div>
     </form>
     <script type="text/javascript" src="js/main.js"></script>
