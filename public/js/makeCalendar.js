@@ -187,16 +187,21 @@ function setCalendar(displayStartDate, noReserveList) {
             e[h] = [];
         }
         e[h][date_num(f) - d] = true;
-        console.log('h:' + h);
-        console.log('date_num(f) - d:' + (date_num(f) - d));
     }
     // 予約不可日リストから'-'を判断する配列を作成
     for (let f of g) {
         let h = f.getHours();
+        /*
         if ('undefined' === typeof n[h]) {
             n[h] = [];
             n[h][date_num(f) - d] = true;
         }
+        */
+        if (n[h] == undefined) {
+            n[h] = [];
+        }
+        n[h][date_num(f) - d] = true;
+
     }
     // 時間部
     for (let i = TIME_BEGIN; i <= TIME_END; i++) {
@@ -206,16 +211,12 @@ function setCalendar(displayStartDate, noReserveList) {
 
         for (j = 0; j < DATE_SPAN; j++) {
             let cell = a.insertCell(-1);
-            console.log('e[i][j]:' + i);
-            console.log('[][j]:' + [][j]);
+            // 予約情報がある日は'×'
             if ((e[i] || [])[j]) {
-                console.log('i:' + i);
-                console.log('j:' + j);
                 cell.textContent = '×';
             } else {
                 cell.textContent = '◎';
             }
-            //cell.textContent = (e[i] || [])[j] ? '×' : '◎';
 
             // 予約不可日の場合は'-'
             if ((n[i] || [])[j]) {
