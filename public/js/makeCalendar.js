@@ -185,6 +185,7 @@ function setCalendar(displayStartDate, noReserveList) {
         g = HAIHUN.map(d => new Date(d + ':00.000+09:00')),
         n = [];
 
+    console.log('BUSYソート後：' + BUSY);
     for (let i = 0; i < DATE_SPAN; i++) {
         c.push(date_th2(date_add(b, i)));
     }
