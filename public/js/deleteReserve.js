@@ -187,13 +187,13 @@ function goConfirm() {
         sessionStorage.setItem('jsonData', JSON.stringify(jsonData));
         console.log('jsonData:' + JSON.stringify(jsonData));
         console.log('checked_date:' + checked_date);
-        location.href = '../html/confirm.html';
+        location.href = '/confirm.html';
     }
 }
 
 // 予約画面に戻る
 function backIndex() {
-    location.href = '../html/index.html';
+    location.href = '/index.html';
 }
 
 /*

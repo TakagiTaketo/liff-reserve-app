@@ -131,5 +131,5 @@ function click_dialog_close() {
 
 // 予約確認
 function reserve_confirm() {
-    location.href = '../html/deleteReserve.html';
+    location.href = '/deleteReserve.html';
 }
