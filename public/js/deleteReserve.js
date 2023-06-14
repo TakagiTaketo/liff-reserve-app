@@ -90,7 +90,6 @@ async function select_reserves() {
 
     // resultの数分テーブルを生成する。
     for (var i in result) {
-        //let table = document.getElementById('reserve_table');
         let head = document.getElementById('reserve_table_head');
         let body = document.getElementById('reserve_table_body');
 

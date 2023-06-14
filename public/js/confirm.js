@@ -46,17 +46,8 @@ window.onload = function () {
         let reserve_date = jsonData[i].reserve_date;
         let reserve_time = jsonData[i].reserve_time;
         line_uid = jsonData[i].line_uid;
-        let table = document.getElementById('reserve_table');
         let head = document.getElementById('reserve_table_head');
-        // 整形
-        /*
-        let year = result[i].getFullYear();
-        let month = result[i].getMonth() + 1;
-        let day = result[i].getDate();
-        let hour = result[i].getHours();
-        let minute = result[i].getMinutes();
-        minute = minute.toString().padStart(2, '0');
-        */
+        let body = document.getElementById('reserve_table_body')
         // テーブル作成
         let tr = document.createElement('tr');
         if (i == 0) {
@@ -76,21 +67,13 @@ window.onload = function () {
         cell2.setAttribute('name', 'date');
         let cell3 = document.createElement('td');
         cell3.setAttribute('name', 'start');
-        //let cellText2 = document.createTextNode(year + '年' + ('00' + month).slice(-2) + '月' + ('00' + day).slice(-2) + '日');
         let cellText2 = document.createTextNode(reserve_date);
-        //let cellText3 = document.createTextNode(hour + ':' + minute);
         let cellText3 = document.createTextNode(reserve_time);
-        //let input2 = document.createElement('input');
-        //input2.setAttribute('hidden', true);
-        //input2.setAttribute('name', 'hidden_date');
-        //cellText4 = document.createTextNode(year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2) + '\n' + hour + ':' + minute);
         cell2.appendChild(cellText2);
         cell3.appendChild(cellText3);
-        //input2.appendChild(cellText4);
         tr.appendChild(cell2);
         tr.appendChild(cell3);
-        //tr.appendChild(input2);
-        table.appendChild(tr);
+        body.appendChild(tr);
     }
 }
 
