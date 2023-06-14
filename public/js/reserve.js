@@ -62,6 +62,16 @@ $(function () {
         $('#dialog_username').text($('#username').val());
         $('#dialog_birthday').text($('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日');
         $('#dialog_reserve_date').text($('#date').val().substring(0, 4) + '/' + $('#date').val().substring(5, 7) + '/' + $('#date').val().substring(8, 10) + ' ' + $('select[name="time"]').val());
+        // 生年月日がありえない値の場合、アラートを出す。
+        let today = new Date();
+        if (parseInt($('#birthday_year').val(), 10) < (today.getFullYear() - 150)
+            || parseInt($('#birthday_year').val(), 10) > today.getFullYear()
+            || parseInt($('#birthday_month').val(), 10) < 1
+            || parseInt($('#birthday_month').val(), 10) > 12
+            || parseInt($('#birthday_day').val(), 10) < 1
+            || parseInt($('#birthday_day').val(), 10) > 31) {
+            alert('生年月日(西暦)を正しく入力してください。');
+        }
         dialog.showModal();
     });
 });
