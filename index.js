@@ -31,7 +31,7 @@ const config = {
 const client = new line.Client(config);
 //express
 express()
-  .use(express.static('public'))
+  .use(express.static('public/html'))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .get('/', (req, res) => { res.sendStatus(200); })
