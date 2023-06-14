@@ -36,7 +36,7 @@ express()
   .use(express.urlencoded({ extended: true }))
   .get('/', (req, res) => { res.sendStatus(200); })
   .post('/api', (req, res) => getUserInfo(req, res))  // LINEプロフィール取得
-  //.post("/webhook", (req, res) => replyMessage(req, res)) // LINEBOT
+  .post("/webhook", (req, res) => replyMessage(req, res)) // LINEBOT
   .post('/insertReserve', (req, res) => insertReserve(req, res))  // 予約追加
   .post('/selectReserve', (req, res) => selectReserve(req, res))  // 予約重複チェック
   .post('/selectWeekReserve', (req, res) => selectWeekReserve(req, res)) // 予約データ取得
@@ -44,7 +44,7 @@ express()
   .post('/selectConfirmReserve', (req, res) => selectConfirmReserve(req, res)) // 予約確認データ取得
   .post('/updateReserve', (req, res) => updateReserve(req, res)) // 予約の取消更新
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
-/*
+
 const replyMessage = (req, res) => {
   res.send("HTTP POST request sent to the webhook URL!")
   // ユーザーがボットにメッセージを送った場合、返信メッセージを送る
@@ -118,7 +118,6 @@ const replyMessage = (req, res) => {
     request.end()
   }
 }
-*/
 
 // LINEプロフィールの取得
 const getUserInfo = (req, res) => {
