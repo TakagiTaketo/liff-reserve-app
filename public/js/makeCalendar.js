@@ -174,12 +174,18 @@ function setCalendar(displayStartDate, noReserveList) {
     // 予約リストから'〇','×'を判断する配列を作成
     for (let f of a) {
         let h = f.getHours();
+        /*
         if ('undefined' === typeof e[h]) {
             e[h] = [];
             e[h][date_num(f) - d] = true;
             console.log('h:' + h);
             console.log('date_num(f) - d:' + (date_num(f) - d));
         }
+        */
+        e[h] = [];
+        e[h][date_num(f) - d] = true;
+        console.log('h:' + h);
+        console.log('date_num(f) - d:' + (date_num(f) - d));
     }
     // 予約不可日リストから'-'を判断する配列を作成
     for (let f of g) {
