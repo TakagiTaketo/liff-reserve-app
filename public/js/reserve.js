@@ -61,7 +61,7 @@ $(function () {
     $('form').submit(function () {
         $('#dialog_username').text($('#username').val());
         $('#dialog_birthday').text($('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日');
-        $('#dialog_reserve_date').text($('#date').val() + ' ' + $('select[name="time"]').val());
+        $('#dialog_reserve_date').text($('#date').val().substring(0, 4) + '/' + $('#date').val().substring(5, 7) + '/' + $('#date').val().substring(8, 10) + ' ' + $('select[name="time"]').val());
         dialog.showModal();
     });
 });
@@ -73,7 +73,8 @@ function click_dialog_reserve() {
         line_uid: line_uid,
         name: $("#dialog_username").text(),
         reserve_date: $("#date").val(),
-        reserve_time: $('select[name="time"]').val()
+        reserve_time: $('select[name="time"]').val(),
+        birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val() + '-' + $('#birthday_day').val()
     });
     console.log('予約ダイアログのjsonData:' + jsonData);
 

@@ -210,9 +210,10 @@ const insertReserve = (req, res) => {
   console.log('reserve_date:', data.reserve_date);
   console.log('reserve_time:', data.reserve_time);
   console.log('created_at:', created_at);
+  console.log('birthday:', data.birthday);
   const insert_query = {
-    text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg) VALUES ($1, $2, $3, $4, $5, $6);`,
-    values: [data.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0]
+    text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg, birthday) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
+    values: [data.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0, data.birthday]
   };
 
   connection.query(insert_query)
