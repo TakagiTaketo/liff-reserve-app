@@ -90,7 +90,7 @@ async function select_reserves() {
 
     // resultの数分テーブルを生成する。
     for (var i in result) {
-        //let table = $('#reserve_table');
+        let table = $('#reserve_table');
         let head = $('#reserve_table_head');
         let tbody = $('#reserve_table_body');
 
