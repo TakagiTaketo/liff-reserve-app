@@ -195,8 +195,8 @@ function setCalendar(displayStartDate, noReserveList) {
 
         for (j = 0; j < DATE_SPAN; j++) {
             let cell = a.insertCell(-1);
-            //cell.textContent = (e[i] || [])[j] ? '×' : '◎';
-            cell.textContent = (e[i][j]) ? '×' : '◎';
+            cell.textContent = (e[i] || [])[j] ? '×' : '◎';
+
             // 予約不可日の場合は'-'
             if ((n[i] || [])[j]) {
                 cell.textContent = '-';
