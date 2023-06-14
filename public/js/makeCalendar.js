@@ -177,7 +177,7 @@ function setCalendar(displayStartDate, noReserveList) {
         if ('undefined' === typeof e[h]) {
             e[h] = [];
             e[h][date_num(f) - d] = true;
-            console.log('date_num:' + date_num(f) - d);
+            console.log('date_num:' + (date_num(f) - d));
         }
     }
     // 予約不可日リストから'-'を判断する配列を作成
