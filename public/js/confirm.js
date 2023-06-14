@@ -247,7 +247,7 @@ function deleteReserve() {
 }
 
 function backDeleteReserve() {
-    location.href = '/deleteReserve.html';
+    location.href = 'html/deleteReserve.html';
 }
 
 function sendText(msg) {
