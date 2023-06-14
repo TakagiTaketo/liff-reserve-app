@@ -183,7 +183,7 @@ function setCalendar(displayStartDate, noReserveList) {
             console.log('date_num(f) - d:' + (date_num(f) - d));
         }
         */
-        e[h] = [];
+        //e[h] = [];
         e[h][date_num(f) - d] = true;
         console.log('h:' + h);
         console.log('date_num(f) - d:' + (date_num(f) - d));
