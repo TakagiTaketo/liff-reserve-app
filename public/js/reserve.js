@@ -71,8 +71,9 @@ $(function () {
             || parseInt($('#birthday_day').val(), 10) < 1
             || parseInt($('#birthday_day').val(), 10) > 31) {
             alert('生年月日(西暦)を正しく入力してください。');
+        } else {
+            dialog.showModal();
         }
-        dialog.showModal();
     });
 });
 
