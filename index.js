@@ -184,6 +184,7 @@ const selectReserve = (req, res) => {
   let reserve_flg = false;
   connection.query(select_query)
     .then(data => {
+      console.log("data.rows.length:" + data.rows.length);
       if (data.rows.length > 0) {
         console.log('予約満席');
         reserve_flg = false;

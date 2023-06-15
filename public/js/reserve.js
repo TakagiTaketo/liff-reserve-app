@@ -85,7 +85,7 @@ function click_dialog_reserve() {
         name: $("#dialog_username").text(),
         reserve_date: $("#date").val(),
         reserve_time: $('select[name="time"]').val(),
-        birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val() + '-' + $('#birthday_day').val()
+        birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val().toString().padStart(2, "0") + '-' + $('#birthday_day').val().toString().padStart(2, "0")
     });
     console.log('予約ダイアログのjsonData:' + jsonData);
 
