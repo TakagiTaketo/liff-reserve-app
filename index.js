@@ -136,6 +136,7 @@ const getUserInfo = (req, res) => {
       response.json()
         .then(json => {
           console.log('response data:', json);
+          /*
           if (json) {
             //Postgresからデータを取得する処理
             const lineId = json.sub; //sub:line_uid
@@ -156,8 +157,13 @@ const getUserInfo = (req, res) => {
               });
             console.log('response data:', json);
           }
-          res.status(200).end;
-        });
+          */
+          const line_uname = json.name;
+          const line_uid = json.sub;
+          res.status(200).send({ line_uname, line_uid });
+        })
+        .catch(e => console.log(e))
+        .finally(() => req.connection.end);
     })
     .catch(e => console.log(e));
 };
@@ -180,11 +186,10 @@ const selectReserve = (req, res) => {
     req.connection.end;
     if (error) throw error;
 
-    // TODO line
-    if (results.rows[0] != null) {
+    if (results.rows[0].id != null) {
       reserve_flg = false;
       console.log('予約満席');
-    } else if (results.rows[0] == null) {
+    } else if (results.rows[0].id == null) {
       reserve_flg = true;
       console.log('予約空席');
     }
