@@ -179,7 +179,7 @@ const selectReserve = (req, res) => {
   const reserve_date = data.reserve_date; //予約日
   const reserve_time = data.reserve_time; //予約時間
   const select_query = {
-    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time} and delete_flg=0';`
+    text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}' and delete_flg=0;`
   };
   let reserve_flg = false;
   connection.query(select_query)
