@@ -182,19 +182,36 @@ const selectReserve = (req, res) => {
     text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time} and delete_flg=0';`
   };
   let reserve_flg = false;
-  connection.query(select_query, function (error, results) {
-    req.connection.end;
-    if (error) throw error;
-
-    if (results.rows[0].id != null) {
-      reserve_flg = false;
-      console.log('予約満席');
-    } else if (results.rows[0].id == null) {
-      reserve_flg = true;
-      console.log('予約空席');
-    }
-    res.status(200).send({ reserve_flg });
-  })
+  connection.query(select_query)
+    .then(data => {
+      if (data.rows.length > 0) {
+        console.log('予約満席');
+        reserve_flg = false;
+      } else {
+        console.log('予約空席');
+        reserve_flg = true;
+      }
+      res.status(200).send({ reserve_flg });
+    })
+    .catch(e => console.log(e))
+    .finally(() => {
+      req.connection.end;
+    });
+  /*
+    connection.query(select_query, function (error, results) {
+      req.connection.end;
+      if (error) throw error;
+  
+      if (results.rows[0].id != null) {
+        reserve_flg = false;
+        console.log('予約満席');
+      } else if (results.rows[0].id == null) {
+        reserve_flg = true;
+        console.log('予約空席');
+      }
+      res.status(200).send({ reserve_flg });
+    })
+    */
 };
 
 // users,reservesテーブルに予定を追加する。
