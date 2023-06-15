@@ -1,4 +1,4 @@
-const liffId = '1661289930-qLmEmZ8w';
+const liffId = '1660856020-lm6XRQgz';
 let line_uid = '';
 let line_uname = '';
 window.addEventListener("DOMContentLoaded", () => {
