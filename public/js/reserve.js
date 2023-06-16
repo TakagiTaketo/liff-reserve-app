@@ -148,6 +148,7 @@ function click_dialog_reserve() {
 }
 // ダイアログの閉じるボタン押下時
 function click_dialog_close() {
+    let dialog = document.querySelector('dialog');
     dialog.close();
     return false;
 }
