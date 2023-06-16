@@ -80,7 +80,7 @@
             </div>
         </div>
     </form>
-    <dialog style="border: 2px solid black;">
+    <dialog id="dialog_reserve" style="border: 2px solid black;">
         <p style="font-size: 20px; text-align: center;">この内容で予約します。<br>よろしいですか？</p>
         <div style="font-size: 20px;">氏名&emsp;&emsp;：<p id="dialog_username" class="dialog_text"></p>
         </div>
@@ -92,6 +92,14 @@
             <button id="dialog_reserve" onclick="click_dialog_reserve()" class="btn--blue btn--radius">予約</button>
             <button id="dialog_close" onclick="click_dialog_close()" class="btn--blue btn--radius"
                 style="margin-left: 20px;">キャンセル</button>
+        </div>
+    </dialog>
+
+    <dialog id="dialog_error" style="border: 2px solid black;">
+        <div class="dialog_text" id="dialog_error_msg" style="font-size: 20px;"></div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button id="dialog_close" onclick="click_dialog_close()" class="btn--blue btn--radius"
+                style="margin-left: 20px;">閉じる</button>
         </div>
     </dialog>
 

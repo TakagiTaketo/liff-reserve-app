@@ -58,11 +58,11 @@ window.addEventListener('load', function () {
     setpull_birthday_month();
     setpull_birthday_day();
 })
-
-let dialog = document.querySelector('dialog');
-let btn_open = $('#reserve_button');
-let dialog_reserve = $('#dialog_reserve');
-let dialog_close = $('#dialog_close');
+let dialog = $('#dialog_reserve');
+//let dialog = document.querySelector('dialog');
+// let btn_open = $('#reserve_button');
+// let dialog_reserve = $('#dialog_reserve');
+// let dialog_close = $('#dialog_close');
 // 予約ボタン押下
 $(function () {
     $('form').submit(function () {
@@ -132,7 +132,10 @@ function click_dialog_reserve() {
                             })
                     } else {
                         // 満席
-                        alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
+                        let dialog_error = $('#dialog_error');
+                        $('#dialog_error_msg').val('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。');
+                        dialog_error.showModal();
+                        //alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
                     }
                 })
         })
