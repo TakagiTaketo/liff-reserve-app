@@ -133,7 +133,8 @@ function click_dialog_reserve() {
                     } else {
                         // 満席
                         let dialog_error = document.getElementById('dialog_error');
-                        $('#dialog_error_msg').val('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。');
+                        let dialog_error_msg = document.getElementById('dialog_error_msg');
+                        dialog_error_msg.textContent = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
                         dialog_error.showModal();
                         //alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
                     }
