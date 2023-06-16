@@ -133,14 +133,14 @@ function click_dialog_reserve() {
                         // 満席
                         let dialog_error = document.getElementById('dialog_error');
                         let dialog_error_msg = document.getElementById('dialog_error_msg');
-                        dialog_error_msg.textContent = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
+                        dialog_error_msg.textContent = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。<br>最新の状態を確認するには更新してください。';
                         dialog_error.showModal();
                         //alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
                     } else if (json.reserve_result == '登録済み') {
                         // 登録済み
                         let dialog_error = document.getElementById('dialog_error');
                         let dialog_error_msg = document.getElementById('dialog_error_msg');
-                        dialog_error_msg.textContent = '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。';
+                        dialog_error_msg.textContent = '面談の予約は初回のみ行うことができます。<br>2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。';
                         dialog_error.showModal();
                     }
                 })
