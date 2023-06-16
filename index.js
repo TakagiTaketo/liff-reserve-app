@@ -175,35 +175,49 @@ const selectReserve = (req, res) => {
   console.log('reserve_date:' + data.reserve_date);
   console.log('reserve_time:' + data.reserve_time);
   //console.log('client_id:' + process.env.LOGIN_CHANNEL_ID);
+  let reserve_result = '';
+
+  // 予約フォームに登録済みかどうか確認する
+  const select_query = {
+    text: `SELECT * FROM reserves WHERE line_uid='${data.line_uid}' AND delete_flg=0;`
+  };
+  connection.query(select_query)
+    .then(data => {
+      if (data.rows.length > 0) {
+        console.log('初回面談登録済み');
+        reserve_result = '登録済み';
+        res.status(200).send({ reserve_result });
+      }
+    }).catch(e => console.log(e));
 
   const reserve_date = data.reserve_date; //予約日
   const reserve_time = data.reserve_time; //予約時間
-  const select_query = {
+  const select_query2 = {
     text: `SELECT * FROM reserves WHERE reserve_date='${reserve_date}' and reserve_time='${reserve_time}' and delete_flg=0;`
   };
-  let reserve_flg = false;
-  connection.query(select_query)
+
+  connection.query(select_query2)
     .then(data => {
       console.log("data.rows.length:" + data.rows.length);
       if (data.rows.length > 0) {
         console.log('予約満席');
-        reserve_flg = false;
-        res.status(200).send({ reserve_flg });
+        reserve_result = '満席';
+        res.status(200).send({ reserve_result });
       } else {
         // 予約不可日のチェックを行う。
-        const select_query2 = {
+        const select_query3 = {
           text: `SELECT * FROM no_reserves WHERE no_reserve_date='${reserve_date}' and no_reserve_time='${reserve_time}' and delete_flg=0;`
         };
-        connection.query(select_query2)
+        connection.query(select_query3)
           .then(data => {
             if (data.rows.length > 0) {
               console.log('予約満席');
-              reserve_flg = false;
+              reserve_result = '満席';
             } else {
               console.log('予約空席');
-              reserve_flg = true;
+              reserve_result = '空席';
             }
-            res.status(200).send({ reserve_flg });
+            res.status(200).send({ reserve_result });
           })
           .catch(e => console.log(e));
       }

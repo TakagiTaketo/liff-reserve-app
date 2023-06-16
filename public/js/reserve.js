@@ -114,7 +114,7 @@ function click_dialog_reserve() {
             res.json()
                 .then(json => {
                     console.log('json:' + json);
-                    if (json.reserve_flg) {
+                    if (json.reserve_result == '空席') {
                         // 空席
                         fetch('/insertReserve', {
                             method: 'POST',
@@ -125,18 +125,23 @@ function click_dialog_reserve() {
                             creadentials: 'same-origin'
                         })
                             .then(json => {
-                                //let msg = '新規予約' + '\n' + reserveDate + '\n' + reserveTime.toString() + '\n' + '氏名：' + username + '\n' + '生年月日：' + birthday;
                                 let msg = '予約入力しました。'
                                 console.log(json.message);
                                 sendText(msg);
                             })
-                    } else {
+                    } else if (json.reserve_result == '満席') {
                         // 満席
                         let dialog_error = document.getElementById('dialog_error');
                         let dialog_error_msg = document.getElementById('dialog_error_msg');
                         dialog_error_msg.textContent = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
                         dialog_error.showModal();
                         //alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
+                    } else if (json.reserve_result == '登録済み') {
+                        // 登録済み
+                        let dialog_error = document.getElementById('dialog_error');
+                        let dialog_error_msg = document.getElementById('dialog_error_msg');
+                        dialog_error_msg.textContent = '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。';
+                        dialog_error.showModal();
                     }
                 })
         })
