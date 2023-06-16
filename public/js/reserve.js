@@ -146,10 +146,12 @@ function click_dialog_reserve() {
 
     return false;
 }
-// ダイアログの閉じるボタン押下時
+// ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
 function click_dialog_close() {
-    let dialog = document.querySelector('dialog');
-    dialog.close();
+    let dialogs = document.querySelectorAll('dialog');
+    for (let i = 0; i < dialogs.length; i++) {
+        dialogs[i].close();
+    }
     return false;
 }
 
