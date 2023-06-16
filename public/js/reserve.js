@@ -52,6 +52,13 @@ function checkLogin() {
     }
 }
 
+window.addEventListener('load', function () {
+    // 生年月日プルダウンの生成
+    setpull_birthday_year();
+    setpull_birthday_month();
+    setpull_birthday_day();
+})
+
 let dialog = document.querySelector('dialog');
 let btn_open = $('#reserve_button');
 let dialog_reserve = $('#dialog_reserve');
@@ -144,4 +151,60 @@ function click_dialog_close() {
 // 予約確認
 function reserve_confirm() {
     location.href = '/deleteReserve.html';
+}
+
+// 生年月日プルダウン生成(年)
+function setpull_birthday_year() {
+    const select_year = document.getElementById('birthday_year');
+
+    // 年プルダウンを生成
+    for (let i = 1900; i <= 2023; i++) {
+        let option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        select_year.appendChild(option);
+    }
+}
+// 生年月日プルダウン生成(月)
+function setpull_birthday_month() {
+    const select_month = document.getElementById('birthday_month');
+
+    // 月プルダウンを生成
+    for (let i = 1; i <= 12; i++) {
+        let option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        select_month.appendChild(option);
+    }
+
+}
+
+// 生年月日プルダウン生成（日）
+function setpull_birthday_day() {
+    const select_year = document.getElementById('birthday_year');
+    const select_month = document.getElementById('birthday_month');
+    const select_day = document.getElementById('birthday_day');
+    // 日プルダウンを生成
+
+    //日の選択肢を空にする
+    let children = select_day.children;
+    while (children.length) {
+        children[0].remove();
+    }
+    // 日を生成(動的に変える)
+    if (select_year.value !== '' && select_month.value !== '') {
+        const last_day = new Date(select_year.value, select_month.value, 0).getDate();
+
+        for (i = 1; i <= last_day; i++) {
+            let option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            select_day.appendChild(option);
+        }
+    }
+}
+
+// 生年月日プルダウンの年、月が変更された時、日のプルダウンを再生成する。
+function change_birthday_pull() {
+    setpull_birthday_day();
 }

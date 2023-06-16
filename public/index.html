@@ -39,12 +39,18 @@
                 <label for="username" style="font-size: 20px;">氏名(本名)</label><br>
                 <input type="text" id="username" style="font-size: 20px;" maxlength="30" required><br>
                 <label for="birthday_year" style="margin-right: 12px; font-size: 20px;">生年月日(西暦)</label><br>
-                <input type="text" id="birthday_year" style="width: 60px;" pattern="^[0-9]+$" minlength="4"
-                    maxlength="4" required><span style="font-size: 20px;">年</span>
-                <input type="text" id="birthday_month" style="width: 60px;" pattern="^[0-9]+$" minlength="1"
+                <!--<input type="text" id="birthday_year" style="width: 60px;" pattern="^[0-9]+$" minlength="4"
+                    maxlength="4" required><span style="font-size: 20px;">年</span>-->
+                <select id="birthday_year" name="birthday_year" style="width: 70px; font-size: 20px;"
+                    onchange="change_birthday_pull()" required></select><span style="font-size: 20px;">年</span>
+                <select id="birthday_month" name="birthday_month" style="width: 70px; font-size: 20px;"
+                    onchange="change_birthday_pull()" required></select><span style="font-size: 20px;">月</span>
+                <select id="birthday_day" name="birthday_day" style="width: 70px; font-size: 20px;"
+                    required></select><span style="font-size: 20px;">日</span>
+                <!--<input type="text" id="birthday_month" style="width: 60px;" pattern="^[0-9]+$" minlength="1"
                     maxlength="2" required><span style="font-size: 20px;">月</span>
                 <input type="text" id="birthday_day" style="width: 60px;" pattern="^[0-9]+$" minlength="1" maxlength="2"
-                    required><span style="font-size: 20px;">日</span>
+                    required><span style="font-size: 20px;">日</span>-->
             </div><br>
             <div style="margin-top: 20px;">
                 <label for="date" class="displayDateLabel"
