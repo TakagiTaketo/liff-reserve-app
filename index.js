@@ -188,6 +188,7 @@ const selectReserve = (req, res) => {
       if (data.rows.length > 0) {
         console.log('予約満席');
         reserve_flg = false;
+
       } else {
         // 予約不可日のチェックを行う。
         const select_query2 = {
@@ -202,10 +203,10 @@ const selectReserve = (req, res) => {
               console.log('予約空席');
               reserve_flg = true;
             }
-            res.status(200).send({ reserve_flg });
           })
           .catch(e => console.log(e));
       }
+      res.status(200).send({ reserve_flg });
     })
     .catch(e => console.log(e))
     .finally(() => {
