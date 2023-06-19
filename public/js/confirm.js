@@ -107,9 +107,12 @@ function deleteReserve() {
         body: JSON.stringify(jsonData)
     })
         .then((json) => {
-            let msg = '予約を取り消しました。';
+            let dialog_ok = document.getElementById('dialog_ok');
+            let dialog_ok_msg = document.getElementById('dialog_ok_msg');
+            dialog_ok_msg.innerText = '予約を取り消しました。';
             console.log('msg:' + json.message);
-            sendText(msg);
+            dialog_ok.showModal();
+            //sendText(msg);
         })
         .catch((err) => {
             alert('予約の取消に失敗しました。\n' + err);
@@ -133,4 +136,14 @@ function sendText(msg) {
     }).catch(function (err) {
         alert('メッセージの送信に失敗しました。\n ' + err);
     });
+}
+
+// ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
+function click_dialog_close() {
+    let dialogs = document.querySelectorAll('dialog');
+    for (let i = 0; i < dialogs.length; i++) {
+        dialogs[i].close();
+    }
+    liff.closeWindow();
+    return false;
 }
