@@ -31,11 +31,11 @@ window.addEventListener("DOMContentLoaded", () => {
                         })
                 })
                 .catch((err) => {
-                    alert(err);
+                    alert('LINEのプロフィール取得に失敗しました・\n' + err);
                 })
         })
         .catch((err) => {
-            alert(err);
+            alert('LIFFの初期化に失敗しました。\n' + err);
         })
 });
 // ログインチェック

@@ -7,6 +7,6 @@ function sendText(msg) {
     ]).then(function () {
         liff.closeWindow();
     }).catch(function (err) {
-        alert('Failed to send message ' + err);
+        alert('メッセージの送信に失敗しました。\n ' + err);
     });
 }

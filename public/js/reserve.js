@@ -31,11 +31,11 @@ window.addEventListener("DOMContentLoaded", () => {
                         })
                 })
                 .catch((err) => {
-                    alert(err);
+                    alert('LINEのプロフィール情報の取得に失敗しました。\n' + err);
                 })
         })
         .catch((err) => {
-            alert(err);
+            alert('LIFFの初期化に失敗しました。\n' + err);
         })
 });
 // ログインチェック
@@ -69,18 +69,7 @@ $(function () {
         $('#dialog_username').text($('#username').val());
         $('#dialog_birthday').text($('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日');
         $('#dialog_reserve_date').text($('#date').val().substring(0, 4) + '/' + $('#date').val().substring(5, 7) + '/' + $('#date').val().substring(8, 10) + ' ' + $('select[name="time"]').val());
-        // 生年月日がありえない値の場合、アラートを出す。
-        let today = new Date();
-        if (parseInt($('#birthday_year').val(), 10) < (today.getFullYear() - 150)
-            || parseInt($('#birthday_year').val(), 10) > today.getFullYear()
-            || parseInt($('#birthday_month').val(), 10) < 1
-            || parseInt($('#birthday_month').val(), 10) > 12
-            || parseInt($('#birthday_day').val(), 10) < 1
-            || parseInt($('#birthday_day').val(), 10) > 31) {
-            alert('生年月日(西暦)を正しく入力してください。');
-        } else {
-            dialog.showModal();
-        }
+        dialog.showModal();
     });
 });
 
@@ -135,7 +124,6 @@ function click_dialog_reserve() {
                         let dialog_error_msg = document.getElementById('dialog_error_msg');
                         dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
                         dialog_error.showModal();
-                        //alert('選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新ボタンを押してください。');
                     } else if (json.reserve_result == '登録済み') {
                         // 登録済み
                         let dialog_error = document.getElementById('dialog_error');
@@ -146,7 +134,7 @@ function click_dialog_reserve() {
                 })
         })
         .catch((err) => {
-            alert(err);
+            alert('予約の検索に失敗しました。\n' + err);
         })
 
     return false;

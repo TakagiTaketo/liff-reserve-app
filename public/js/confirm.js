@@ -30,11 +30,11 @@ window.addEventListener("DOMContentLoaded", () => {
                         })
                 })
                 .catch((err) => {
-                    alert(err);
+                    alert('LINEプロフィール情報の取得に失敗しました。\n' + err);
                 })
         })
         .catch((err) => {
-            alert(err);
+            alert('LIFF初期化に失敗しました。\n' + err);
         })
 });
 // 選択テーブル作成
@@ -112,7 +112,7 @@ function deleteReserve() {
             sendText(msg);
         })
         .catch((err) => {
-            alert(err);
+            alert('予約の取消に失敗しました。\n' + err);
         })
         .finally(() => {
         })
@@ -131,6 +131,6 @@ function sendText(msg) {
     ]).then(function () {
         liff.closeWindow();
     }).catch(function (err) {
-        alert('Failed to send message ' + err);
+        alert('メッセージの送信に失敗しました。\n ' + err);
     });
 }
