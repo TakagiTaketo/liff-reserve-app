@@ -198,3 +198,12 @@ function goConfirm() {
 function backIndex() {
     location.href = '/index.html';
 }
+
+// ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
+function click_dialog_close() {
+    let dialogs = document.querySelectorAll('dialog');
+    for (let i = 0; i < dialogs.length; i++) {
+        dialogs[i].close();
+    }
+    return false;
+}
