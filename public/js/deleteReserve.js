@@ -181,7 +181,10 @@ function goConfirm() {
     }
 
     if (!check_flg) {
-        alert('取り消す予約情報を選択してください。');
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
+        dialog_error_msg.innerText = '取り消す予約情報を選択してください。';
+        dialog_error.showModal();
         return false;
     } else {
         sessionStorage.setItem('jsonData', JSON.stringify(jsonData));
