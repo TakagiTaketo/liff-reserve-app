@@ -211,6 +211,40 @@ function setCalendar(displayStartDate, noReserveList) {
 
         for (j = 0; j < DATE_SPAN; j++) {
             let cell = a.insertCell(-1);
+            cell.setAttribute('name', 'calendar_cell');
+            let day = new Date();
+            let time = i + ':00';
+            switch (j) {
+                case 0:
+                    day = b;
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 1:
+                    day.setDate(b.getDate() + 1);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 2:
+                    day.setDate(b.getDate() + 2);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 3:
+                    day.setDate(b.getDate() + 3);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 4:
+                    day.setDate(b.getDate() + 4);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 5:
+                    day.setDate(b.getDate() + 5);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+                case 6:
+                    day.setDate(b.getDate() + 6);
+                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
+                    break;
+            }
+
             // 予約情報がある日は'×'
             if ((e[i] || [])[j]) {
                 cell.textContent = '×';
@@ -224,6 +258,7 @@ function setCalendar(displayStartDate, noReserveList) {
             }
             // 土日はハイフン
             if (j == 0 || j == 6) cell.textContent = '-';
+            cell.setAttribute('onclick', `changeClickColor(this);clickReserve('${time}', '${day}', '${cell.textContent}')`);
             if (cell.textContent == "◎") {
                 cell.style.color = "red";
             } else if (cell.textContent == "×") {
@@ -233,4 +268,25 @@ function setCalendar(displayStartDate, noReserveList) {
             }
         }
     }
+}
+
+// クリックしたtd要素の色を変える
+function changeClickColor(table_cell) {
+
+    let calendar_cell = document.getElementsByName('calendar_cell');
+
+    for (let i = 0; i < calendar_cell.length; i++) {
+        calendar_cell[i].style.background = 'none';
+    }
+
+    table_cell.style.background = 'orange';
+
+};
+
+// 予定がクリックされた時の処理
+function clickReserve(time, date, status) {
+    let dateElement = document.getElementById('date');
+    dateElement.value = date;
+    let timeElement = document.getElementById('time');
+    timeElement.value = time;
 }

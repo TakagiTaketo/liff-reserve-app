@@ -148,6 +148,11 @@ td {
   text-align: center;
 }
 
+td[name="calendar_cell"] {
+  cursor: pointer;
+}
+
+
 .calendar {
   display: inline-block;
 }
@@ -176,6 +181,7 @@ td {
   color: blue;
 }
 
+/* ボタン */
 .btn--blue {
   color: #fff;
   background-color: #007bff;
@@ -185,6 +191,7 @@ td {
 .btn--blue:hover {
   color: #fff;
   background: lightblue;
+  cursor: pointer;
 }
 
 .btn--radius {
