@@ -269,7 +269,7 @@ const insertReserve = (req, res) => {
   connection.query(insert_query)
     .then(() => {
       let message = '予約追加完了'
-      res.status(200).send(message);
+      res.status(200).send({ message });
     })
     .catch(e => {
       console.log(e);

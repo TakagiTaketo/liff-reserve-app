@@ -59,9 +59,9 @@ function main() {
 
     let message = "";
 
-    // 検索クエリ
+    // 検索クエリ(line_uid:medibrainはリマインドしない)
     const select_query = {
-        text: `SELECT line_uid, reserve_time FROM reserves WHERE reserve_date='${reserve_date_after3days}' and delete_flg=0;`
+        text: `SELECT line_uid, reserve_time FROM reserves WHERE reserve_date='${reserve_date_after3days}' and delete_flg=0 and line_uid!='medibrain';`
     };
     connection.query(select_query)
         .then(data => {
