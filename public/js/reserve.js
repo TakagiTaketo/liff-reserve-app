@@ -116,6 +116,8 @@ function click_dialog_reserve() {
                             .then(json => {
                                 let msg = '予約入力しました。'
                                 console.log(json.message);
+                                // メール送信処理を入れたい。
+                                sendEmail('hoken_moriguchi@medi-brain.com', 'Test Email', '守口市LINEのテストメールです。')
                                 sendText(msg);
                             })
                     } else if (json.reserve_result == '満席') {
@@ -208,3 +210,27 @@ function setpull_birthday_day() {
 function change_birthday_pull() {
     setpull_birthday_day();
 }
+
+// メール送信を行う
+function sendEmail(to, subject, text) {
+    const jsonData = JSON.stringify({
+      to,
+      subject,
+      text,
+    });
+    console.log("クライアント側のメール送信メソッドです。");
+    fetch('/sendMail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error('Error sending email:', err);
+      });
+  }

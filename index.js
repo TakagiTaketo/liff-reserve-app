@@ -6,7 +6,7 @@ const { Client } = ClientPg;
 import line from '@line/bot-sdk';
 const TOKEN = process.env.ACCESS_TOKEN;
 import https from 'https';
-
+import nodemailer from 'nodemailer';
 /*
 const express = require('express');
 //const { Client } = require('pg');
@@ -18,9 +18,15 @@ const PORT = process.env.PORT || 5000
 
 const connection = new Client({
   connectionString: process.env.DATABASE_URL,
+  /*
+  password: process.env.DB_PASS,
+  ssl:false
+  */
   ssl: {
     rejectUnauthorized: false
+    
   }
+  
 });
 connection.connect();
 
@@ -425,3 +431,41 @@ const updateReserve = (req, res) => {
     });
 */
 }
+express()
+.post('/sendMail', (req, res) => {
+  const nodemailer = require('nodemailer');
+  console.log("サーバー側メール送信メソッドです。");
+// メールサーバーの設定
+const smtpConfig = {
+  host: 'smtp.lolipop.jp', // ロリポップのSMTPサーバー
+  port: 587, // SMTPサーバーのポート
+  secure: false, // SSL/TLSを使用しない場合はfalse
+  auth: {
+    user: 'takagi_taketo@medi-brain.com', // あなたのメールアドレス
+    pass: 'Tak_tak221115' // あなたのメールアカウントのパスワード
+  }
+};
+
+// Nodemailerのトランスポートを作成
+const transporter = nodemailer.createTransport(smtpConfig);
+
+// メールの内容
+const mailOptions = {
+  from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
+  to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
+  subject: 'テストメール', // 件名
+  text: 'これはテストメールです。', // テキスト本文
+  html: '<p>これはテストメールです。</p>' // HTML本文
+};
+
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).send('Email sent');
+    }
+  });
+});
