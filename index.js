@@ -6,7 +6,8 @@ const { Client } = ClientPg;
 import line from '@line/bot-sdk';
 const TOKEN = process.env.ACCESS_TOKEN;
 import https from 'https';
-import nodemailer from 'nodemailer';
+import nodemailer_import from 'nodemailer';
+const nodemailer = nodemailer_import;
 /*
 const express = require('express');
 //const { Client } = require('pg');
@@ -435,7 +436,7 @@ const updateReserve = (req, res) => {
 
 // メール送信
 const sendEmail = (req, res) => {
-  const nodemailer = require('nodemailer');
+  //const nodemailer = require('nodemailer');
   console.log("サーバー側メール送信メソッドです。");
 
   // メールサーバーの設定
