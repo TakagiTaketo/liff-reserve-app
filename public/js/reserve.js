@@ -117,7 +117,7 @@ function click_dialog_reserve() {
                                 let msg = '予約入力しました。'
                                 console.log(json.message);
                                 // メール送信処理を入れたい。
-                                sendEmail($("#dialog_username").text(), $("#date").val(), $('select[name="time"]').val());
+                                sendEmail($("#dialog_username").text(), line_uname, $("#date").val(), $('select[name="time"]').val());
                                 sendText(msg);
                             })
                     } else if (json.reserve_result == '満席') {
@@ -212,9 +212,10 @@ function change_birthday_pull() {
 }
 
 // メール送信を行う
-function sendEmail(reserve_name, reserve_date, reserve_time) {
+function sendEmail(reserve_name, line_uname, reserve_date, reserve_time) {
     const jsonData = JSON.stringify({
       reserve_name,
+      line_uname,
       reserve_date,
       reserve_time
     });
