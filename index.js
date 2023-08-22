@@ -436,9 +436,8 @@ const updateReserve = (req, res) => {
 
 // メール送信
 const sendEmail = (req, res) => {
-  //const nodemailer = require('nodemailer');
   console.log("サーバー側メール送信メソッドです。");
-
+  const data = req.body;
   // メールサーバーの設定
 const smtpConfig = {
   host: 'smtp.lolipop.jp', // ロリポップのSMTPサーバー
@@ -453,13 +452,14 @@ const smtpConfig = {
 // Nodemailerのトランスポートを作成
 const transporter = nodemailer.createTransport(smtpConfig);
 
+let mail_text = data.reserve_name + '　さんが面談予約しました。\n対象日時：' + reserve_date + '　' + reserve_time;
 // メールの内容
 const mailOptions = {
   from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
   to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
-  subject: 'テストメール', // 件名
-  text: 'これはテストメールです。', // テキスト本文
-  html: '<p>これはテストメールです。</p>' // HTML本文
+  subject: '【予約】守口　保健指導', // 件名
+  text: mail_text, // テキスト本文
+  html: '<p>' + mail_text + '</p>' // HTML本文
 };
 
 
