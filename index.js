@@ -453,13 +453,15 @@ const smtpConfig = {
 const transporter = nodemailer.createTransport(smtpConfig);
 
 let mail_text = data.line_uname + '　さんが面談予約しました。\n面談者名：' + data.reserve_name + '\n対象日時：' + data.reserve_date + '　' + data.reserve_time;
+// HTMLメールの本文に改行を反映
+let mail_html = mail_text.replace(/\n/g, '<br>');
 // メールの内容
 const mailOptions = {
   from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
   to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
   subject: '【予約】守口　保健指導', // 件名
   text: mail_text, // テキスト本文
-  html: '<p>' + mail_text + '</p>' // HTML本文
+  html: '<p>' + mail_html + '</p>' // HTML本文
 };
 
 
