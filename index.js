@@ -452,7 +452,7 @@ const smtpConfig = {
 // Nodemailerのトランスポートを作成
 const transporter = nodemailer.createTransport(smtpConfig);
 
-let mail_text = data.line_uname + '　さんが面談予約しました。\n面談者名：' + data.reserve_name + '\n対象日時：' + reserve_date + '　' + reserve_time;
+let mail_text = data.line_uname + '　さんが面談予約しました。\n面談者名：' + data.reserve_name + '\n対象日時：' + data.reserve_date + '　' + data.reserve_time;
 // メールの内容
 const mailOptions = {
   from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
