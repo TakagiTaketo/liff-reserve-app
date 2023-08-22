@@ -49,6 +49,7 @@ express()
   .post('/selectNoReserve', (req, res) => selectNoReserve(req, res)) // 予約不可データ取得
   .post('/selectConfirmReserve', (req, res) => selectConfirmReserve(req, res)) // 予約確認データ取得
   .post('/updateReserve', (req, res) => updateReserve(req, res)) // 予約の取消更新
+  .post('/sendMail', (req, res) => sendEmail(req, res)) // メール送信
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 const replyMessage = (req, res) => {
@@ -431,11 +432,13 @@ const updateReserve = (req, res) => {
     });
 */
 }
-express()
-.post('/sendMail', (req, res) => {
+
+// メール送信
+const sendEmail = (req, res) => {
   const nodemailer = require('nodemailer');
   console.log("サーバー側メール送信メソッドです。");
-// メールサーバーの設定
+
+  // メールサーバーの設定
 const smtpConfig = {
   host: 'smtp.lolipop.jp', // ロリポップのSMTPサーバー
   port: 587, // SMTPサーバーのポート
@@ -468,4 +471,5 @@ const mailOptions = {
       res.status(200).send('Email sent');
     }
   });
-});
+
+}
