@@ -82,8 +82,6 @@ async function selectNoReserve(noReserveList, startDate, endDate) {
 
 // カレンダー
 async function reserveDB_access() {
-    // GASからカレンダーの値を取得
-    //const api_url = 'https://script.google.com/macros/s/AKfycbyXtqPI5N7mt44QlEVz6H--NxljrVMnJF8ANNV1u55G6RVGt5NAGTP6WRgZfyLZvs8KIw/exec'; //生成したAPIのURLを指定
     // 選択した日付を取得
     let selectDate = new Date(document.getElementById("displayDate").value); // ex)2023-05-01
     // 年を取得
@@ -206,12 +204,37 @@ function setCalendar(displayStartDate, noReserveList) {
     // 時間部
     for (let i = TIME_BEGIN; i <= TIME_END; i++) {
         if (i == 12) continue;
-        let a = TABLE.insertRow(-1);
-        a.appendChild(document.createElement('th')).textContent = i + ':00';
-
+        //let a = TABLE.insertRow(-1);
+        let row = TABLE.insertRow(-1);
+        //a.appendChild(document.createElement('th')).textContent = i + ':00';
+        row.appendChild(document.createElement('th')).textContent = i + ':00';
         for (j = 0; j < DATE_SPAN; j++) {
-            let cell = a.insertCell(-1);
+            //let cell = a.insertCell(-1);
+            let cell = row.insertCell(-1);
             cell.setAttribute('name', 'calendar_cell');
+            // 日付の最適化
+            let day = new Date(b);
+            day.setDate(b.getDate() + j);
+            let formattedDate = `${day.getFullYear()}-${(day.getMonth() + 1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`;
+
+            // 予約情報に基づくテキストと色の設定
+            if (day.getDay() == 0 || day.getDay() == 6) { // 土日の場合
+                cell.textContent = '-';
+                cell.style.color = "black";
+            } else if (n[i] && n[i][j]) { // 予約不可日の場合
+                cell.textContent = '-';
+                cell.style.color = "black";
+            } else if (e[i] && e[i][j]) { // 予約済みの場合
+                cell.textContent = '×';
+                cell.style.color = "blue";
+            } else { // 予約可能な場合
+                cell.textContent = '◎';
+                cell.style.color = "red";
+            }
+
+
+            cell.setAttribute('onclick', `changeClickColor(this);clickReserve('${i}:00', '${formattedDate}', '${cell.textContent}')`);
+            /*
             let day = new Date();
             let time = i + ':00';
             switch (j) {
@@ -266,6 +289,7 @@ function setCalendar(displayStartDate, noReserveList) {
             } else if (cell.textContent == "-") {
                 cell.style.color = "black";
             }
+            */
         }
     }
 }
@@ -285,6 +309,14 @@ function changeClickColor(table_cell) {
 
 // 予定がクリックされた時の処理
 function clickReserve(time, date, status) {
+    // 予約できない日時をクリックした場合のチェック
+    if (status === "-" || status === "×") {
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
+        dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
+        dialog_error.showModal();
+    }
+    
     let dateElement = document.getElementById('date');
     dateElement.value = date;
     let timeElement = document.getElementById('time');
