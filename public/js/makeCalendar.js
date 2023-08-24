@@ -119,50 +119,48 @@ async function reserveDB_access() {
 }
 // 予約日・予約不可日リストからカレンダーを生成する。
 function setCalendar(displayStartDate, noReserveList) {
+    // カレンダーを取得し、内容をクリア
     let calendar = document.getElementById("calendar");
     while (calendar.lastChild) {
         calendar.removeChild(calendar.lastChild);
     }
     console.log(displayStartDate);
-    let BUSY = [];
-    let HAIHUN = [];
-    for (let i = 0; i < displayStartDate.length; i++) {
-        BUSY.push(displayStartDate[i]);
-    }
-    for (let i = 0; i < noReserveList.length; i++) {
-        HAIHUN.push(noReserveList[i]);
-    }
-    console.log('BUSY' + BUSY);
+    // 予約日と予約不可日のリストをクローンする。
+    let busyDates = displayStartDate;
+    let noReserveDates = noReserveList;
+    
+    console.log('busyDates' + busyDates);
+    // 定数設定
     const
-        TABLE = document.getElementById('calendar'),
-        DATE_SPAN = 7,
-        TIME_BEGIN = 10,
-        TIME_END = 16,
-
-        WEEK_NAME = ['日', '月', '火', '水', '木', '金', '土'],
+        table = document.getElementById('calendar'),
+        date_span = 7,
+        time_begin = 10,
+        time_end = 16,
+        week_name = ['日', '月', '火', '水', '木', '金', '土'],
+        // 日付操作用の関数
         date_th = d => [d.getMonth() + 1, d.getDate()].join('/'),
-        //date_th = d => [d.getDate()],
-        date_th2 = d => [date_th(d), '\n(', WEEK_NAME[d.getDay()], ')'].join(''),
+        date_th2 = d => [date_th(d), '\n(', week_name[d.getDay()], ')'].join(''),
         date_add = (d, o = 1) => { let r = new Date(d); r.setDate(r.getDate() + o); return r },
         date_same = (a, b) => ['getFullYear', 'getMonth', 'getDate'].every((c, d) => a[c]() === b[c]()),
         date_sun = d => (date_add(d, - ((7 - d.getDay()) % 7))),
-
         date_num = d => {
             let m = d.getMonth();
             return [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
                 (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m);
         };
+    // カレンダー表示の範囲を決定するための日付を処理
     let
-        a = BUSY.map(d => new Date(d + ':00.000+09:00')).sort((a, b) => +a > +b),
+        a = busyDates.map(d => new Date(d + ':00.000+09:00')).sort((a, b) => +a > +b),
         b = date_sun(new Date(a[0])),
-        c = [[date_th(b), date_th(date_add(b, DATE_SPAN - 1))].join('-')],
+        c = [[date_th(b), date_th(date_add(b, date_span - 1))].join('-')],
         d = date_num(b),
-        e = [],
-        f = TABLE.insertRow(-1),
-        g = HAIHUN.map(d => new Date(d + ':00.000+09:00')),
-        n = [];
+        e = [], // 予約の有無を判断するための配列
+        f = table.insertRow(-1),
+        g = noReserveDates.map(d => new Date(d + ':00.000+09:00')),
+        n = []; // 予約不可日を判断するための配列
 
-    for (let i = 0; i < DATE_SPAN; i++) {
+    // カレンダーのヘッダーを埋める
+    for (let i = 0; i < date_span; i++) {
         c.push(date_th2(date_add(b, i)));
     }
     c.forEach(s => f.insertCell(-1).textContent = s);
@@ -184,14 +182,11 @@ function setCalendar(displayStartDate, noReserveList) {
 
     }
     // 時間部
-    for (let i = TIME_BEGIN; i <= TIME_END; i++) {
+    for (let i = time_begin; i <= time_end; i++) {
         if (i == 12) continue;
-        //let a = TABLE.insertRow(-1);
-        let row = TABLE.insertRow(-1);
-        //a.appendChild(document.createElement('th')).textContent = i + ':00';
+        let row = table.insertRow(-1);
         row.appendChild(document.createElement('th')).textContent = i + ':00';
-        for (j = 0; j < DATE_SPAN; j++) {
-            //let cell = a.insertCell(-1);
+        for (j = 0; j < date_span; j++) {
             let cell = row.insertCell(-1);
             cell.setAttribute('name', 'calendar_cell');
             // 日付の最適化
