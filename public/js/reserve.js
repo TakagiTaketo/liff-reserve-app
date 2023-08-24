@@ -98,6 +98,7 @@ function click_dialog_reserve() {
         let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = '過去の日時は予約出来ません。';
         dialog_error.showModal();
+        return false;
     }
 
     // 予定検索
