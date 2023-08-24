@@ -149,10 +149,6 @@ function setCalendar(displayStartDate, noReserveList) {
 
         date_num = d => {
             let m = d.getMonth();
-            /*
-            console.log([0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
-                (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m));
-                */
             return [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m] + d.getDate() - 1 +
                 (new Date(d.getFullYear(), m + 1, 0) === 29 && 0 < m);
         };
@@ -173,14 +169,6 @@ function setCalendar(displayStartDate, noReserveList) {
     // 予約リストから'〇','×'を判断する配列を作成
     for (let f of a) {
         let h = f.getHours();
-        /*
-        if ('undefined' === typeof e[h]) {
-            e[h] = [];
-            e[h][date_num(f) - d] = true;
-            console.log('h:' + h);
-            console.log('date_num(f) - d:' + (date_num(f) - d));
-        }
-        */
         if (e[h] == undefined) {
             e[h] = [];
         }
@@ -189,12 +177,6 @@ function setCalendar(displayStartDate, noReserveList) {
     // 予約不可日リストから'-'を判断する配列を作成
     for (let f of g) {
         let h = f.getHours();
-        /*
-        if ('undefined' === typeof n[h]) {
-            n[h] = [];
-            n[h][date_num(f) - d] = true;
-        }
-        */
         if (n[h] == undefined) {
             n[h] = [];
         }
@@ -218,10 +200,7 @@ function setCalendar(displayStartDate, noReserveList) {
             let formattedDate = `${day.getFullYear()}-${(day.getMonth() + 1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`;
 
             // 予約情報に基づくテキストと色の設定
-            if (day.getDay() == 0 || day.getDay() == 6) { // 土日の場合
-                cell.textContent = '-';
-                cell.style.color = "black";
-            } else if (n[i] && n[i][j]) { // 予約不可日の場合
+            if (n[i] && n[i][j]) { // 予約不可日の場合
                 cell.textContent = '-';
                 cell.style.color = "black";
             } else if (e[i] && e[i][j]) { // 予約済みの場合
@@ -232,64 +211,7 @@ function setCalendar(displayStartDate, noReserveList) {
                 cell.style.color = "red";
             }
 
-
             cell.setAttribute('onclick', `changeClickColor(this);clickReserve('${i}:00', '${formattedDate}', '${cell.textContent}')`);
-            /*
-            let day = new Date();
-            let time = i + ':00';
-            switch (j) {
-                case 0:
-                    day = b;
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 1:
-                    day.setDate(b.getDate() + 1);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 2:
-                    day.setDate(b.getDate() + 2);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 3:
-                    day.setDate(b.getDate() + 3);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 4:
-                    day.setDate(b.getDate() + 4);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 5:
-                    day.setDate(b.getDate() + 5);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-                case 6:
-                    day.setDate(b.getDate() + 6);
-                    day = day.getFullYear() + '-' + (day.getMonth() + 1).toString().padStart(2, '0') + '-' + day.getDate().toString().padStart(2, '0');
-                    break;
-            }
-
-            // 予約情報がある日は'×'
-            if ((e[i] || [])[j]) {
-                cell.textContent = '×';
-            } else {
-                cell.textContent = '◎';
-            }
-
-            // 予約不可日の場合は'-'
-            if ((n[i] || [])[j]) {
-                cell.textContent = '-';
-            }
-            // 土日はハイフン
-            if (j == 0 || j == 6) cell.textContent = '-';
-            cell.setAttribute('onclick', `changeClickColor(this);clickReserve('${time}', '${day}', '${cell.textContent}')`);
-            if (cell.textContent == "◎") {
-                cell.style.color = "red";
-            } else if (cell.textContent == "×") {
-                cell.style.color = "blue";
-            } else if (cell.textContent == "-") {
-                cell.style.color = "black";
-            }
-            */
         }
     }
 }
