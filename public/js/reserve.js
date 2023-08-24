@@ -86,12 +86,12 @@ function click_dialog_reserve() {
     console.log('予約ダイアログのjsonData:' + jsonData);
 
     // 選択した日付の生成
-    let selectedDate = new Date(date + "T" + time + ":00.000+09:00");
-
+    let selectedDate = new Date($("#date").val() + "T" + $('select[name="time"]').val() + ":00.000+09:00");
+    console.log("面談日に選択した日時：" + selectedDate);
     // 現在の日付と時刻の取得（時分秒を無視するために日付のみを使用）
     let currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    
+    console.log("今日の日付：" + currentDate);
     // 予約日が過去日付の場合のチェック
     if (selectedDate < currentDate) {
         let dialog_error = document.getElementById('dialog_error');
