@@ -235,7 +235,7 @@ function clickReserve(time, date, status) {
     if (status === "-" || status === "×") {
         let dialog_error = document.getElementById('dialog_error');
         let dialog_error_msg = document.getElementById('dialog_error_msg');
-        dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
+        dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ません。';
         dialog_error.showModal();
     }
     

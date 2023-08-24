@@ -85,10 +85,20 @@ function click_dialog_reserve() {
     });
     console.log('予約ダイアログのjsonData:' + jsonData);
 
-    // let reserveDate = $("#date").val();
-    // let reserveTime = document.getElementsByName("time")[0].value;
-    // let username = $('#username').val();
-    // let birthday = $('#birthday_year').val() + '年' + $('#birthday_month').val() + '月' + $('#birthday_day').val() + '日';
+    // 選択した日付の生成
+    let selectedDate = new Date(date + "T" + time + ":00.000+09:00");
+
+    // 現在の日付と時刻の取得（時分秒を無視するために日付のみを使用）
+    let currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    // 予約日が過去日付の場合のチェック
+    if (selectedDate < currentDate) {
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
+        dialog_error_msg.innerText = '過去の日時は予約出来ません。';
+        dialog_error.showModal();
+    }
 
     // 予定検索
     fetch('/selectReserve', {
