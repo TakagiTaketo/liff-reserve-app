@@ -1,6 +1,6 @@
 const liffId = '1660856020-lm6XRQgz';
-let line_uid = '';
-let line_uname = '';
+//let line_uid = '';
+//let line_uname = '';
 window.addEventListener("DOMContentLoaded", () => {
 
     // LIFF 初期化
@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             checkLogin();
+            /*
             const idtoken = liff.getIDToken();
             const jsonData = JSON.stringify({
                 id_token: idtoken
@@ -33,6 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 .catch((err) => {
                     alert('LINEのプロフィール情報の取得に失敗しました。\n' + err);
                 })
+            */
         })
         .catch((err) => {
             alert('LIFFの初期化に失敗しました。\n' + err);
@@ -76,6 +78,7 @@ $(function () {
 // ダイアログの「予約」ボタン押下時
 function click_dialog_reserve() {
     // jsonDataを作成
+    /*
     const jsonData = JSON.stringify({
         line_uid: line_uid,
         name: $("#dialog_username").text(),
@@ -83,6 +86,16 @@ function click_dialog_reserve() {
         reserve_time: $('select[name="time"]').val(),
         birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val().toString().padStart(2, "0") + '-' + $('#birthday_day').val().toString().padStart(2, "0")
     });
+    */
+    const idToken = liff.getIDToken();
+    const jsonData = JSON.stringify({
+        id_token: idToken,
+        name: $("#dialog_username").text(),
+        reserve_date: $("#date").val(),
+        reserve_time: $('select[name="time"]').val(),
+        birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val().toString().padStart(2, "0") + '-' + $('#birthday_day').val().toString().padStart(2, "0")
+    });
+
     console.log('予約ダイアログのjsonData:' + jsonData);
 
     // 選択した日付の生成
@@ -128,7 +141,7 @@ function click_dialog_reserve() {
                                 let msg = '予約入力しました。'
                                 console.log(json.message);
                                 // メール送信処理を入れたい。
-                                sendEmail($("#dialog_username").text(), line_uname, $("#date").val(), $('select[name="time"]').val());
+                                sendEmail($("#dialog_username").text(), idToken, $("#date").val(), $('select[name="time"]').val());
                                 sendText(msg);
                             })
                     } else if (json.reserve_result == '満席') {
@@ -223,12 +236,13 @@ function change_birthday_pull() {
 }
 
 // メール送信を行う
-function sendEmail(reserve_name, line_uname, reserve_date, reserve_time) {
+function sendEmail(reserve_name, reserve_date, reserve_time) {
+    const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
-      reserve_name,
-      line_uname,
-      reserve_date,
-      reserve_time
+      reserve_name: reserve_name,
+      id_token: idToken,
+      reserve_date: reserve_date,
+      reserve_time: reserve_time,
     });
     console.log("クライアント側のメール送信メソッドです。");
     fetch('/sendMail', {

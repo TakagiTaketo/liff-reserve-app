@@ -144,28 +144,6 @@ const getUserInfo = (req, res) => {
       response.json()
         .then(json => {
           console.log('response data:', json);
-          /*
-          if (json) {
-            //Postgresからデータを取得する処理
-            const lineId = json.sub; //sub:line_uid
-            const select_query = {
-              text: `SELECT * FROM users WHERE line_uid='${lineId}';`
-            };
-
-            connection.query(select_query)
-              .then(data => {
-                console.log('data.rows[0]:', data.rows[0]);
-                const line_uname = data.rows[0].line_uname;
-                const line_uid = data.rows[0].line_uid;
-                res.status(200).send({ line_uname, line_uid });
-              })
-              .catch(e => console.log(e))
-              .finally(() => {
-                req.connection.end;
-              });
-            console.log('response data:', json);
-          }
-          */
           const line_uname = json.name;
           const line_uid = json.sub;
           res.status(200).send({ line_uname, line_uid });
@@ -252,40 +230,47 @@ const selectReserve = (req, res) => {
 };
 
 // users,reservesテーブルに予定を追加する。
-const insertReserve = (req, res) => {
+const insertReserve = async(req, res) => {
   const data = req.body;
+  const idToken = data.id_Token; // IDトークンを取得
+  try{
+    const userInfo = await verifyIdTokenAndGetUserInfo(idToken);  // IDトークンを検証し、ユーザー情報を取得
+    
+    // タイムスタンプ整形
+    let created_at = '';
+    let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+    console.log('date:' + date);
+    created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+      + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
+      + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    console.log('created_at:' + created_at);
+    console.log('line_uid:', userInfo.line_uid);
+    console.log('name:', data.name);
+    console.log('reserve_date:', data.reserve_date);
+    console.log('reserve_time:', data.reserve_time);
+    console.log('created_at:', created_at);
+    console.log('birthday:', data.birthday);
+    const insert_query = {
+      text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg, birthday) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
+      values: [userInfo.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0, data.birthday]
+    };
 
-  // タイムスタンプ整形
-  let created_at = '';
-  let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  console.log('date:' + date);
-  created_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
-    + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
-    + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
-  console.log('created_at:' + created_at);
-  console.log('line_uid:', data.line_uid);
-  console.log('name:', data.name);
-  console.log('reserve_date:', data.reserve_date);
-  console.log('reserve_time:', data.reserve_time);
-  console.log('created_at:', created_at);
-  console.log('birthday:', data.birthday);
-  const insert_query = {
-    text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg, birthday) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-    values: [data.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0, data.birthday]
-  };
-
-  connection.query(insert_query)
-    .then(() => {
-      let message = '予約追加完了'
-      res.status(200).send({ message });
-    })
-    .catch(e => {
-      console.log(e);
-      res.status
-    })
-    .finally(() => {
-      req.connection.end;
-    });
+    connection.query(insert_query)
+      .then(() => {
+        let message = '予約追加完了'
+        res.status(200).send({ message });
+      })
+      .catch(e => {
+        console.log(e);
+        res.status
+      })
+      .finally(() => {
+        req.connection.end;
+      });
+  } catch(e){
+    console.log(e);
+    res.status(500).send({ error: 'Server error'});
+  }
 }
 
 // 予約カレンダー取得
@@ -380,7 +365,7 @@ const selectConfirmReserve = (req, res) => {
 }
 
 // 予約情報の削除更新
-const updateReserve = (req, res) => {
+const updateReserve = async(req, res) => {
   const data = req.body;
   // タイムスタンプ整形
   let updated_at = '';
@@ -407,7 +392,7 @@ const updateReserve = (req, res) => {
       .catch(e => {
         console.log(e);
         message = '取消完了'
-        res.send(503).send(message);
+        res.status(503).send(message);
       })
   }
   res.status(200).send(message);
@@ -435,44 +420,73 @@ const updateReserve = (req, res) => {
 }
 
 // メール送信
-const sendEmail = (req, res) => {
+const sendEmail = async(req, res) => {
   console.log("サーバー側メール送信メソッドです。");
   const data = req.body;
-  // メールサーバーの設定
-const smtpConfig = {
-  host: 'smtp.lolipop.jp', // ロリポップのSMTPサーバー
-  port: 587, // SMTPサーバーのポート
-  secure: false, // SSL/TLSを使用しない場合はfalse
-  auth: {
-    user: 'takagi_taketo@medi-brain.com', // あなたのメールアドレス
-    pass: 'Tak_tak221115' // あなたのメールアカウントのパスワード
-  }
-};
+  const idToken = data.idToken;
 
-// Nodemailerのトランスポートを作成
-const transporter = nodemailer.createTransport(smtpConfig);
+  try{
+    const userInfo = await verifyIdTokenAndGetUserInfo(idToken);  // IDトークンを検証し、ユーザー情報を取得
 
-let mail_text = data.line_uname + '　さんが面談予約しました。\n面談者名：' + data.reserve_name + '\n対象日時：' + data.reserve_date + '　' + data.reserve_time;
-// HTMLメールの本文に改行を反映
-let mail_html = mail_text.replace(/\n/g, '<br>');
-// メールの内容
-const mailOptions = {
-  from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
-  to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
-  subject: '【予約】守口　保健指導', // 件名
-  text: mail_text, // テキスト本文
-  html: '<p>' + mail_html + '</p>' // HTML本文
-};
-
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send('Error sending email');
-    } else {
-      console.log('Email sent: ' + info.response);
-      res.status(200).send('Email sent');
+    // メールサーバーの設定
+  const smtpConfig = {
+    host: 'smtp.lolipop.jp', // ロリポップのSMTPサーバー
+    port: 587, // SMTPサーバーのポート
+    secure: false, // SSL/TLSを使用しない場合はfalse
+    auth: {
+      user: 'takagi_taketo@medi-brain.com', // あなたのメールアドレス
+      pass: 'Tak_tak221115' // あなたのメールアカウントのパスワード
     }
-  });
+  };
 
+  // Nodemailerのトランスポートを作成
+  const transporter = nodemailer.createTransport(smtpConfig);
+
+  let mail_text = userInfo.line_uname + '　さんが面談予約しました。\n面談者名：' + data.reserve_name + '\n対象日時：' + data.reserve_date + '　' + data.reserve_time;
+  // HTMLメールの本文に改行を反映
+  let mail_html = mail_text.replace(/\n/g, '<br>');
+  // メールの内容
+  const mailOptions = {
+    from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
+    to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
+    subject: '【予約】守口　保健指導', // 件名
+    text: mail_text, // テキスト本文
+    html: '<p>' + mail_html + '</p>' // HTML本文
+  };
+
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send('Error sending email');
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.status(200).send('Email sent');
+      }
+    });
+  }catch(e){
+    console.log(e);
+    res.status(500).send({ error: 'Server error'});
+  }
+}
+
+const verifyIdTokenAndGetUserInfo = async (idToken) => {
+  try {
+    const response = await fetch('https://api.line.me/oauth2/v2.1/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `id_token=${idToken}&client_id=${process.env.LOGIN_CHANNEL_ID}`
+    });
+
+    const data = await response.json();
+    return {
+      line_uid: data.sub,
+      line_uname: data.name,
+    };
+  } catch (e) {
+    console.error(e);
+    throw new Error('Failed to verify ID token or fetch user info');
+  }
 }
