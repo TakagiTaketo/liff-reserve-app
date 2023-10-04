@@ -235,7 +235,7 @@ const insertReserve = async(req, res) => {
   const idToken = data.id_Token; // IDトークンを取得
   try{
     const userInfo = await verifyIdTokenAndGetUserInfo(idToken);  // IDトークンを検証し、ユーザー情報を取得
-    
+    console.log('insertReserveのuserInfo:' + userInfo)
     // タイムスタンプ整形
     let created_at = '';
     let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
@@ -448,7 +448,8 @@ const sendEmail = async(req, res) => {
   // メールの内容
   const mailOptions = {
     from: 'takagi_taketo@medi-brain.com', // 送信者のアドレス
-    to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
+    //to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
+    to: 'takagi_taketo@medi-brain.com',
     subject: '【予約】守口　保健指導', // 件名
     text: mail_text, // テキスト本文
     html: '<p>' + mail_html + '</p>' // HTML本文
@@ -479,8 +480,11 @@ const verifyIdTokenAndGetUserInfo = async (idToken) => {
       },
       body: `id_token=${idToken}&client_id=${process.env.LOGIN_CHANNEL_ID}`
     });
-
+    console.log('verifyIdTokenAndGetUserInfoのidToken:' + idToken);
     const data = await response.json();
+    console.log('verifyIdTokenAndGetUserInfoのdata:' + data);
+    console.log('verifyIdTokenAndGetUserInfoのline_uid:' + data.sub);
+    console.log('verifyIdTokenAndGetUserInfoのline_uname:' + data.name);
     return {
       line_uid: data.sub,
       line_uname: data.name,
