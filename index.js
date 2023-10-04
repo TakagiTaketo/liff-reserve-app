@@ -262,7 +262,7 @@ const insertReserve = async(req, res) => {
       })
       .catch(e => {
         console.log(e);
-        res.status
+        res.status(500).send({ error: e.message })
       })
       .finally(() => {
         req.connection.end;

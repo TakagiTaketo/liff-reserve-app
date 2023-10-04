@@ -1,3 +1,5 @@
+import { response } from "express";
+
 const liffId = '1660856020-lm6XRQgz';
 //let line_uid = '';
 //let line_uname = '';
@@ -137,12 +139,28 @@ function click_dialog_reserve() {
                             body: jsonData,
                             creadentials: 'same-origin'
                         })
-                            .then(json => {
-                                let msg = '予約入力しました。'
-                                console.log(json.message);
-                                // メール送信処理を入れたい。
+                            .then(response => {
+                                // レスポンスのステータスコードをチェック
+                                if (!response.ok) {
+                                    // サーバーからのエラーレスポンスを処理
+                                    return response.json().then(error => Promise.reject(error));
+                                }
+                                // ステータスコードが OK の場合、レスポンスをJSONとして解析
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log(data.message);
+                                // メール送信処理
                                 sendEmail($("#dialog_username").text(), idToken, $("#date").val(), $('select[name="time"]').val());
+                                let msg = '予約入力しました。'
                                 sendText(msg);
+                            })
+                            .catch(error => {
+                                // ネットワークエラーやサーバーからのエラーレスポンスを処理
+                                console.error(error);
+                                if (error.error) {
+                                    console.error('Server error:', error.error);
+                                }
                             })
                     } else if (json.reserve_result == '満席') {
                         // 満席
