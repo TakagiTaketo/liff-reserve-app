@@ -216,8 +216,8 @@ function changeClickColor(table_cell) {
 
     let calendar_cell = document.getElementsByName('calendar_cell');
 
-    for (let i = 0; i < calendar_cell.length; i++) {
-        calendar_cell[i].style.background = 'none';
+    for (let item of calendar_cell) {
+        item.style.background = 'none';
     }
 
     table_cell.style.background = 'orange';

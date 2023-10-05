@@ -148,8 +148,8 @@ function click_dialog_reserve() {
 // ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
 function click_dialog_close() {
     let dialogs = document.querySelectorAll('dialog');
-    for (let i = 0; i < dialogs.length; i++) {
-        dialogs[i].close();
+    for (let item of dialogs) {
+        item.close();
     }
     return false;
 }

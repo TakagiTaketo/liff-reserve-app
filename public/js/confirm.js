@@ -19,9 +19,9 @@ window.onload = function () {
     // セッションから選択した予約でデータの日付を取得する
     let jsonData = sessionStorage.getItem('jsonData');
     jsonData = JSON.parse(jsonData);
-    for (let i = 0; i < jsonData.length; i++) {
-        let reserve_date = jsonData[i].reserve_date;
-        let reserve_time = jsonData[i].reserve_time;
+    for (let item of jsonData) {
+        let reserve_date = item.reserve_date;
+        let reserve_time = item.reserve_time;
         let head = document.getElementById('reserve_table_head');
         let body = document.getElementById('reserve_table_body')
         // テーブル作成
@@ -70,11 +70,8 @@ function checkLogin() {
 // 予約取消ボタン
 function deleteReserve() {
     // セッションから選択した予約でデータの日付を取得する
-    let session_jsonData = sessionStorage.getItem('jsonData');
+    let session_jsonData = JSON.parse(sessionStorage.getItem('jsonData'));
     const idToken = liff.getIDToken();
-    console.log('session_jsonData.reserve_date:', session_jsonData.reserve_date)
-    console.log('session_jsonData.reserve_time:', session_jsonData.reserve_time)
-    console.log('deleteReserve()のidToken:', idToken)
     const jsonData = JSON.stringify({
         reserve_date: session_jsonData.reserve_date,
         reserve_time: session_jsonData.reserve_time,
@@ -100,13 +97,11 @@ function deleteReserve() {
             return response.json();
         })
         .then(data => {
-            dialog_ok_msg.innerText = '予約を取り消しました。';
-            console.log('uploadReserveからのmsg:' + data.message);
+            dialog_ok_msg.innerText = data;
             dialog_ok.showModal();
         })
         .catch(error => {
-            console.error('予約の取消に失敗しました。：', error.error);
-            dialog_ok_msg.innerText = '予約の取消に失敗しました。：', error.error;
+            dialog_ok_msg.innerText = '予約の取消に失敗しました。：' + error.error;
             dialog_ok.showModal();
         })
 }
@@ -131,8 +126,8 @@ function sendText(msg) {
 // ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
 function click_dialog_close() {
     let dialogs = document.querySelectorAll('dialog');
-    for (let i = 0; i < dialogs.length; i++) {
-        dialogs[i].close();
+    for (let item of dialogs) {
+        item.close();
     }
     liff.closeWindow();
     return false;

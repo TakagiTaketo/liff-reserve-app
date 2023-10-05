@@ -61,13 +61,14 @@ function main() {
 
     // 検索クエリ(line_uid:medibrainはリマインドしない)
     const select_query = {
-        text: `SELECT line_uid, reserve_time FROM reserves WHERE reserve_date='${reserve_date_after3days}' and delete_flg=0 and line_uid!='medibrain';`
+        text: `SELECT line_uid, reserve_time FROM reserves WHERE reserve_date=$1 and delete_flg=0 and line_uid!='medibrain';`,
+        values: [reserve_date_after3days]
     };
     connection.query(select_query)
         .then(data => {
-            for (let i = 0; i < data.rows.length; i++) {
-                message = `予約3日前になりました。\n予約日時は\n${year}年${month}月${date_after3days}日 ${data.rows[i].reserve_time}\nです。\nよろしくお願いいたします。`;
-                sendMessage(message, data.rows[i].line_uid);
+            for (let item of data.rows) {
+                message = `予約3日前になりました。\n予約日時は\n${year}年${month}月${date_after3days}日 ${item.reserve_time}\nです。\nよろしくお願いいたします。`;
+                sendMessage(message, item.line_uid);
             }
         })
         .catch(e => console.log('error:' + e))

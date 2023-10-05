@@ -1,6 +1,7 @@
 const liffId = '1660856020-lm6XRQgz';
-let line_uid = '';
-let line_uname = '';
+let dialog_error = document.getElementById('dialog_error');
+let dialog_error_msg = document.getElementById('dialog_error_msg');
+
 window.addEventListener("DOMContentLoaded", () => {
     // LIFF 初期化
     liff.init({
@@ -8,34 +9,10 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             checkLogin();
-            const idtoken = liff.getIDToken();
-            const jsonData = JSON.stringify({
-                id_token: idtoken
-            });
-            // LINEプロフィール取得
-            fetch('/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData,
-                creadentials: 'same-origin'
-            })
-                .then(res => {
-                    res.json()
-                        .then(json => {
-                            console.log('json:' + json);
-                            line_uname = json.line_uname;
-                            line_uid = json.line_uid;
-                            select_reserves();
-                        })
-                })
-                .catch((err) => {
-                    alert('LINEのプロフィール取得に失敗しました・\n' + err);
-                })
         })
         .catch((err) => {
-            alert('LIFFの初期化に失敗しました。\n' + err);
+            dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。\n' + err;
+            dialog_error.showModal();    
         })
 });
 // ログインチェック
@@ -55,10 +32,11 @@ function checkLogin() {
 // 予約情報取得
 async function select_reserves() {
     // jsonDataを作成
+    const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
-        line_uid: line_uid
+        idToken: idToken
     });
-    console.log('select_reserves()のline_uid:' + line_uid);
+    
     // DBから予約情報を取得
     const res = await fetch('/selectConfirmReserve', {
         method: 'POST',
@@ -69,10 +47,12 @@ async function select_reserves() {
         credentials: 'same-origin'
 
     })
-        .catch((err) => console.error(`予約情報が取得できませんでした：${err}`));
-    console.log('selectWeekReserveのresponse:' + res);
+        .catch((err) => {
+            console.error(`予約情報が取得できませんでした：${err}`)
+            throw err;
+        });
+        
     const json = await res.json();
-    console.log('selectConfirmReserveのjson' + json);
     // 配列dataListに結果を格納
     let dateList = [];
     for (var i in json) {
@@ -81,12 +61,11 @@ async function select_reserves() {
         let date = new Date(reserve_date.substring(0, 10) + 'T' + reserve_time + ':00');
         dateList.push(date);
     }
-    console.log('dataList:' + dateList);
+    
     // dataListを日付順にソート
     let result = dateList.sort(function (a, b) {
         return (a < b) ? -1 : 1;
     });
-    console.log('result:' + result);
 
     // resultの数分テーブルを生成する。
     for (var i in result) {
@@ -181,15 +160,11 @@ function goConfirm() {
     }
 
     if (!check_flg) {
-        let dialog_error = document.getElementById('dialog_error');
-        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = '取り消す予約情報を選択してください。';
         dialog_error.showModal();
         return false;
     } else {
         sessionStorage.setItem('jsonData', JSON.stringify(jsonData));
-        console.log('jsonData:' + JSON.stringify(jsonData));
-        console.log('checked_date:' + checked_date);
         location.href = '/confirm.html';
     }
 }
@@ -202,8 +177,8 @@ function backIndex() {
 // ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
 function click_dialog_close() {
     let dialogs = document.querySelectorAll('dialog');
-    for (let i = 0; i < dialogs.length; i++) {
-        dialogs[i].close();
+    for (let item of dialogs) {
+        item.close();
     }
     return false;
 }
