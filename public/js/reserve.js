@@ -150,7 +150,7 @@ function click_dialog_reserve() {
                             .then(data => {
                                 console.log(data.message);
                                 // メール送信処理
-                                sendEmail($("#dialog_username").text(), idToken, $("#date").val(), $('select[name="time"]').val());
+                                sendEmail($("#dialog_username").text(), $("#date").val(), $('select[name="time"]').val());
                                 let msg = '予約入力しました。'
                                 sendText(msg);
                             })
