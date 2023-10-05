@@ -173,7 +173,7 @@ function goConfirm() {
     let check_flg = false;
     for (let i = 0; i < reserveDate.length; i++) {
         if (reserveDate[i].checked) {
-            let addData = { reserve_date: dateList[i].innerText, reserve_time: startList[i].innerText, line_uid: line_uid }
+            let addData = { reserve_date: dateList[i].innerText, reserve_time: startList[i].innerText}
             jsonData.push(addData);
             checked_date.push(hiddenDateList[i].innerText);
             check_flg = true;

@@ -367,56 +367,47 @@ const selectConfirmReserve = (req, res) => {
 // 予約情報の削除更新
 const updateReserve = async(req, res) => {
   const data = req.body;
-  // タイムスタンプ整形
-  let updated_at = '';
-  let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  updated_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
-    + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
-    + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+  const idToken = data.idToken;
 
-  let message = '';
-  for (let i = 0; i < data.length; i++) {
-    const line_uid = data[i].line_uid;
-    const reserve_date = data[i].reserve_date.substring(0, 4) + '-' + data[i].reserve_date.substring(5, 7) + '-' + data[i].reserve_date.substring(8, 10);
-    const reserve_time = data[i].reserve_time;
-    console.log('updateReserve()のline_uid:' + line_uid);
-    console.log('updateReserve()のreserve_date:' + reserve_date);
-    console.log('updateReserve()のreserve_time:' + reserve_time);
-    const update_query = {
-      text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
-    };
-    connection.query(update_query)
-      .then(() => {
-        message = '取消完了';
-      })
-      .catch(e => {
-        console.log(e);
-        message = '取消完了'
-        res.status(503).send(message);
-      })
+  try{
+    const userInfo = await verifyIdTokenAndGetUserInfo(idToken);  // IDトークンを検証し、ユーザー情報を取得
+    
+    // タイムスタンプ整形
+    let updated_at = '';
+    let date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+    updated_at = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+      + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':'
+      + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+
+    let message = '';
+    for (let i = 0; i < data.length; i++) {
+      const line_uid = userInfo.line_uid;
+      const reserve_date = data[i].reserve_date.substring(0, 4) + '-' + data[i].reserve_date.substring(5, 7) + '-' + data[i].reserve_date.substring(8, 10);
+      const reserve_time = data[i].reserve_time;
+      console.log('updateReserve()のline_uid:' + line_uid);
+      console.log('updateReserve()のreserve_date:' + reserve_date);
+      console.log('updateReserve()のreserve_time:' + reserve_time);
+      const update_query = {
+        text: `UPDATE reserves set updated_at='${updated_at}', delete_flg=1 WHERE line_uid='${line_uid}' AND reserve_date='${reserve_date}' AND reserve_time='${reserve_time}';`
+      };
+      connection.query(update_query)
+        .then(() => {
+          message = '取消完了';
+        })
+        .catch(e => {
+          console.log(e);
+          message = '取消完了'
+          res.status(503).send(message);
+        })
+    }
+    res.status(200).send(message);
+    req.connection.end;
+    console.log('取消SQL終了');
+    console.log('レスポンス返しました');
+  }catch(e){
+    console.log(e);
+    res.status(500).send({ error: 'Server error' });
   }
-  res.status(200).send(message);
-  req.connection.end;
-  console.log('取消SQL終了');
-  console.log('レスポンス返しました');
-  /*
-  let dataList = [];
-  connection.query(select_query)
-    .then(data => {
-      for (let i = 0; i < data.rows.length; i++) {
-        let tmp_data = {};
-        tmp_data.reserve_date = data.rows[i].reserve_date;
-        tmp_data.reserve_time = data.rows[i].reserve_time;
-        dataList.push(tmp_data);
-      }
-      console.log('サーバーサイドselectConfirmReserve()のdataList:' + JSON.stringify(dataList));
-      res.status(200).send((JSON.stringify(dataList)));
-    })
-    .catch(e => console.log(e))
-    .finally(() => {
-      connection.end;
-    });
-*/
 }
 
 // メール送信
@@ -471,6 +462,7 @@ const sendEmail = async(req, res) => {
   }
 }
 
+// IDTokenから個人情報を取得する
 const verifyIdTokenAndGetUserInfo = async (idToken) => {
   try {
     const response = await fetch('https://api.line.me/oauth2/v2.1/verify', {
@@ -480,11 +472,8 @@ const verifyIdTokenAndGetUserInfo = async (idToken) => {
       },
       body: `id_token=${idToken}&client_id=${process.env.LOGIN_CHANNEL_ID}`
     });
-    console.log('verifyIdTokenAndGetUserInfoのidToken:' + idToken);
+    
     const data = await response.json();
-    console.log('verifyIdTokenAndGetUserInfoのdata:' + data);
-    console.log('verifyIdTokenAndGetUserInfoのline_uid:' + data.sub);
-    console.log('verifyIdTokenAndGetUserInfoのline_uname:' + data.name);
     return {
       line_uid: data.sub,
       line_uname: data.name,

@@ -1,6 +1,6 @@
 const liffId = '1660856020-lm6XRQgz';
-//let line_uid = '';
-//let line_uname = '';
+let dialog_error = document.getElementById('dialog_error'); // エラーメッセージダイアログ
+let dialog_error_msg = document.getElementById('dialog_error_msg'); // エラーメッセージ内容
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -9,36 +9,12 @@ window.addEventListener("DOMContentLoaded", () => {
         liffId: liffId
     })
         .then(() => {
+            // ログインしてなければログインさせる
             checkLogin();
-            /*
-            idToken = liff.getIDToken();
-            const jsonData = JSON.stringify({
-                id_token: idtoken
-            });
-            // LINEプロフィール取得
-            fetch('/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData,
-                creadentials: 'same-origin'
-            })
-                .then(res => {
-                    res.json()
-                        .then(json => {
-                            console.log('json:' + json);
-                            line_uname = json.line_uname;
-                            line_uid = json.line_uid;
-                        })
-                })
-                .catch((err) => {
-                    alert('LINEのプロフィール情報の取得に失敗しました。\n' + err);
-                })
-            */
         })
         .catch((err) => {
-            alert('LIFFの初期化に失敗しました。\n' + err);
+            dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。\n' + err;
+            dialog_error.showModal();
         })
 });
 // ログインチェック
@@ -79,15 +55,6 @@ $(function () {
 // ダイアログの「予約」ボタン押下時
 function click_dialog_reserve() {
     // jsonDataを作成
-    /*
-    const jsonData = JSON.stringify({
-        line_uid: line_uid,
-        name: $("#dialog_username").text(),
-        reserve_date: $("#date").val(),
-        reserve_time: $('select[name="time"]').val(),
-        birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val().toString().padStart(2, "0") + '-' + $('#birthday_day').val().toString().padStart(2, "0")
-    });
-    */
     const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
         idToken: idToken,
@@ -108,8 +75,6 @@ function click_dialog_reserve() {
     console.log("今日の日付：" + currentDate);
     // 予約日が過去日付の場合のチェック
     if (selectedDate < currentDate) {
-        let dialog_error = document.getElementById('dialog_error');
-        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = '過去の日時は予約出来ません。';
         dialog_error.showModal();
         return false;
@@ -159,22 +124,16 @@ function click_dialog_reserve() {
                                 console.error(error);
                                 if (error.error) {
                                     console.error('Server error:', error.error);
-                                    let dialog_error = document.getElementById('dialog_error');
-                                    let dialog_error_msg = document.getElementById('dialog_error_msg');
                                     dialog_error_msg.innerText = 'Server error:', error.error;
                                     dialog_error.showModal();
                                 }
                             })
                     } else if (json.reserve_result == '満席') {
                         // 満席
-                        let dialog_error = document.getElementById('dialog_error');
-                        let dialog_error_msg = document.getElementById('dialog_error_msg');
                         dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
                         dialog_error.showModal();
                     } else if (json.reserve_result == '登録済み') {
                         // 登録済み
-                        let dialog_error = document.getElementById('dialog_error');
-                        let dialog_error_msg = document.getElementById('dialog_error_msg');
                         dialog_error_msg.innerText = '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。';
                         dialog_error.showModal();
                     }
@@ -278,6 +237,6 @@ function sendEmail(reserve_name, reserve_date, reserve_time) {
         console.log(data);
       })
       .catch((err) => {
-        console.error('Error sending email:', err);
+        console.error('メール送信時にエラーが発生しました。:', err);
       });
   }

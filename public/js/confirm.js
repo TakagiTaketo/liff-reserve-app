@@ -1,6 +1,7 @@
 const liffId = '1660856020-lm6XRQgz';
-let line_uid = '';
-let line_uname = '';
+let dialog_ok = document.getElementById('dialog_ok');
+let dialog_ok_msg = document.getElementById('dialog_ok_msg');
+
 window.addEventListener("DOMContentLoaded", () => {
     // LIFF 初期化
     liff.init({
@@ -8,30 +9,6 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             checkLogin();
-            const idtoken = liff.getIDToken();
-            const jsonData = JSON.stringify({
-                id_token: idtoken
-            });
-            // LINEプロフィール取得
-            fetch('/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData,
-                creadentials: 'same-origin'
-            })
-                .then(res => {
-                    res.json()
-                        .then(json => {
-                            console.log('json:' + json);
-                            line_uname = json.line_uname;
-                            line_uid = json.line_uid;
-                        })
-                })
-                .catch((err) => {
-                    alert('LINEプロフィール情報の取得に失敗しました。\n' + err);
-                })
         })
         .catch((err) => {
             alert('LIFF初期化に失敗しました。\n' + err);
@@ -45,7 +22,6 @@ window.onload = function () {
     for (let i = 0; i < jsonData.length; i++) {
         let reserve_date = jsonData[i].reserve_date;
         let reserve_time = jsonData[i].reserve_time;
-        line_uid = jsonData[i].line_uid;
         let head = document.getElementById('reserve_table_head');
         let body = document.getElementById('reserve_table_body')
         // テーブル作成
@@ -94,8 +70,16 @@ function checkLogin() {
 // 予約取消ボタン
 function deleteReserve() {
     // セッションから選択した予約でデータの日付を取得する
-    let jsonData = sessionStorage.getItem('jsonData');
-    jsonData = JSON.parse(jsonData);
+    let session_jsonData = sessionStorage.getItem('jsonData');
+    const idToken = liff.getIDToken();
+    console.log('session_jsonData.reserve_date:', session_jsonData.reserve_date)
+    console.log('session_jsonData.reserve_time:', session_jsonData.reserve_time)
+    console.log('deleteReserve()のidToken:', idToken)
+    const jsonData = JSON.stringify({
+        reserve_date: session_jsonData.reserve_date,
+        reserve_time: session_jsonData.reserve_time,
+        idToken: idToken
+    });
 
     // 取消
     fetch('/updateReserve', {
@@ -104,20 +88,26 @@ function deleteReserve() {
             'Content-Type': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify(jsonData)
+        body: jsonData
     })
-        .then((json) => {
-            let dialog_ok = document.getElementById('dialog_ok');
-            let dialog_ok_msg = document.getElementById('dialog_ok_msg');
+        .then(response => {
+            // レスポンスのステータスコードをチェック
+            if (!response.ok) {
+                // サーバーからのエラーレスポンスを処理
+                return response.json().then(error => Promise.reject(error));
+            }
+            // ステータスコードが OK の場合、レスポンスをJSONとして解析
+            return response.json();
+        })
+        .then(data => {
             dialog_ok_msg.innerText = '予約を取り消しました。';
-            console.log('msg:' + json.message);
+            console.log('uploadReserveからのmsg:' + data.message);
             dialog_ok.showModal();
-            //sendText(msg);
         })
-        .catch((err) => {
-            alert('予約の取消に失敗しました。\n' + err);
-        })
-        .finally(() => {
+        .catch(error => {
+            console.error('予約の取消に失敗しました。：', error.error);
+            dialog_ok_msg.innerText = '予約の取消に失敗しました。：', error.error;
+            dialog_ok.showModal();
         })
 }
 
