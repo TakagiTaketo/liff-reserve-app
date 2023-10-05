@@ -232,7 +232,7 @@ const selectReserve = (req, res) => {
 // users,reservesテーブルに予定を追加する。
 const insertReserve = async(req, res) => {
   const data = req.body;
-  const idToken = data.id_Token; // IDトークンを取得
+  const idToken = data.idToken; // IDトークンを取得
   try{
     const userInfo = await verifyIdTokenAndGetUserInfo(idToken);  // IDトークンを検証し、ユーザー情報を取得
     console.log('insertReserveのuserInfo:' + userInfo)
