@@ -1,6 +1,7 @@
 const liffId = '1660856020-lm6XRQgz';
 //let line_uid = '';
 //let line_uname = '';
+let idToken = '';
 window.addEventListener("DOMContentLoaded", () => {
 
     // LIFF 初期化
@@ -9,8 +10,9 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             checkLogin();
+            
+            idToken = liff.getIDToken();
             /*
-            const idtoken = liff.getIDToken();
             const jsonData = JSON.stringify({
                 id_token: idtoken
             });
@@ -87,7 +89,7 @@ function click_dialog_reserve() {
         birthday: $('#birthday_year').val() + '-' + $('#birthday_month').val().toString().padStart(2, "0") + '-' + $('#birthday_day').val().toString().padStart(2, "0")
     });
     */
-    const idToken = liff.getIDToken();
+    //const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
         id_token: idToken,
         name: $("#dialog_username").text(),
@@ -158,6 +160,10 @@ function click_dialog_reserve() {
                                 console.error(error);
                                 if (error.error) {
                                     console.error('Server error:', error.error);
+                                    let dialog_error = document.getElementById('dialog_error');
+                                    let dialog_error_msg = document.getElementById('dialog_error_msg');
+                                    dialog_error_msg.innerText = 'Server error:', error.error;
+                                    dialog_error.showModal();
                                 }
                             })
                     } else if (json.reserve_result == '満席') {
@@ -253,7 +259,7 @@ function change_birthday_pull() {
 
 // メール送信を行う
 function sendEmail(reserve_name, reserve_date, reserve_time) {
-    const idToken = liff.getIDToken();
+    //const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
       reserve_name: reserve_name,
       id_token: idToken,
