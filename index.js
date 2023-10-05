@@ -335,7 +335,7 @@ const selectConfirmReserve = async (req, res) => {
 
   try {
     const userInfo = await verifyIdTokenAndGetUserInfo(idToken); // IDトークンを検証し、ユーザー情報を取得
-    console.log('selectConfirmReserveのline_uid：' + userInfo.line_uid);
+    
     const select_query = {
       text: `SELECT reserve_date, reserve_time FROM reserves WHERE line_uid = $1 AND delete_flg=0;`,
       values: [userInfo.line_uid]
@@ -349,7 +349,6 @@ const selectConfirmReserve = async (req, res) => {
           tmp_data.reserve_time = data.rows[i].reserve_time;
           dataList.push(tmp_data);
         }
-        console.log("サーバーサイドselectConfirmReserve()のdataList:" + JSON.stringify(dataList));
         res.status(200).send(JSON.stringify(dataList));
       })
       .catch((e) => {

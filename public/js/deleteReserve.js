@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     })
         .then(() => {
             checkLogin();
+            select_reserves();
         })
         .catch((err) => {
             dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。\n' + err;
@@ -36,7 +37,6 @@ async function select_reserves() {
     const jsonData = JSON.stringify({
         idToken: idToken
     });
-    alert('idToken：' + idToken);   //TODO 後で消す
     // DBから予約情報を取得
     const res = await fetch('/selectConfirmReserve', {
         method: 'POST',
@@ -49,7 +49,6 @@ async function select_reserves() {
     })
         .catch((error) => {
             console.log(`予約情報が取得できませんでした：${error}`);
-            alert(`予約情報が取得できませんでした：${error}`);
             throw error;
         });
         
