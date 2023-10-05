@@ -73,8 +73,8 @@ function deleteReserve() {
     let session_jsonData = JSON.parse(sessionStorage.getItem('jsonData'));
     const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
-        reserve_date: session_jsonData.reserve_date,
-        reserve_time: session_jsonData.reserve_time,
+        reserve_date: session_jsonData[0].reserve_date,
+        reserve_time: session_jsonData[0].reserve_time,
         idToken: idToken
     });
 
