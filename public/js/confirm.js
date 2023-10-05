@@ -19,9 +19,9 @@ window.onload = function () {
     // セッションから選択した予約でデータの日付を取得する
     let jsonData = sessionStorage.getItem('jsonData');
     jsonData = JSON.parse(jsonData);
-    for (let item of jsonData) {
-        let reserve_date = item.reserve_date;
-        let reserve_time = item.reserve_time;
+    for (let i = 0; i < jsonData.length; i++) {
+        let reserve_date = jsonData[i].reserve_date;
+        let reserve_time = jsonData[i].reserve_time;
         let head = document.getElementById('reserve_table_head');
         let body = document.getElementById('reserve_table_body')
         // テーブル作成
