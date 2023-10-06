@@ -37,7 +37,6 @@ express()
   })
   .post("/webhook", (req, res) => replyMessage(req, res)) // LINEBOT
   .post("/insertReserve", (req, res) => insertReserve(req, res)) // 予約追加
-  .post("/selectReserve", (req, res) => selectReserve(req, res)) // 予約重複チェック
   .post("/selectWeekReserve", (req, res) => selectWeekReserve(req, res)) // 予約データ取得
   .post("/selectNoReserve", (req, res) => selectNoReserve(req, res)) // 予約不可データ取得
   .post("/selectConfirmReserve", (req, res) => selectConfirmReserve(req, res)) // 予約確認データ取得
@@ -125,131 +124,79 @@ const replyMessage = (req, res) => {
   }
 };
 
-// 予定を入れられるかどうか確認する。
-const selectReserve = async (req, res) => {
-  const data = req.body;
-  const idToken = data.idToken;
-  console.log("reserve_date:" + data.reserve_date);
-  console.log("reserve_time:" + data.reserve_time);
-
-  try {
-    let reserve_result = "";
-    const userInfo = await verifyIdTokenAndGetUserInfo(idToken); // IDトークンを検証し、ユーザー情報を取得
-    // 予約フォームに登録済みかどうか確認する
-    const select_query = {
-      text: `SELECT * FROM reserves WHERE line_uid=$1 AND delete_flg=0;`,
-      values: [userInfo.line_uid],
-    };
-    connection
-      .query(select_query)
-      .then((data) => {
-        if (data.rows.length > 0) {
-          console.log("初回面談登録済み");
-          reserve_result = "登録済み";
-          res.status(200).send({ reserve_result });
-        }
-      })
-      .catch((e) => console.log(e));
-
-    const reserve_date = data.reserve_date; //予約日
-    const reserve_time = data.reserve_time; //予約時間
-    const select_query2 = {
-      text: `SELECT * FROM reserves WHERE reserve_date=$1 and reserve_time=$2 and delete_flg=0;`,
-      values: [reserve_date, reserve_time],
-    };
-
-    connection
-      .query(select_query2)
-      .then((data) => {
-        console.log("data.rows.length:" + data.rows.length);
-        if (data.rows.length > 0) {
-          console.log("予約満席");
-          reserve_result = "満席";
-          res.status(200).send({ reserve_result });
-        } else {
-          // 予約不可日のチェックを行う。
-          const select_query3 = {
-            text: `SELECT * FROM no_reserves WHERE no_reserve_date=$1 and no_reserve_time=$2 and delete_flg=0;`,
-            values: [reserve_date, reserve_time],
-          };
-          connection
-            .query(select_query3)
-            .then((data) => {
-              if (data.rows.length > 0) {
-                console.log("予約満席");
-                reserve_result = "満席";
-              } else {
-                console.log("予約空席");
-                reserve_result = "空席";
-              }
-              res.status(200).send({ reserve_result });
-            })
-            .catch((e) => console.log(e));
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        connection.end;
-      });
-  } catch (e) {
-    console.log(e);
-    res.status(500).send({ error: "Server error" });
-  }
-};
-
 // users,reservesテーブルに予定を追加する。
 const insertReserve = async (req, res) => {
   const data = req.body;
   const idToken = data.idToken; // IDトークンを取得
   try {
     const userInfo = await verifyIdTokenAndGetUserInfo(idToken); // IDトークンを検証し、ユーザー情報を取得
-    console.log("insertReserveのuserInfo:" + userInfo);
+    
     // タイムスタンプ整形
     let created_at = "";
     let date = new Date(
       Date.now() + (new Date().getTimezoneOffset() + 9 * 60) * 60 * 1000
     );
-    console.log("date:" + date);
+    
     created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " +
       ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
-    console.log("created_at:" + created_at);
-    console.log("line_uid:", userInfo.line_uid);
-    console.log("name:", data.name);
-    console.log("reserve_date:", data.reserve_date);
-    console.log("reserve_time:", data.reserve_time);
-    console.log("created_at:", created_at);
-    console.log("birthday:", data.birthday);
-    const insert_query = {
-      text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg, birthday) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-      values: [
-        userInfo.line_uid,
-        data.name,
-        data.reserve_date,
-        data.reserve_time,
-        created_at,
-        0,
-        data.birthday,
-      ],
+
+    // 予約フォームに登録済みかどうか確認する
+    const check_query1 = {
+      text: `SELECT * FROM reserves WHERE line_uid=$1 AND delete_flg=0;`,
+      values: [userInfo.line_uid]
+    };
+    const existingReserve1 = await connection.query(check_query1);
+    if (existingReserve1.rowCount > 0) {
+      // 既にその日時での予約が存在する場合
+      res.status(400).send({ error: '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。' });
+      return;
+    }
+
+    // 指定された日時での既存の予約を確認
+    const check_query2 = {
+      text: `SELECT * FROM reserves WHERE reserve_date = $1 AND reserve_time = $2 AND delete_flg = 0`,
+      values: [data.reserve_date, data.reserve_time],
     };
 
-    connection
-      .query(insert_query)
+    const existingReserve2 = await connection.query(check_query2);
+    if (existingReserve2.rowCount > 0) {
+      // 既にその日時での予約が存在する場合
+      res.status(400).send({ error: '選択していただいた日時は満席のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。' });
+      return;
+    }
+
+    // 予約不可日かどうかのチェックを行う。
+    const check_query3 = {
+      text: `SELECT * FROM no_reserves WHERE no_reserve_date=$1 and no_reserve_time=$2 and delete_flg=0;`,
+      values: [data.reserve_date, data.reserve_time],
+    };
+    const existingReserve3 = await connection.query(check_query3);
+    if (existingReserve3.rowCount > 0) {
+      // 予約不可日の場合
+      res.status(400).send({ error: '選択していただいた日時は休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。' });
+      return;
+    }
+
+    const insert_query = {
+      text: `INSERT INTO reserves(line_uid, name, reserve_date, reserve_time, created_at, delete_flg, birthday) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
+      values: [userInfo.line_uid, data.name, data.reserve_date, data.reserve_time, created_at, 0, data.birthday]
+    };
+
+    connection.query(insert_query)
       .then(() => {
         let message = "予約追加完了";
-        res.status(200).send({ message });
+        res.status(200).send({ msg: message });
       })
       .catch((e) => {
-        console.log(e);
-        res.status(500).send({ error: e.message });
+        console.log(e.message);
+        res.status(500).send({ error: '予約に失敗しました。\n一度アプリを閉じて再度お試しください。' });
       })
       .finally(() => {
-        connection.end;
+        connection.end();
       });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ error: "Server error" });
+    console.log(e.message);
+    res.status(500).send({ error: '何らかの問題が発生し、予約に失敗しました。\n一度アプリを閉じて再度お試しください。' });
   }
 };
 
@@ -258,8 +205,6 @@ const selectWeekReserve = (req, res) => {
   const data = req.body;
   const startDate = data.startDate;
   const endDate = data.endDate;
-  console.log("selectWeekREserve()のstartDate:" + startDate);
-  console.log("selectWeekREserve()のendDate:" + endDate);
   // SELECT文
   const select_query = {
     text: `SELECT name, reserve_date, reserve_time FROM reserves WHERE delete_flg=0 AND reserve_date BETWEEN $1 AND $2 ORDER BY reserve_date ASC, reserve_time ASC;`,
@@ -268,8 +213,7 @@ const selectWeekReserve = (req, res) => {
   let dataList = [];
 
   // SQL実行
-  connection
-    .query(select_query)
+  connection.query(select_query)
     .then((data) => {
       for (let i = 0; i < data.rows.length; i++) {
         let tmp_data = {};
@@ -278,17 +222,15 @@ const selectWeekReserve = (req, res) => {
         tmp_data.reserve_time = data.rows[i].reserve_time;
         dataList.push(tmp_data);
       }
-      console.log(
-        "サーバーサイドselectWeekReserve()のdataList" + JSON.stringify(dataList)
-      );
+      console.log('selectWeekReserve()のdataList' + JSON.stringify(dataList));
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).send({ error: e.message });
+      console.log(e.message);
+      res.status(500).send({ error: '予約カレンダーの取得に失敗しました。\n一度アプリを閉じて再度開いてください。'});
     })
     .finally(() => {
-      connection.end;
+      connection.end();
     });
 };
 
@@ -297,16 +239,13 @@ const selectNoReserve = (req, res) => {
   const data = req.body;
   const startDate = data.startDate;
   const endDate = data.endDate;
-  console.log("selectNoReserve()のstartDate:" + startDate);
-  console.log("selectNoReserve()のendDate:" + endDate);
 
   const select_query = {
     text: `SELECT name, no_reserve_date, no_reserve_time FROM no_reserves WHERE delete_flg=0 AND no_reserve_date BETWEEN $1 AND $2 ORDER BY no_reserve_date ASC, no_reserve_time ASC;`,
     values: [startDate, endDate],
   };
   let dataList = [];
-  connection
-    .query(select_query)
+  connection.query(select_query)
     .then((data) => {
       for (let i = 0; i < data.rows.length; i++) {
         let tmp_data = {};
@@ -315,17 +254,15 @@ const selectNoReserve = (req, res) => {
         tmp_data.no_reserve_time = data.rows[i].no_reserve_time;
         dataList.push(tmp_data);
       }
-      console.log(
-        "サーバーサイドselectNoReserve()のdataList:" + JSON.stringify(dataList)
-      );
+      console.log("サーバーサイドselectNoReserve()のdataList:" + JSON.stringify(dataList));
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch((e) => {
-      console.log(e);
-      res.status(500).send({ error: e.message });
+      console.log(e.message);
+      res.status(500).send({ error: '休診カレンダーの取得に失敗しました。\n一度アプリを閉じて再度開いてください。' });
     })
     .finally(() => {
-      connection.end;
+      connection.end();
     });
 };
 // 予約確認データ取得
@@ -352,15 +289,15 @@ const selectConfirmReserve = async (req, res) => {
         res.status(200).send(JSON.stringify(dataList));
       })
       .catch((e) => {
-        console.log(e);
-        res.status(500).send({ error: e.message });
+        console.log(e.message);
+        res.status(500).send({ error: '予約データの取得に失敗しました。\n一度アプリを閉じて再度お試しください。' });
       })
       .finally(() => {
-        connection.end;
+        connection.end();
       });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ error: e.message });
+    console.log(e.message);
+    res.status(500).send({ error: '何らかの問題が発生し、予約データの取得に失敗しました。\n一度アプリを閉じて再度お試しください。' });
   }
 };
 
@@ -381,7 +318,6 @@ const updateReserve = async (req, res) => {
       date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " +
       ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
 
-    let message = "";
     const line_uid = userInfo.line_uid;
     const reserve_date = data.reserve_date.substring(0, 4) + "-" +
       data.reserve_date.substring(5, 7) + "-" +
@@ -392,21 +328,21 @@ const updateReserve = async (req, res) => {
     console.log("updateReserve()のreserve_time:" + reserve_time);
     const update_query = {
       text: `UPDATE reserves set updated_at=$1, delete_flg=1 WHERE line_uid=$2 AND reserve_date=$3 AND reserve_time=$4;`,
-      values: [updated_at, line_uid, reserve_date, reserve_time],
+      values: [updated_at, line_uid, reserve_date, reserve_time]
     };
 
     await connection
       .query(update_query)
       .then(() => {
-        res.status(200).send("予約を取り消しました。");
+        res.status(200).send({ msg:'予約を取り消しました。'});
       })
       .catch((e) => {
-        console.log(e);
-        res.status(500).send({ error: e });
+        console.log(e.message);
+        res.status(500).send({ error: '予約の取り消しに失敗しました。\n一度アプリを閉じて再度お試しください。' });
       });
   } catch (e) {
-    console.log(e);
-    res.status(500).send({ error: e });
+    console.log(e.message);
+    res.status(500).send({ error: '予約の取り消しに失敗しました。\n一度アプリを閉じて再度お試しください。' });
   }
 };
 
@@ -449,15 +385,15 @@ const sendEmail = async (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
-        res.status(500).send("メールの送信に失敗しました。");
+        res.status(500).send({ error: "メールの送信に失敗しました。" });
       } else {
         console.log("メールを送信しました。: " + info.response);
-        res.status(200).send("メールを送信しました。");
+        res.status(200).send({ msg: "メールを送信しました。" });
       }
     });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ error: "Server error" });
+    res.status(500).send({ error: 'メールの送信に失敗しました。' });
   }
 };
 

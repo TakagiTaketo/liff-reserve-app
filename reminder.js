@@ -73,6 +73,6 @@ function main() {
         })
         .catch(e => console.log('error:' + e))
         .finally(() => {
-            connection.end;
+            connection.end();
         })
 }

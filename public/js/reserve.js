@@ -38,10 +38,6 @@ window.addEventListener('load', function () {
     setpull_birthday_day();
 })
 let dialog = document.getElementById('dialog_reserve');
-//let dialog = document.querySelector('dialog');
-// let btn_open = $('#reserve_button');
-// let dialog_reserve = $('#dialog_reserve');
-// let dialog_close = $('#dialog_close');
 // 予約ボタン押下
 $(function () {
     $('form').submit(function () {
@@ -53,7 +49,7 @@ $(function () {
 });
 
 // ダイアログの「予約」ボタン押下時
-function click_dialog_reserve() {
+async function click_dialog_reserve() {
     // jsonDataを作成
     const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
@@ -81,68 +77,39 @@ function click_dialog_reserve() {
     }
 
     // 予定検索
-    fetch('/selectReserve', {
+    await fetch('/insertReserve', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: jsonData,
-        credentials: 'same-origin'
+        creadentials: 'same-origin'
     })
-        .then(res => {
-            res.json()
-                .then(json => {
-                    console.log('json:' + json);
-                    if (json.reserve_result == '空席') {
-                        // 空席
-                        fetch('/insertReserve', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: jsonData,
-                            creadentials: 'same-origin'
-                        })
-                            .then(response => {
-                                // レスポンスのステータスコードをチェック
-                                if (!response.ok) {
-                                    // サーバーからのエラーレスポンスを処理
-                                    return response.json().then(error => Promise.reject(error));
-                                }
-                                // ステータスコードが OK の場合、レスポンスをJSONとして解析
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log(data.message);
-                                // メール送信処理
-                                sendEmail($("#dialog_username").text(), $("#date").val(), $('select[name="time"]').val());
-                                let msg = '予約入力しました。'
-                                sendText(msg);
-                            })
-                            .catch(error => {
-                                // ネットワークエラーやサーバーからのエラーレスポンスを処理
-                                console.error(error);
-                                if (error.error) {
-                                    console.error('Server error:', error.error);
-                                    dialog_error_msg.innerText = 'Server error:', error.error;
-                                    dialog_error.showModal();
-                                }
-                            })
-                    } else if (json.reserve_result == '満席') {
-                        // 満席
-                        dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。';
-                        dialog_error.showModal();
-                    } else if (json.reserve_result == '登録済み') {
-                        // 登録済み
-                        dialog_error_msg.innerText = '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。';
-                        dialog_error.showModal();
-                    }
-                })
+        .then(response => {
+            // レスポンスのステータスコードをチェック
+            if (!response.ok) {
+                // サーバーからのエラーレスポンスを処理
+                return response.json().then(error => Promise.reject(error));
+            }
+            // ステータスコードが OK の場合、レスポンスをJSONとして解析
+            return response.json();
         })
-        .catch((err) => {
-            alert('予約の検索に失敗しました。\n' + err);
+        .then(data => {
+            console.log(data.msg);
+            // メール送信処理
+            sendEmail($("#dialog_username").text(), $("#date").val(), $('select[name="time"]').val());
+            let msg = '予約入力しました。'
+            sendText(msg);
         })
-
+        .catch(error => {
+            // ネットワークエラーやサーバーからのエラーレスポンスを処理
+            console.error(error.error);
+            if (error.error) {
+                dialog_error_msg.innerText = error.error;
+                dialog_error.showModal();
+            }
+        })
+    
     return false;
 }
 // ダイアログの閉じるボタン押下時、開いているダイアログを全て閉じる。
@@ -216,7 +183,7 @@ function change_birthday_pull() {
 }
 
 // メール送信を行う
-function sendEmail(reserve_name, reserve_date, reserve_time) {
+async function sendEmail(reserve_name, reserve_date, reserve_time) {
     const idToken = liff.getIDToken();
     const jsonData = JSON.stringify({
       reserve_name: reserve_name,
@@ -225,18 +192,26 @@ function sendEmail(reserve_name, reserve_date, reserve_time) {
       reserve_time: reserve_time,
     });
     console.log("クライアント側のメール送信メソッドです。");
-    fetch('/sendMail', {
+    await fetch('/sendMail', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: jsonData,
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      .then(res => {
+        // レスポンスのステータスコードをチェック
+        if(!res.ok){
+            // サーバーからのエラーレスポンスを処理
+            return res.json().then(error => Promise.reject(error));
+        }
+        // ステータスコードが OK の場合、レスポンスをJSONとして解析
+        return res.json();
+    })
+      .then(data => {
+        console.log(data.msg);
       })
-      .catch((err) => {
-        console.error('メール送信時にエラーが発生しました。:', err);
+      .catch(error => {
+        console.error('メール送信時にエラーが発生しました。:', error);
       });
   }

@@ -87,9 +87,9 @@ function deleteReserve() {
         credentials: 'same-origin',
         body: jsonData
     })
-        .then(response => {
+        .then(responce => {
             // レスポンスのステータスコードをチェック
-            if (!response.ok) {
+            if (!responce.ok) {
                 // サーバーからのエラーレスポンスを処理
                 return response.json().then(error => Promise.reject(error));
             }
@@ -97,11 +97,11 @@ function deleteReserve() {
             return response.json();
         })
         .then(data => {
-            dialog_ok_msg.innerText = data;
+            dialog_ok_msg.innerText = data.msg;
             dialog_ok.showModal();
         })
         .catch(error => {
-            dialog_ok_msg.innerText = '予約の取消に失敗しました。：' + error.error;
+            dialog_ok_msg.innerText = error.error;
             dialog_ok.showModal();
         })
 }

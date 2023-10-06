@@ -1,5 +1,7 @@
 let displayStartDate = [];
 let noReserveList = [];
+let dialog_error = document.getElementById('dialog_error');
+let dialog_error_msg = document.getElementById('dialog_error_msg');
 
 window.addEventListener("DOMContentLoaded", () => {
     //今日の日時を表示
@@ -41,11 +43,17 @@ async function selectWeekReserve(displayStartDate, startTime, endTime, startDate
         credentials: 'same-origin'
 
     });
-    console.log('selectWeekReserveのresponse:' + res);
-    const json = await res.json();
-    console.log('selectWeekReserveのjson' + json);
+    // エラー時処理
+    if(!res.ok){
+        const error = await res.json();
+        dialog_error_msg.innerText = error.error;
+        await dialog_error.showModal();
+        throw new Error(error.error);
+    }
 
-    for (var i in json) {
+    const json = await res.json();
+    
+    for (let i in json) {
         // 選択した週の予定の場合、配列に格納する。
         let excelDate = new Date(json[i].reserve_date);
         if (startTime <= excelDate && excelDate <= endTime) {
@@ -70,10 +78,14 @@ async function selectNoReserve(noReserveList, startDate, endDate) {
         body: jsonData,
         credentials: 'same-origin'
     });
-    console.log('selectNoReserveのresponse:' + res);
+    // エラー時処理
+    if(!res.ok){
+        const error = await res.json();
+        dialog_error_msg.innerText = error.error;
+        await dialog_error.showModal();
+        throw new Error(error.error);
+    }
     const json = await res.json();
-    console.log('selectNoReserveのjson' + json);
-
     for (var i in json) {
         noReserveList.push((json[i].no_reserve_date).toString().slice(0, 10) + 'T' + json[i].no_reserve_time);
     }
@@ -113,8 +125,8 @@ async function reserveDB_access() {
     noReserveList = [];
     displayStartDate.push(startDate + 'T00:00');
 
-    await selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate);
-    await selectNoReserve(noReserveList, startDate, endDate);
+    displayStartDate = await selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate);
+    noReserveList = await selectNoReserve(noReserveList, startDate, endDate);
     setCalendar(displayStartDate, noReserveList);
 }
 // 予約日・予約不可日リストからカレンダーを生成する。
@@ -228,8 +240,6 @@ function changeClickColor(table_cell) {
 function clickReserve(time, date, status) {
     // 予約できない日時をクリックした場合のチェック
     if (status === "-" || status === "×") {
-        let dialog_error = document.getElementById('dialog_error');
-        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ません。';
         dialog_error.showModal();
     }

@@ -47,11 +47,14 @@ async function select_reserves() {
         credentials: 'same-origin'
 
     })
-        .catch((error) => {
-            console.log(`予約情報が取得できませんでした：${error}`);
-            throw error;
-        });
         
+    // エラー処理
+    if(!res.ok){
+        const error = await res.json();
+        dialog_error_msg.innerText = error.error;
+        await dialog_error.showModal();
+        throw new Error(error.error);
+    }
     const json = await res.json();
     // 配列dataListに結果を格納
     let dateList = [];
