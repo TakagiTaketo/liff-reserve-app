@@ -149,6 +149,7 @@ const insertReserve = async (req, res) => {
     if (existingReserve1.rowCount > 0) {
       // 既にその日時での予約が存在する場合
       res.status(400).send({ error: '面談の予約は初回のみ行うことができます。\n2回目以降の面談をご希望の場合はトークルームでその旨をお伝えください。' });
+      console.log('面談の予約は初回のみ');
       return;
     }
 
@@ -162,6 +163,7 @@ const insertReserve = async (req, res) => {
     if (existingReserve2.rowCount > 0) {
       // 既にその日時での予約が存在する場合
       res.status(400).send({ error: '選択していただいた日時は満席のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。' });
+      console.log('満席のため予約出来ませんでした');
       return;
     }
 
@@ -174,6 +176,7 @@ const insertReserve = async (req, res) => {
     if (existingReserve3.rowCount > 0) {
       // 予約不可日の場合
       res.status(400).send({ error: '選択していただいた日時は休診のため、予約出来ませんでした。\n最新の状態を確認するには更新してください。' });
+      console.log('休診のため予約出来ませんでした。');
       return;
     }
 
@@ -188,14 +191,14 @@ const insertReserve = async (req, res) => {
         res.status(200).send({ msg: message });
       })
       .catch((e) => {
-        console.log(e.message);
+        console.error(e.message);
         res.status(500).send({ error: '予約に失敗しました。\n一度アプリを閉じて再度お試しください。' });
       })
       .finally(() => {
         connection.end();
       });
   } catch (e) {
-    console.log(e.message);
+    console.error(e.message);
     res.status(500).send({ error: '何らかの問題が発生し、予約に失敗しました。\n一度アプリを閉じて再度お試しください。' });
   }
 };
@@ -226,7 +229,7 @@ const selectWeekReserve = (req, res) => {
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch((e) => {
-      console.log(e.message);
+      console.error(e.message);
       res.status(500).send({ error: '予約カレンダーの取得に失敗しました。\n一度アプリを閉じて再度開いてください。'});
     })
     .finally(() => {
@@ -258,7 +261,7 @@ const selectNoReserve = (req, res) => {
       res.status(200).send(JSON.stringify(dataList));
     })
     .catch((e) => {
-      console.log(e.message);
+      console.error(e.message);
       res.status(500).send({ error: '休診カレンダーの取得に失敗しました。\n一度アプリを閉じて再度開いてください。' });
     })
     .finally(() => {
@@ -289,14 +292,14 @@ const selectConfirmReserve = async (req, res) => {
         res.status(200).send(JSON.stringify(dataList));
       })
       .catch((e) => {
-        console.log(e.message);
+        console.error(e.message);
         res.status(500).send({ error: '予約データの取得に失敗しました。\n一度アプリを閉じて再度お試しください。' });
       })
       .finally(() => {
         connection.end();
       });
   } catch (e) {
-    console.log(e.message);
+    console.error(e.message);
     res.status(500).send({ error: '何らかの問題が発生し、予約データの取得に失敗しました。\n一度アプリを閉じて再度お試しください。' });
   }
 };
@@ -337,7 +340,7 @@ const updateReserve = async (req, res) => {
         res.status(200).send({ msg:'予約を取り消しました。'});
       })
       .catch((e) => {
-        console.log(e.message);
+        console.error(e.message);
         res.status(500).send({ error: '予約の取り消しに失敗しました。\n一度アプリを閉じて再度お試しください。' });
       });
   } catch (e) {
@@ -384,7 +387,7 @@ const sendEmail = async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
+        console.error(error.message);
         res.status(500).send({ error: "メールの送信に失敗しました。" });
       } else {
         console.log("メールを送信しました。: " + info.response);
@@ -392,7 +395,7 @@ const sendEmail = async (req, res) => {
       }
     });
   } catch (e) {
-    console.log(e);
+    console.error(e.message);
     res.status(500).send({ error: 'メールの送信に失敗しました。' });
   }
 };
@@ -414,7 +417,7 @@ const verifyIdTokenAndGetUserInfo = async (idToken) => {
       line_uname: data.name,
     };
   } catch (e) {
-    console.error(e);
+    console.error(e.message);
     throw new Error("Failed to verify ID token or fetch user info");
   }
 };
