@@ -4,7 +4,6 @@ const PORT = process.env.PORT || 5001;
 //import ClientPg from "pg";
 //const { Client } = ClientPg;
 import Pool from "pg";
-const { Pool } = Pool;
 import line from "@line/bot-sdk";
 const TOKEN = process.env.ACCESS_TOKEN;
 import https from "https";
