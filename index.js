@@ -474,8 +474,7 @@ const sendEmail = async (req, res) => {
     // メールの内容
     const mailOptions = {
       from: "takagi_taketo@medi-brain.com", // 送信者のアドレス
-      //to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
-      to: "takagi_taketo@medi-brain.com",
+      to: 'hoken_moriguchi@medi-brain.com', // 受信者のアドレス
       subject: "【予約】守口　保健指導", // 件名
       text: mail_text, // テキスト本文
       html: "<p>" + mail_html + "</p>", // HTML本文
