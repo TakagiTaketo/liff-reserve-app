@@ -125,8 +125,8 @@ async function reserveDB_access() {
     noReserveList = [];
     displayStartDate.push(startDate + 'T00:00');
 
-    displayStartDate = await selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate);
-    noReserveList = await selectNoReserve(noReserveList, startDate, endDate);
+    await selectWeekReserve(displayStartDate, startTime, endTime, startDate, endDate);
+    await selectNoReserve(noReserveList, startDate, endDate);
     setCalendar(displayStartDate, noReserveList);
 }
 // 予約日・予約不可日リストからカレンダーを生成する。
