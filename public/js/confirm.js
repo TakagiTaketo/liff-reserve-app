@@ -87,9 +87,9 @@ function deleteReserve() {
         credentials: 'same-origin',
         body: jsonData
     })
-        .then(responce => {
+        .then(response => {
             // レスポンスのステータスコードをチェック
-            if (!responce.ok) {
+            if (!response.ok) {
                 // サーバーからのエラーレスポンスを処理
                 return response.json().then(error => Promise.reject(error));
             }
