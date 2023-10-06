@@ -1,7 +1,5 @@
 let displayStartDate = [];
 let noReserveList = [];
-let dialog_error = document.getElementById('dialog_error');
-let dialog_error_msg = document.getElementById('dialog_error_msg');
 
 window.addEventListener("DOMContentLoaded", () => {
     //今日の日時を表示
@@ -46,6 +44,8 @@ async function selectWeekReserve(displayStartDate, startTime, endTime, startDate
     // エラー時処理
     if(!res.ok){
         const error = await res.json();
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = error.error;
         await dialog_error.showModal();
         throw new Error(error.error);
@@ -81,6 +81,8 @@ async function selectNoReserve(noReserveList, startDate, endDate) {
     // エラー時処理
     if(!res.ok){
         const error = await res.json();
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = error.error;
         await dialog_error.showModal();
         throw new Error(error.error);
@@ -240,6 +242,8 @@ function changeClickColor(table_cell) {
 function clickReserve(time, date, status) {
     // 予約できない日時をクリックした場合のチェック
     if (status === "-" || status === "×") {
+        let dialog_error = document.getElementById('dialog_error');
+        let dialog_error_msg = document.getElementById('dialog_error_msg');
         dialog_error_msg.innerText = '選択していただいた日時は満席（予約不可）か休診のため、予約出来ません。';
         dialog_error.showModal();
     }

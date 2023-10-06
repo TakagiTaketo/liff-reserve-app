@@ -1,6 +1,4 @@
 const liffId = '1660856020-lm6XRQgz';
-let dialog_error = document.getElementById('dialog_error'); // エラーメッセージダイアログ
-let dialog_error_msg = document.getElementById('dialog_error_msg'); // エラーメッセージ内容
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -13,6 +11,8 @@ window.addEventListener("DOMContentLoaded", () => {
             checkLogin();
         })
         .catch((err) => {
+            let dialog_error = document.getElementById('dialog_error'); // エラーメッセージダイアログ
+            let dialog_error_msg = document.getElementById('dialog_error_msg'); // エラーメッセージ内容
             dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。\n' + err;
             dialog_error.showModal();
         })
@@ -71,6 +71,8 @@ async function click_dialog_reserve() {
     console.log("今日の日付：" + currentDate);
     // 予約日が過去日付の場合のチェック
     if (selectedDate < currentDate) {
+        let dialog_error = document.getElementById('dialog_error'); // エラーメッセージダイアログ
+        let dialog_error_msg = document.getElementById('dialog_error_msg'); // エラーメッセージ内容
         dialog_error_msg.innerText = '過去の日時は予約出来ません。';
         dialog_error.showModal();
         return false;
@@ -105,6 +107,8 @@ async function click_dialog_reserve() {
             // ネットワークエラーやサーバーからのエラーレスポンスを処理
             console.error(error.error);
             if (error.error) {
+                let dialog_error = document.getElementById('dialog_error'); // エラーメッセージダイアログ
+                let dialog_error_msg = document.getElementById('dialog_error_msg'); // エラーメッセージ内容
                 dialog_error_msg.innerText = error.error;
                 dialog_error.showModal();
             }
