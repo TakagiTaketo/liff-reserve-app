@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
         .catch((err) => {
             let dialog_error = document.getElementById('dialog_error');
             let dialog_error_msg = document.getElementById('dialog_error_msg');
-            dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。\n' + err;
+            dialog_error_msg.innerText = 'LIFFの初期化に失敗しました。';
             dialog_error.showModal();    
         })
 });
